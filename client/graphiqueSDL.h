@@ -2,7 +2,10 @@
 #ifndef GRAPHIQUE_SDL_H
 #define GRAPHIQUE_SDL_H
 
-#include "affichable.h"
+struct point
+{
+    float x, y;
+};
 
 class graphiqueSDL
 {
@@ -28,9 +31,9 @@ public:
         SDL_RenderPresent(renderer);
     }
 
-    void dessinerLigne(const ligne& l)
+    void dessinerLigne(const point& a, const point& b)
     {
-        SDL_RenderDrawLine(renderer, l.a.x, l.a.y, l.b.x, l.b.y);
+        SDL_RenderDrawLine(renderer, a.x, a.y, b.x, b.y);
     }
 
     bool isFonctionne() const
