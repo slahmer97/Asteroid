@@ -24,7 +24,7 @@ endif()
 #client side
 include_directories(client client/includes)
 add_executable(client client/main.cpp client/client_message_factory.h)
-target_link_libraries(client ${Boost_LIBRARIES} SDL2::Main  boost_system crypto ssl ${LIB_CPP_REST})
+target_link_libraries(client ${Boost_LIBRARIES} SDL2::Main  boost_system crypto ssl ${LIB_CPP_REST} SDL2_ttf)
 
 
 #server side
