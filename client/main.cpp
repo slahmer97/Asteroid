@@ -1,37 +1,41 @@
-//
-// Created by stevlulz on 23/02/2020.
-//
-
 
 #include <SDL.h>
-#include <iostream>
-auto main(int argc, char**argv) -> int {
+#include <chrono>
+#include <thread>
+#include "graphiqueSDL.h"
+#include "affichableClient.h"
+#include <cpprest/http_client.h>
+#include <cpprest/filestream.h>
+using namespace utility;                    // Common utilities like string conversions
+using namespace web;                        // Common features like URIs.
+using namespace web::http;                  // Common HTTP functionality
+using namespace web::http::client;          // HTTP client features
+using namespace concurrency::streams;       // Asynchronous streams
+int main(int argc, char** argv)
+{
+    //test with an online webservice TODO Delete
+    web::http::client::http_client client(U("https://reqres.in/api/users/1"));
+    http_response response = client.request(web::http::methods::GET).get();
+    const utility::string_t body = response.extract_string().get();
+    std::cout<<body;
 
-    SDL_Window* window = nullptr;
-    SDL_Surface* screenSurface = nullptr;
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::cerr<<"could not initialize sdl2: "<< SDL_GetError()<<std::endl;
-        return 1;
-    }
-    window = SDL_CreateWindow(
-            "Asteroid hello wolrd",
-            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-            500, 500,
-            SDL_WINDOW_SHOWN
-    );
-    if (window == nullptr) {
-        std::cerr<< "could not create window: "<< SDL_GetError()<<std::endl;
-        return 1;
-    }
-    screenSurface = SDL_GetWindowSurface(window);
-    SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
-    SDL_UpdateWindowSurface(window);
-    SDL_Delay(2000);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+
+    graphiqueSDL fenetre{1000, 800};
+    polygoneAC a1 = {{100,100}, {300, 300}};
+    polygoneAC a2 = {{400,400}, {600, 600}};
+
+    polygoneAC b1 = {{200,100}, {400, 300}};
+    polygoneAC b2 = {{500,400}, {700, 600}};
+
+    a1.afficherSurFenetre(fenetre);
+    a2.afficherSurFenetre(fenetre);
+    fenetre.afficherImage();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+
+    b1.afficherSurFenetre(fenetre);
+    b2.afficherSurFenetre(fenetre);
+    fenetre.afficherImage();
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
     return 0;
 }
-
-
-
-

@@ -24,6 +24,7 @@ public:
 
     void afficherSurFenetre(graphiqueSDL& fenetre) const override
     {
+
         for (int i = 0; i < points.size() - 1; ++i)
             fenetre.dessinerLigne(points[i], points[i + 1]);
     }
