@@ -4,7 +4,9 @@
 
 struct point
 {
-    float x, y;
+    int x, y;
+    inline point() = default;
+    inline point(int x, int y) noexcept : x(x),y(y){}
 };
 
 class graphiqueSDL
@@ -40,9 +42,9 @@ public:
     {
         return renderer != nullptr;
     }
+    SDL_Renderer* renderer;
 
 private:
-    SDL_Renderer* renderer;
 };
 
 #endif //GRAPHIQUE_SDL_H
