@@ -2,6 +2,10 @@
 #ifndef GRAPHIQUE_SDL_H
 #define GRAPHIQUE_SDL_H
 
+#include <SDL_render.h>
+#include <SDL_events.h>
+#include <SDL.h>
+
 struct point
 {
     int x, y;
