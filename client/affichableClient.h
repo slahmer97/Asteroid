@@ -11,14 +11,9 @@
 using namespace web;                        // Common features like URIs.
 
 
-class affichableClient
-{
-public:
-    virtual void afficherSurFenetre(graphiqueSDL& fenetre) const = 0;
-};
 
 
-class polygoneAC: public affichableClient
+class polygoneAC
 {
 public:
     polygoneAC(std::initializer_list<point>&& liste) : points{liste}
@@ -34,15 +29,22 @@ public:
         this->m_center.y =  (minY )+ ((maxY - minY) / 2);
     }
 
-    polygoneAC(std::vector<point>  p) : points{std::move(p)}
+    explicit polygoneAC(std::vector<point>  p) : points{std::move(p)}
     {}
 
-    void afficherSurFenetre(graphiqueSDL& fenetre) const override
-    {
-        for (int i = 0; i < points.size() - 1; ++i)
-            fenetre.dessinerLigne(points[i], points[i + 1]);
-    }
+
+public:
     point m_center{};
+    std::vector<point> points;
+};
+
+
+
+
+class pologoneSer : polygoneAC{
+public:
+    inline pologoneSer(std::initializer_list<point>&& liste): polygoneAC(liste) {}
+    inline explicit pologoneSer(std::vector<point> points): polygoneAC(std::move(points)) {}
 
     inline std::string to_string(){
         json::value o;
@@ -62,7 +64,7 @@ public:
         return s.str();
     }
 
-    static polygoneAC json_to_polygoneAC(const std::string& p_object){
+    static pologoneSer json_to_polygoneAC(const std::string& p_object){
 
         json::array obj = json::value::parse(p_object)["points"].as_array();
         long size = obj.size();
@@ -70,11 +72,117 @@ public:
         //initialize vector with size
         for (auto& o : obj)
             res.emplace_back(o["x"].as_integer(),o["y"].as_integer());
-        return polygoneAC(res);
+        return pologoneSer(res);
     }
-private:
-    std::vector<point> points;
+
 };
+
+class affichableClient : polygoneAC
+{
+public:
+    inline affichableClient(std::initializer_list<point>&& liste): polygoneAC(liste) {}
+    inline explicit affichableClient(std::vector<point> points): polygoneAC(std::move(points)) {}
+    void afficherSurFenetre(graphiqueSDL& fenetre) const
+    {
+        for (int i = 0; i < points.size() - 1; ++i)
+            fenetre.dessinerLigne(points[i], points[i + 1]);
+
+
+
+    }
+    bool DrawFilledPolygon(const SDL_Color color, SDL_Renderer* renderer) {
+        int topY;
+        int topCnt;
+        int leftCnt;
+        int rightCnt;
+        int startX;
+        int endX;
+        int cntY;
+        int leftSlope;
+        int rightSlope;
+        int cnt;
+        int numVerts = this->points.size();
+        int numVertsProc = 1;
+
+        point center = this->m_center;
+        point *verts = &this->points[0];
+
+        topY = verts[0].y;
+        topCnt = 0;
+
+
+        for(cnt = 1; cnt < numVerts; cnt++)
+        {
+            if(verts[cnt].y < topY)
+            {
+                topY = verts[cnt].y;
+                topCnt = cnt;
+            }
+        }
+
+
+        leftCnt = topCnt - 1;
+        if(leftCnt < 0)
+            leftCnt = numVerts - 1;
+        rightCnt = topCnt + 1;
+        if(rightCnt >= numVerts)
+            rightCnt = 0;
+
+        startX = endX = (verts[topCnt].x + center.x) << 16;
+        cntY = verts[topCnt].y;
+
+        if(verts[leftCnt].y != verts[topCnt].y)
+            leftSlope = ((verts[leftCnt].x - verts[topCnt].x) << 16) / (verts[leftCnt].y - verts[topCnt].y);
+        if(verts[rightCnt].y != verts[topCnt].y)
+            rightSlope = ((verts[rightCnt].x - verts[topCnt].x) << 16) / (verts[rightCnt].y - verts[topCnt].y);
+
+        SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+
+        // find slopes
+        while(numVertsProc < numVerts)
+        {
+            while(cntY < verts[leftCnt].y && cntY < verts[rightCnt].y)
+            {
+                SDL_RenderDrawLine(renderer, startX >> 16, cntY + center.y, endX >> 16, cntY + center.y);
+                cntY++;
+                startX += leftSlope;
+                endX += rightSlope;
+            }
+
+            if(verts[leftCnt].y <= cntY)
+            {
+                topCnt = leftCnt;
+                leftCnt--;
+                if(leftCnt < 0)
+                    leftCnt = numVerts - 1;
+                if(verts[leftCnt].y != verts[topCnt].y)
+                    leftSlope = ((verts[leftCnt].x - verts[topCnt].x) << 16) / (verts[leftCnt].y - verts[topCnt].y);    // find the left side slope
+
+                startX = (verts[topCnt].x + center.x) << 16;
+                numVertsProc++;
+            }
+
+            if(verts[rightCnt].y <= cntY)
+            {
+                topCnt = rightCnt;
+                rightCnt++;
+                if(rightCnt == numVerts)
+                    rightCnt = 0;
+                if(verts[rightCnt].y != verts[topCnt].y)
+                    rightSlope = ((verts[rightCnt].x - verts[topCnt].x) << 16) / (verts[rightCnt].y - verts[topCnt].y); // find the right side slope
+
+                endX = (verts[topCnt].x + center.x) << 16;
+                numVertsProc++;
+            }
+            SDL_RenderDrawLine(renderer, startX >> 16, cntY + center.y, endX >> 16, cntY + center.y);
+        }
+
+        return true;            // return success
+    }
+};
+
+
+
 
 
 
@@ -83,10 +191,10 @@ class alphaNumAC: public affichableClient // ???
 public:
     // ??? CONSTRUCTEURS
     
-    void afficherSurFenetre(graphiqueSDL& fenetre) const override
-    {
+    //void afficherSurFenetre(graphiqueSDL& fenetre) const
+    //{
         // ???
-    }
+    //}
 private:
     // ???
     // ???
