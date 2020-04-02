@@ -8,6 +8,7 @@
 #include <iostream>
 #include <thread>
 #include "graphiqueSDL.h"
+
 #include "affichableClient.h"
 
 class client{
@@ -30,7 +31,7 @@ public:
         affichableClient b1 = {{200,100}, {400, 300},{500,500}};
         //affichableClient b2 = {{500,400}, {700, 600}};
 
-        SDL_Color color = {.r = 255, .g = 255, .b = 255, .a = 255 };
+        SDL_Color color = {255, 255,255,  255 };
 
         b1.DrawFilledPolygon(color,fenetre.renderer);
 
@@ -44,10 +45,17 @@ public:
 
     inline static void client_network_interface(){
 
+
+
+
+
+
     }
 
 
     inline static void start(int argc,char**argv){
+        argc++;
+        argv--;
         std::thread gui(client::client_gui);
         std::thread cni(client::client_network_interface);
 

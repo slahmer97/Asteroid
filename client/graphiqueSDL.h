@@ -2,9 +2,10 @@
 #ifndef GRAPHIQUE_SDL_H
 #define GRAPHIQUE_SDL_H
 
-#include <SDL_render.h>
-#include <SDL_events.h>
-#include <SDL.h>
+#include <SDL2/SDL_render.h>
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL.h>
+
 
 struct point
 {

@@ -10,9 +10,6 @@
 #include <cpprest/filestream.h>
 using namespace web;                        // Common features like URIs.
 
-
-
-
 class polygoneAC
 {
 public:
@@ -30,7 +27,9 @@ public:
     }
 
     explicit polygoneAC(std::vector<point>  p) : points{std::move(p)}
-    {}
+    {
+
+    }
 
 
 public:
@@ -67,7 +66,7 @@ public:
     static pologoneSer json_to_polygoneAC(const std::string& p_object){
 
         json::array obj = json::value::parse(p_object)["points"].as_array();
-        long size = obj.size();
+       // unsigned long size = obj.size();
         std::vector<point> res;
         //initialize vector with size
         for (auto& o : obj)
@@ -84,11 +83,10 @@ public:
     inline explicit affichableClient(std::vector<point> points): polygoneAC(std::move(points)) {}
     void afficherSurFenetre(graphiqueSDL& fenetre) const
     {
-        for (int i = 0; i < points.size() - 1; ++i)
+        for (unsigned long i = 0; i < points.size() - 1; ++i)
             fenetre.dessinerLigne(points[i], points[i + 1]);
 
-
-
+        std::cout<<std::endl;
     }
     bool DrawFilledPolygon(const SDL_Color color, SDL_Renderer* renderer) {
         int topY;
@@ -186,7 +184,7 @@ public:
 
 
 
-class alphaNumAC: public affichableClient // ???
+class alphaNumAC: public affichableClient
 {
 public:
     // ??? CONSTRUCTEURS
