@@ -4,14 +4,7 @@
 
 #include <SDL.h>
 #include <vector>
-
-struct point {
-    int x, y;
-
-    point() = default;
-
-    point(int x, int y) noexcept : x(x), y(y) {}
-};
+#include "point.h"
 
 class graphiqueSDL {
 public:

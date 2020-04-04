@@ -8,8 +8,8 @@
 #include <iostream>
 #include <thread>
 #include "graphiqueSDL.h"
+#include "polyClient.h"
 
-#include "affichableClient.h"
 
 class client {
 public:
