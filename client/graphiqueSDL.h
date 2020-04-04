@@ -2,14 +2,12 @@
 #ifndef GRAPHIQUE_SDL_H
 #define GRAPHIQUE_SDL_H
 
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL.h>
-
+#include <SDL.h>
 
 struct point
 {
     int x, y;
+
     inline point() = default;
     inline point(int x, int y) noexcept : x(x),y(y){}
 };
