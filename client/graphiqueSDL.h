@@ -31,6 +31,10 @@ public:
         SDL_RenderDrawLine(renderer, a.x, a.y, b.x, b.y);
     }
 
+    void dessinerTexte(const std::string& val, const point& pos, int taille) {
+
+    }
+
     void dessinerPolyPlein(const SDL_Color &color, const point &center, const std::vector<point> &points) {
         int topY;
         int topCnt;

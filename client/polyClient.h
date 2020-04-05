@@ -16,9 +16,10 @@ public:
     explicit polyClient(std::vector<point> points): polygone(std::move(points)) {}
     void afficherSurFenetre(graphiqueSDL& fenetre) const override
     {
-        const SDL_Color c = {255, 255,255,  255 };
-        fenetre.dessinerPolyPlein(c, m_center, points);
+        fenetre.dessinerPolyPlein(couleur, m_center, points);
     }
+private:
+    static constexpr SDL_Color couleur = {255, 255,255,  255 };
 };
 
 #endif //ASTEROID_POLYCLIENT_H

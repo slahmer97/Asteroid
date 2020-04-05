@@ -18,8 +18,6 @@ add_subdirectory(my_libs)
 
 
 
-
-
 # FOR BOOST CHECK THIS TO GET SAME VERSION ^_^
 # https://www.osetc.com/en/how-to-install-boost-on-ubuntu-16-04-18-04-linux.html
 find_package(Boost 1.58 COMPONENTS program_options REQUIRED)
