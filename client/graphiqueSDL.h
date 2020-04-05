@@ -5,6 +5,8 @@
 #include <SDL.h>
 #include <vector>
 #include "point.h"
+#include <SDL2/SDL_ttf.h>
+
 
 class graphiqueSDL {
 public:
@@ -32,6 +34,7 @@ public:
     }
 
     void dessinerTexte(const std::string& val, const point& pos, int taille) {
+        //TTF_Font* Sans = TTF_OpenFont("Sans.ttf", taille);
 
     }
 

@@ -7,6 +7,7 @@
 
 #include <string>
 #include "affichable.h"
+#include "graphiqueSDL.h"
 #include "point.h"
 
 class alphaNumClient: public affichable
