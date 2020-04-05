@@ -2,7 +2,7 @@
 #ifndef GRAPHIQUE_SDL_H
 #define GRAPHIQUE_SDL_H
 
-#include <SDL.h>
+#include "../my_libs/SDL2-2.0.12/include/SDL.h"
 
 struct point
 {

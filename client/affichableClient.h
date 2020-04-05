@@ -6,6 +6,8 @@
 #include <vector>
 #include <initializer_list>
 #include "graphiqueSDL.h"
+#include "../my_libs/SDL2-2.0.12/include/SDL_pixels.h"
+#include "../my_libs/SDL2-2.0.12/include/SDL_render.h"
 #include <cpprest/http_client.h>
 #include <cpprest/filestream.h>
 using namespace web;                        // Common features like URIs.
