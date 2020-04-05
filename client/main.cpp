@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
     // http_response response = client.request(web::http::methods::GET).get();
     // const utility::string_t body = response.extract_string().get();
     //  std::cout<<body;
-    client::start(argc, argv);
 
+    asteroid_game::client::start(argc,argv);
     return 0;
 }

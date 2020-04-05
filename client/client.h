@@ -11,8 +11,9 @@
 #include "polyClient.h"
 #include "client_http_service_handler.h"
 
-
+namespace asteroid_game{
 class client {
+
 private:
     //shared objects here
     static void client_gui() {
@@ -74,5 +75,5 @@ private:
 
 };
 
-
+}
 #endif //ASTEROID_CLIENT_H
