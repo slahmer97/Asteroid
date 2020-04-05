@@ -2,9 +2,10 @@
 // Created by stevlulz on 21/03/2020.
 //
 
-#ifndef ASTEROID_HTTP_SERVICE_HANDLER_H
-#define ASTEROID_HTTP_SERVICE_HANDLER_H
+#ifndef ASTEROID_SERVER_HTTP_SERVICE_HANDLER_H
+#define ASTEROID_SERVER_HTTP_SERVICE_HANDLER_H
 #include <iostream>
+
 #include "stdafx.h"
 
 using namespace std;
@@ -14,17 +15,17 @@ using namespace utility;
 using namespace http::experimental::listener;
 
 
-class http_service_handler
+class server_http_service_handler
 {
 public:
-    http_service_handler() = default;
-    inline explicit http_service_handler(const utility::string_t& url) : m_listener(url){
-        m_listener.support(methods::GET, std::bind(&http_service_handler::handle_get, this, std::placeholders::_1));
-        m_listener.support(methods::PUT, std::bind(&http_service_handler::handle_put, this, std::placeholders::_1));
-        m_listener.support(methods::POST, std::bind(&http_service_handler::handle_post, this, std::placeholders::_1));
-        m_listener.support(methods::DEL, std::bind(&http_service_handler::handle_delete, this, std::placeholders::_1));
+    server_http_service_handler() = default;
+    inline explicit server_http_service_handler(const utility::string_t& url) : m_listener(url){
+        m_listener.support(methods::GET, std::bind(&server_http_service_handler::handle_get, this, std::placeholders::_1));
+        m_listener.support(methods::PUT, std::bind(&server_http_service_handler::handle_put, this, std::placeholders::_1));
+        m_listener.support(methods::POST, std::bind(&server_http_service_handler::handle_post, this, std::placeholders::_1));
+        m_listener.support(methods::DEL, std::bind(&server_http_service_handler::handle_delete, this, std::placeholders::_1));
     }
-    ~http_service_handler() = default;
+    ~server_http_service_handler() = default;
 
     inline pplx::task<void>open(){return m_listener.open();}
     inline pplx::task<void>close(){return m_listener.close();}
@@ -76,4 +77,4 @@ private:
     http_listener m_listener;
 };
 
-#endif //ASTEROID_HTTP_SERVICE_HANDLER_H
+#endif //ASTEROID_SERVER_HTTP_SERVICE_HANDLER_H

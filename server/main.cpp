@@ -3,7 +3,7 @@
 #include <cpprest/filestream.h>
 
 #include <memory>
-#include "http_service_handler.h"
+#include "server_http_service_handler.h"
 
 
 using namespace std;
@@ -13,7 +13,7 @@ using namespace utility;
 using namespace http::experimental::listener;
 
 
-std::unique_ptr<http_service_handler> g_httpHandler;
+std::unique_ptr<server_http_service_handler> g_httpHandler;
 
 void on_initialize(const string_t& address)
 {
@@ -21,7 +21,7 @@ void on_initialize(const string_t& address)
 
 
     auto addr = uri.to_uri().to_string();
-    g_httpHandler = std::make_unique<http_service_handler>(addr);
+    g_httpHandler = std::make_unique<server_http_service_handler>(addr);
     g_httpHandler->open().wait();
 
     std::cout<< utility::string_t(U("Listening for requests at: ")) << addr << std::endl;

@@ -2,7 +2,7 @@
 #ifndef GRAPHIQUE_SDL_H
 #define GRAPHIQUE_SDL_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <vector>
 #include "point.h"
 #include <SDL2/SDL_ttf.h>
