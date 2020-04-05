@@ -18,8 +18,6 @@ add_subdirectory(my_libs)
 
 
 
-
-
 # FOR BOOST CHECK THIS TO GET SAME VERSION ^_^
 # https://www.osetc.com/en/how-to-install-boost-on-ubuntu-16-04-18-04-linux.html
 find_package(Boost 1.58 COMPONENTS program_options REQUIRED)
@@ -39,8 +37,8 @@ find_package(Boost 1.58 COMPONENTS program_options REQUIRED)
 
 #client side
 include_directories(client client/includes)
-add_executable(client client/main.cpp client/client_message_factory.h client/client.h)
-target_link_libraries(client ${Boost_LIBRARIES} SDL2  boost_system crypto ssl cpprest)
+add_executable(client client/main.cpp client/client_message_factory.h client/client.h client/polygone.h client/point.h client/polyServeur.h client/polyClient.h client/affichable.h client/alphaNumClient.h)
+target_link_libraries(client ${Boost_LIBRARIES} SDL2-static  boost_system crypto ssl cpprest)
 
 
 #server side
