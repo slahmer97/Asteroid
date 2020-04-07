@@ -9,6 +9,7 @@
 #include <thread>
 #include "graphiqueSDL.h"
 #include "polyClient.h"
+#include "alphaNumClient.h"
 #include "client_http_service_handler.h"
 
 namespace asteroid_game{
@@ -26,8 +27,9 @@ private:
                          {400, 300},
                          {500, 500}
         };
-
+        alphaNumClient a1 {"HelloWorld!", {10,10}};
         b1.afficherSurFenetre(fenetre);
+        a1.afficherSurFenetre(fenetre);
         fenetre.afficherImage();
 
         getchar();
