@@ -23,21 +23,12 @@ add_subdirectory(my_libs)
 find_package(Boost 1.58 COMPONENTS program_options REQUIRED)
 
 
-#FOR SDL 2
-#https://lazyfoo.net/tutorials/SDL/01_hello_SDL/linux/index.php
-#list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
-#find_package(SDL2 REQUIRED)
-
-#For cpprest https://github.com/microsoft/cpprestsdk
-#find_library( LIB_CPP_REST cpprest )
-#if(${LIB_CPP_REST} STREQUAL "LIB_CPP_REST-NOTFOUND")
-#    message(FATAL_ERROR "Couldn't find the 'libcpprest' library")
-#endif()
 
 
 #client side
 include_directories(client client/includes)
 add_executable(client client/main.cpp
+                      client/client.cpp
                       client/client_message_factory.h
                       client/client.h
                       client/polygone.h

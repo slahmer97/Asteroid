@@ -42,7 +42,7 @@ auto main(int argc,char**argv) -> int {
         port = argv[1];
     }
 
-    utility::string_t address = U("http://localhost:");
+    utility::string_t address = U("http://localhost");
     address.append(port);
 
     on_initialize(address);

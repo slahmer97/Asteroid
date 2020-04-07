@@ -17,59 +17,19 @@ class client {
 
 private:
     //shared objects here
-    static void client_gui() {
-        //main thread for displaying gui
+    inline static void client_gui();
+    inline static void client_network_interface();
 
-        graphiqueSDL fenetre{1000, 800};
-
-        polyClient b1 = {
-                         {200, 100},
-                         {400, 300},
-                         {500, 500}
-        };
-        alphaNumClient a1 {"HelloWorld!", {10,10}};
-        b1.afficherSurFenetre(fenetre);
-        a1.afficherSurFenetre(fenetre);
-        fenetre.afficherImage();
-
-        getchar();
-    }
-
-    static void client_network_interface() {
+    static void on_shutdown();
 
 
-
-
-
-    }
-    static void on_initialize()
-    {
-        uri_builder uri(client::host+":"+client::port);
-
-
-        auto addr = uri.to_uri().to_string();
-        g_httpHandler = std::make_unique<client_http_service_handler>(addr);
-        g_httpHandler->open().wait();
-
-        std::cout<< utility::string_t(U("Client for requests at: ")) << addr << std::endl;
-
-    }
-
+     static void on_initialize();
 public:
 
-    static void start(int argc, char **argv) {
-        argc++;
-        argv++;
-        std::thread gui(client::client_gui);
-        std::thread cni(client::client_network_interface);
+     static void start(std::string& p_host, std::string& p_port);
+    //inline static void set_config(std::string& p_host, std::string& p_port){
 
-        gui.join();
-        cni.join();
-    }
-    static void set_config(std::string& p_host, std::string& p_port){
-        client::host = std::move(p_host);
-        client::port = std::move(p_port);
-    }
+    //}
 private:
     static std::string host;
     static std::string port;
