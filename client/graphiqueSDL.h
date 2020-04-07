@@ -34,8 +34,8 @@ public:
     }
 
     void dessinerTexte(const std::string& val, const point& pos, int taille) {
-
-        TTF_Font* police = TTF_OpenFont("Sans.ttf", taille);
+        TTF_Init();
+        TTF_Font* police = TTF_OpenFont("../client/DroidSans.ttf", taille);
         SDL_Surface* aux = TTF_RenderText_Solid(police, val.c_str(), {255, 255, 255, 255});
         SDL_Texture* valRendu = SDL_CreateTextureFromSurface(renderer, aux);
         SDL_Rect boite {pos.x, pos.y, static_cast<int>(taille * val.length() / 2), taille};
@@ -43,7 +43,7 @@ public:
         TTF_CloseFont(police);
         SDL_FreeSurface(aux);
         SDL_DestroyTexture(valRendu);
-
+        TTF_Quit();
     }
 
     void dessinerPolyPlein(const SDL_Color &color, const point &center, const std::vector<point> &points) {
