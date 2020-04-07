@@ -48,7 +48,7 @@ add_executable(client client/main.cpp
                       client/alphaNumClient.h
                       client/client_http_service_handler.h
         )
-target_link_libraries(client ${Boost_LIBRARIES} SDL2  boost_system crypto ssl cpprest)
+target_link_libraries(client ${Boost_LIBRARIES} SDL2  boost_system crypto ssl cpprest -lSDL2_ttf)
 
 
 #server side
