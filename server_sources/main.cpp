@@ -1,9 +1,9 @@
-#include <games_scheduler.h>
+#include "headers/games_scheduler.h"
 #include <cpprest/http_listener.h>
 #include <cpprest/filestream.h>
 
 #include <memory>
-#include "server_http_service_handler.h"
+#include "headers/server_http_service_handler.h"
 
 
 using namespace std;

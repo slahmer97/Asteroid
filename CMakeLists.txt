@@ -22,28 +22,30 @@ add_subdirectory(my_libs)
 # https://www.osetc.com/en/how-to-install-boost-on-ubuntu-16-04-18-04-linux.html
 find_package(Boost 1.58 COMPONENTS program_options REQUIRED)
 
+set(CLIENT_SOURCE_PATH client_sources/)
+set(SERVER_SOURCE_PATH server_sources/)
+set(SHARED_SOURCE_PATH shared_sources/)
+include_directories(CLIENT_HEADER_FILES_I client_sources/headers)
+include_directories(SERVER_HEADER_FILES_I server_sources/headers)
+include_directories(SHARED_HEADER_FILES_I shared_sources/headers)
 
-
-
-#client side
-include_directories(client client/includes)
-add_executable(client client/main.cpp
-        client/client_message_factory.h
-        client/polygone.h
-                      client/point.h
-                      client/polyServeur.h
-                      client/polyClient.h
-                      client/affichable.h
-                      client/alphaNumClient.h
-                      client/client_http_service_handler.h
-                      client/rest_client.cpp
-                      client/rest_client.h
+set(CLIENT_SOURCE_FILES
+        ${CLIENT_SOURCE_PATH}/main.cpp
+        ${CLIENT_SOURCE_PATH}/rest_client.cpp
         )
+
+set(SERVER_SOURCE_FILES
+        ${SERVER_SOURCE_PATH}/main.cpp
+        ${SERVER_SOURCE_PATH}/vec2d.cpp
+        )
+set(SHARED_SOURCE_FILES
+
+        )
+#client side
+add_executable(client ${CLIENT_SOURCE_FILES} ${CLIENT_HEADER_FILES_I} ${SHARED_HEADER_FILES_I})
 target_link_libraries(client ${Boost_LIBRARIES} SDL2  boost_system crypto ssl cpprest -lSDL2_ttf)
 
 
 #server side
-include_directories(server server/includes)
-add_executable(server server/main.cpp server/game.h server/games_scheduler.h
-        server/server_http_service_handler.h server/stdafx.h)
+add_executable(server ${SERVER_SOURCE_FILES} ${SERVER_HEADER_FILES_I} ${SHARED_HEADER_FILES_I})
 target_link_libraries(server PRIVATE ${Boost_LIBRARIES} boost_system crypto ssl cpprest)

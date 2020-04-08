@@ -4,10 +4,10 @@
 
 #include <cpprest/details/basic_types.h>
 #include <thread>
-#include "rest_client.h"
-#include "graphiqueSDL.h"
-#include "polyClient.h"
-#include "client_http_service_handler.h"
+#include "headers/rest_client.h"
+#include "headers/graphiqueSDL.h"
+#include "headers/polyClient.h"
+#include "headers/client_http_service_handler.h"
 std::shared_ptr<rest_client> rest_client::s_rest_client;
 
 
