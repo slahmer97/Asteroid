@@ -14,12 +14,13 @@ class polyClient : public polygone, public affichable
 public:
     polyClient(std::initializer_list<point>&& liste): polygone(liste) {}
     explicit polyClient(std::vector<point> points): polygone(std::move(points)) {}
-    void afficherSurFenetre(graphiqueSDL& fenetre) const override
+    inline void afficherSurFenetre(graphiqueSDL& fenetre) const override
     {
-        fenetre.dessinerPolyPlein(polyClient::couleur, m_center, points);
+        const SDL_Color couleur = {255, 255,255,  255 };
+        fenetre.dessinerPolyPlein(couleur, m_center, points);
     }
 private:
-    static const SDL_Color  couleur;
+    //static const SDL_Color  couleur;
 };
-const SDL_Color polyClient::couleur = {255, 255,255,  255 };
+//const SDL_Color polyClient::couleur = {255, 255,255,  255 };
 #endif //ASTEROID_POLYCLIENT_H

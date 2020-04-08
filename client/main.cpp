@@ -1,5 +1,5 @@
 
-#include "client.h"
+#include "rest_client.h"
 
 
 int main() {
@@ -9,9 +9,11 @@ int main() {
     // http_response response = client.request(web::http::methods::GET).get();
     // const utility::string_t body = response.extract_string().get();
     //  std::cout<<body;
-    std::string host = "http://localhost:";
-    std::string port = "1000";
+    std::string host = "http://localhost";
+    std::string port = "9999";
     // asteroid_game::client::set_config(host,port);
-    asteroid_game::client::start(host,port);
+    std::shared_ptr<rest_client> e = rest_client::get_instance();
+    e->init(host,port);
+    e->run();
     return 0;
 }

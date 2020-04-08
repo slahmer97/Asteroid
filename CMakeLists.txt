@@ -28,16 +28,16 @@ find_package(Boost 1.58 COMPONENTS program_options REQUIRED)
 #client side
 include_directories(client client/includes)
 add_executable(client client/main.cpp
-                      client/client.cpp
-                      client/client_message_factory.h
-                      client/client.h
-                      client/polygone.h
+        client/client_message_factory.h
+        client/polygone.h
                       client/point.h
                       client/polyServeur.h
                       client/polyClient.h
                       client/affichable.h
                       client/alphaNumClient.h
                       client/client_http_service_handler.h
+                      client/rest_client.cpp
+                      client/rest_client.h
         )
 target_link_libraries(client ${Boost_LIBRARIES} SDL2  boost_system crypto ssl cpprest -lSDL2_ttf)
 
