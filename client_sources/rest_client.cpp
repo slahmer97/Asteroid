@@ -8,6 +8,8 @@
 #include "headers/graphiqueSDL.h"
 #include "headers/polyClient.h"
 #include "headers/client_http_service_handler.h"
+#include "headers/alphaNumClient.h"
+
 std::shared_ptr<rest_client> rest_client::s_rest_client;
 
 
@@ -48,9 +50,9 @@ void rest_client::client_gui(){
             {400, 300},
             {500, 500}
     };
-    //alphaNumClient a1 {"HelloWorld!", {10,10}};
+    alphaNumClient a1 {"HelloWorld, le retour ! Score : 19999", {10,10}};
     b1.afficherSurFenetre(fenetre);
-    //a1.afficherSurFenetre(fenetre);
+    a1.afficherSurFenetre(fenetre);
     fenetre.afficherImage();
     getchar();
 }

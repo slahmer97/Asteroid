@@ -6,7 +6,7 @@
 #define ASTEROID_REST_CLIENT_H
 
 
-#include <bits/unique_ptr.h>
+#include <memory>
 #include "client_http_service_handler.h"
 
 class rest_client {

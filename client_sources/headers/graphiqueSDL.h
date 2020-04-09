@@ -35,7 +35,7 @@ public:
 
     void dessinerTexte(const std::string& val, const point& pos, int taille) {
         TTF_Init();
-        TTF_Font* police = TTF_OpenFont("../client/DroidSans.ttf", taille);
+        TTF_Font* police = TTF_OpenFont("../client_sources/DroidSans.ttf", taille);
         SDL_Surface* aux = TTF_RenderText_Solid(police, val.c_str(), {255, 255, 255, 255});
         SDL_Texture* valRendu = SDL_CreateTextureFromSurface(renderer, aux);
         SDL_Rect boite {pos.x, pos.y, static_cast<int>(taille * val.length() / 2), taille};

@@ -13,7 +13,7 @@
 class alphaNumClient: public affichable
 {
 public:
-    alphaNumClient(const std::string& val, const point& pos, int taille = 14) : val{val}, pos{pos}, taille{taille} {}
+    alphaNumClient(const std::string& val, const point& pos, int taille = 18) : val{val}, pos{pos}, taille{taille} {}
     void afficherSurFenetre(graphiqueSDL& fenetre) const override
     {
         fenetre.dessinerTexte(val, pos, taille);
