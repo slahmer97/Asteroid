@@ -30,22 +30,23 @@ include_directories(SERVER_HEADER_FILES_I server_sources/headers)
 include_directories(SHARED_HEADER_FILES_I shared_sources/headers)
 
 set(CLIENT_SOURCE_FILES
-        ${CLIENT_SOURCE_PATH}/main.cpp
+        ${CLIENT_SOURCE_PATH}/asteroid_client.cpp
         ${CLIENT_SOURCE_PATH}/rest_client.cpp
         )
 
 set(SERVER_SOURCE_FILES
-        ${SERVER_SOURCE_PATH}/main.cpp
+        ${SERVER_SOURCE_PATH}/asteroid_server.cpp
         ${SERVER_SOURCE_PATH}/vec2d.cpp
+        ${SERVER_SOURCE_PATH}/rest_server.cpp
         )
 set(SHARED_SOURCE_FILES
 
         )
 #client side
-add_executable(client ${CLIENT_SOURCE_FILES} ${CLIENT_HEADER_FILES_I} ${SHARED_HEADER_FILES_I})
-target_link_libraries(client ${Boost_LIBRARIES} SDL2  boost_system crypto ssl cpprest -lSDL2_ttf)
+add_executable(Asteroid_client client_sources/asteroid_client.cpp ${CLIENT_SOURCE_FILES} ${CLIENT_HEADER_FILES_I} ${SHARED_HEADER_FILES_I})
+target_link_libraries(Asteroid_client ${Boost_LIBRARIES} SDL2  boost_system crypto ssl cpprest -lSDL2_ttf)
 
 
 #server side
-add_executable(server ${SERVER_SOURCE_FILES} ${SERVER_HEADER_FILES_I} ${SHARED_HEADER_FILES_I})
-target_link_libraries(server PRIVATE ${Boost_LIBRARIES} boost_system crypto ssl cpprest)
+add_executable(Asteroid_server server_sources/asteroid_server.cpp ${SERVER_SOURCE_FILES} ${SERVER_HEADER_FILES_I} ${SHARED_HEADER_FILES_I})
+target_link_libraries(Asteroid_server ${Boost_LIBRARIES} boost_system crypto ssl cpprest)

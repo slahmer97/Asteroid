@@ -4,6 +4,7 @@
 
 #include <cpprest/details/basic_types.h>
 #include <thread>
+#include <cpprest/http_client.h>
 #include "headers/rest_client.h"
 #include "headers/graphiqueSDL.h"
 #include "headers/polyClient.h"
@@ -44,6 +45,8 @@ void rest_client::client_network()  {
 void rest_client::client_gui(){
     //main thread for displaying gui
     std::cout<<"client gui is started : "<<"\n";
+
+
     graphiqueSDL fenetre{1000, 800};
     polyClient b1 = {
             {200, 100},
@@ -57,6 +60,7 @@ void rest_client::client_gui(){
     getchar();
 }
 
+
 void rest_client::run() {
     std::thread gui([&]() {
         this->client_gui();
@@ -67,6 +71,8 @@ void rest_client::run() {
     });
 
     gui.join();
+
+
     net.join();
 
     on_shutdown();
@@ -78,4 +84,5 @@ std::shared_ptr<rest_client > rest_client::get_instance() noexcept {
     }
     return rest_client::s_rest_client;
 }
+
 
