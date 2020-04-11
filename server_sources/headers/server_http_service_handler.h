@@ -38,7 +38,7 @@ private:
         std::cout <<  message.to_string() << endl;
 
         auto paths = http::uri::split_path(http::uri::decode(message.relative_uri().path()));
-        message.relative_uri().path();
+        std::cout<<"Relative uri : "<<message.relative_uri().to_string()<<"\n";
         string rep = U("write post handler");
 
         message.reply(status_codes::OK,rep);
