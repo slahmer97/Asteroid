@@ -6,16 +6,26 @@
 #define ASTEROID_GAME_H
 
 #include <iostream>
-class game{
+#include "asteroid.h"
+#include "laser.h"
+#include "vaisseau.h"
+
+class game {
 public:
 
-    game()= default;
+    game() = default;
 
-    void start(){
+    void start() {
 
     }
+
 private:
     std::string m_game_id;
-
+    std::vector<std::shared_ptr<asteroid>> asteroids;
+    std::vector<std::shared_ptr<laser>> lasers;
+    std::map<std::shared_ptr<vaisseau>, int/*idDuJoueur*/> vaisseaux;
+    int score;
+    // autre, placeholder
 };
+
 #endif //ASTEROID_GAME_H
