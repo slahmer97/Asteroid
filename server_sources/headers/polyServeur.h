@@ -9,6 +9,7 @@
 #include "../../client_sources/headers/point.h"
 #include "../../client_sources/headers/polygone.h"
 #include "vec2d.h"
+#include "intersection.h"
 
 using namespace web;
 
@@ -47,13 +48,17 @@ public:
         return polyServeur(res);
     }
 
-    bool intersection(const polyServeur &ps) const {
-
-        ps.to_string(); // placeholder
-
-
-
-        return true; // placeholder
+    bool intersecte(const polyServeur &ps) const {
+        intersection<point> coupe;
+        bool b = false;
+        for (unsigned i = 0; i < points.size() - 1; ++i)
+            for (unsigned j = 0; j < ps.points.size() - 1; ++j)
+                if (coupe(points[i], points[i + 1], ps.points[j], ps.points[j + 1])) {
+                    b = true;
+                    goto finBoucles;
+                }
+        finBoucles:
+        return b;
     }
 
 private:

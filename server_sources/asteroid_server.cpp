@@ -12,18 +12,13 @@
 void TEST() {
     game g{};
 
-    polyServeur ps = {{1, 2},
-                      {2, 2},
-                      {3, 4}};
+    moyenAsteroid ma = {{8, 2}, {2, 6}, {3, 7}};
 
-    moyenAsteroid ma = {{8, 2},
-                        {2, 6},
-                        {3, 7}};
-
-    intersection<point> coupe{};
-    point p1 = {1, 0}, q1 = {1, 3};
-    point p2 = {1, 2}, q2 = {1, 4};
-    coupe(p1, q1, p2, q2) ? std::cout << "Oui\n" : std::cout << "Non\n";
+    point p1 = {1, 1}, p2 = {2, 3}, p3 = {3, 1};
+    point q1 = {2, 2}, q2 = {4, 5}, q3 = {4, 2};
+    polyServeur psA = {p1, p2, p3, p1};
+    polyServeur psB = {q1, q2, q3, q1};
+    psA.intersecte(psB) ? std::cout << "Oui\n" : std::cout << "Non\n";
 }
 
 auto main(int argc, char **argv) -> int {
