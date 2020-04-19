@@ -13,9 +13,9 @@
 class game {
 public:
 
-    explicit game(std::string game_id){
-        m_game_id = std::move(game_id);
-    }
+    explicit game(std::string game_id) : m_game_id{std::move(game_id)}, score{},
+                                        asteroids{}, lasers{}, vaisseaux{}
+    {}
 
     void start() {
 
@@ -23,10 +23,10 @@ public:
 
 private:
     std::string m_game_id;
-//    std::vector<std::shared_ptr<asteroid>> asteroids;
- //   std::vector<std::shared_ptr<laser>> lasers;
- //   std::map<std::shared_ptr<vaisseau>, int/*idDuJoueur*/> vaisseaux;
-    int score{};
+    int score;
+    std::vector<std::shared_ptr<asteroid>> asteroids;
+    std::vector<std::shared_ptr<laser>> lasers;
+    std::map<std::shared_ptr<vaisseau>, int/*idDuJoueur*/> vaisseaux;
     // autre, placeholder
 };
 

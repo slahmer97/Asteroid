@@ -11,10 +11,13 @@
 #include <algorithm>
 #include <memory>
 #include "game.h"
-class Game;
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
+
+class Game;
+
 namespace pt = boost::property_tree;
+
 class game_scheduler{
 public:
 
@@ -41,4 +44,5 @@ private:
 
     static std::string str;
 };
+
 #endif //ASTEROID_GAME_SCHEDULER_H

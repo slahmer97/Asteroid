@@ -5,7 +5,6 @@
 #ifndef ASTEROID_POLYSERVEUR_H
 #define ASTEROID_POLYSERVEUR_H
 
-#include "../../client_sources/headers/point.h"
 #include "../../client_sources/headers/polygone.h"
 #include "vec2d.h"
 #include "intersection.h"

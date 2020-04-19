@@ -26,10 +26,9 @@ public:
 
 private:
     bool aligner(const P& p, const P& q, const P& r) {
-        if (q.x <= std::max(p.x, r.x) && q.x >= std::min(p.x, r.x) &&
-            q.y <= std::max(p.y, r.y) && q.y >= std::min(p.y, r.y))
-            return true;
-        return false;
+        bool b1 = q.x <= std::max(p.x, r.x) && q.x >= std::min(p.x, r.x);
+        bool b2 = q.y <= std::max(p.y, r.y) && q.y >= std::min(p.y, r.y);
+        return b1 && b2;
     }
     T orientation(const P& p, const P& q, const P& r) {
         int val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);

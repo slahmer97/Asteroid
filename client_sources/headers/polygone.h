@@ -5,6 +5,8 @@
 #ifndef ASTEROID_POLYGONE_H
 #define ASTEROID_POLYGONE_H
 
+#include <vector>
+#include "point.h"
 
 class polygone
 {

@@ -5,6 +5,7 @@
 #ifndef ASTEROID_ASTEROID_H
 #define ASTEROID_ASTEROID_H
 
+#include <memory>
 #include "polyServeur.h"
 
 class asteroid : public polyServeur {
@@ -13,8 +14,8 @@ public:
 
     explicit asteroid(std::vector<point> points) : polyServeur(std::move(points)) {}
 
-    //virtual std::vector<std::shared_ptr<asteroid>>
-   // generationDestruction() const = 0; // genere nouveaux asteroids plus petits
+    //genere nouveaux asteroids plus petits
+    virtual std::vector<std::shared_ptr<asteroid>> generationDestruction() const = 0;
 };
 
 #endif //ASTEROID_ASTEROID_H
