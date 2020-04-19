@@ -14,7 +14,7 @@ public:
 
     explicit grandAsteroid(std::vector<point> points) : asteroid(std::move(points)) {}
 
-    std::vector<std::shared_ptr<asteroid>> generationDestruction() const override {
+    [[nodiscard]] std::vector<std::shared_ptr<asteroid>> generationDestruction() const override {
 
         // placeholder code:
 

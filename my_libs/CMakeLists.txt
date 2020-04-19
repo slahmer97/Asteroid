@@ -3,5 +3,6 @@ add_subdirectory(SDL2-2.0.12)
 
 
 #git clone https://github.com/microsoft/cpprestsdk.git
-add_subdirectory(cpprestsdk)
+#add_subdirectory(Simple-WebSocket-Server)
+
 

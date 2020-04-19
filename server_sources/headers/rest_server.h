@@ -7,19 +7,23 @@
 
 #include <iostream>
 #include "server_http_service_handler.h"
+#include "server_ws.hpp"
+using WsServer = SimpleWeb::SocketServer<SimpleWeb::WS>;
 
 class rest_server {
-    inline rest_server() noexcept = default;
-    void on_shutdown();
-    void on_initialize();
+    rest_server();
+
 public:
     void init(std::string& host, std::string& port);
 
     void run();
-
+    void on_message(const std::shared_ptr<WsServer::Connection>& connection, std::shared_ptr<WsServer::InMessage> in_message);
+    void on_open(const std::shared_ptr<WsServer::Connection>& connection);
+    void on_close(const std::shared_ptr<WsServer::Connection>& connection, int status, const std::string & );
+    void on_handshake(std::shared_ptr<WsServer::Connection> /*connection*/, SimpleWeb::CaseInsensitiveMultimap &);
     static std::shared_ptr<rest_server> get_instance();
 private:
-    std::unique_ptr<server_http_service_handler> m_g_httpHandler;
+    WsServer* m_g_httpHandler;
     std::string m_uri;
 
     static std::shared_ptr<rest_server> m_rest_server;

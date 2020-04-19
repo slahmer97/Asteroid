@@ -2,49 +2,56 @@
 // Created by stevlulz on 08/04/2020.
 //
 
-#include <cpprest/details/basic_types.h>
 #include <thread>
-#include <cpprest/http_client.h>
+#include <client_message_factory.h>
 #include "headers/rest_client.h"
 #include "headers/graphiqueSDL.h"
 #include "headers/polyClient.h"
 #include "headers/client_http_service_handler.h"
 #include "headers/alphaNumClient.h"
+#include <boost/log/trivial.hpp>
 
 std::shared_ptr<rest_client> rest_client::s_rest_client;
 
 
 void rest_client::init(std::string &host, std::string &port) {
-    if(m_g_httpHandler != nullptr){
-        std::cerr<<"[!] client is already initialized \n";
-        return;
-    }
-    uri_builder uri(host+":"+port);
-    m_uri = uri.to_uri().to_string();
-    on_initialize();
-}
-
-void rest_client::on_shutdown()
-{
-    m_g_httpHandler->close().wait();
-    std::cout<<"[+] Client rest shutdown\n";
-}
-
-void rest_client::on_initialize() {
-
-    m_g_httpHandler = std::make_unique<client_http_service_handler>(m_uri);
-    std::cout<<"[+] client rest was successfully initialized\n";
+    BOOST_LOG_TRIVIAL(info)<<"init() start";
+    m_uri = std::string(host)+std::string(":")+std::string(port)+std::string("/echo");
+    BOOST_LOG_TRIVIAL(info)<<"init() uri is created : "<<m_uri;
+    BOOST_LOG_TRIVIAL(info)<<"init() exit";
 
 }
+
 
 void rest_client::client_network()  {
-    m_g_httpHandler->open().wait();
-    std::cout<<"client network interface is running on : "<<m_uri<<"\n";
+    BOOST_LOG_TRIVIAL(info)<<"client_network() init "<<m_uri;
+    m_g_httpHandler = new WsClient(m_uri);
+    m_g_httpHandler->on_message = [&](const std::shared_ptr<WsClient::Connection>& connection, const std::shared_ptr<WsClient::InMessage> &in_message) {
+        //this->on_message(connection,in_message);
+    };
+
+    m_g_httpHandler->on_open = [&](const std::shared_ptr<WsClient::Connection>& connection) {
+        //this->on_open(connection);
+        connection->send("Hello server");
+    };
+
+    m_g_httpHandler->on_close = [&](const std::shared_ptr<WsClient::Connection>& connection, int status, const std::string & reason) {
+        //this->on_close(connection,status,reason);
+    };
+
+    // See http://www.boost.org/doc/libs/1_55_0/doc/html/boost_asio/reference.html, Error Codes for error code meanings
+    m_g_httpHandler->on_error = [&](const std::shared_ptr<WsClient::Connection>& connection, const SimpleWeb::error_code &ec) {
+        //this->on_error(connection,ec);
+    };
+
+    m_g_httpHandler->start();
+    BOOST_LOG_TRIVIAL(info)<<"client network interface is running on : "<<m_uri;
 }
 
 void rest_client::client_gui(){
     //main thread for displaying gui
-    std::cout<<"client gui is started : "<<"\n";
+    //BOOST_LOG_TRIVIAL(info)<<"Client gui is started";
+    BOOST_LOG_TRIVIAL(info)<<"client_gui() started";
 
 
     graphiqueSDL fenetre{1000, 800};
@@ -58,31 +65,77 @@ void rest_client::client_gui(){
     a1.afficherSurFenetre(fenetre);
     fenetre.afficherImage();
     getchar();
+    BOOST_LOG_TRIVIAL(info)<<"client_gui() ended";
 }
 
 
 void rest_client::run() {
     std::thread gui([&]() {
+        BOOST_LOG_TRIVIAL(info)<<"gui thread started";
         this->client_gui();
     });
 
-    std::thread net([&]() {
-        this->client_network();
-    });
+    this->client_network();
 
     gui.join();
-
-
-    net.join();
-
-    on_shutdown();
+   // net.join();
+   // send_create_game_message();
 }
 
 std::shared_ptr<rest_client > rest_client::get_instance() noexcept {
     if (rest_client::s_rest_client == nullptr){
         rest_client::s_rest_client = std::make_shared<rest_client>(rest_client());
+        BOOST_LOG_TRIVIAL(info)<<"rest client instance is being created";
+    }
+    else{
+        BOOST_LOG_TRIVIAL(warning)<<"rest client instance already exist";
     }
     return rest_client::s_rest_client;
 }
+
+void rest_client::send_create_game_message(){
+    BOOST_LOG_TRIVIAL(info)<<"send_create_game_message()";
+    std::string payload = client_message_factory::get_create_game_message("username");
+
+    std::string ret = send_message(payload);
+
+    BOOST_LOG_TRIVIAL(info)<<"Reiceived : "<<ret;
+}
+
+std::string rest_client::send_message(const std::string &message){
+    if(this->m_server_uri == "empty"){
+        BOOST_LOG_TRIVIAL(fatal)<<"Attempting to send message without specifiying server endpoint uri";
+        throw std::runtime_error("server uri is not valid");
+    }
+
+}
+
+
+void on_message(std::shared_ptr<WsClient::Connection> connection, std::shared_ptr<WsClient::InMessage> in_message){
+    BOOST_LOG_TRIVIAL(info)<<"on_message() start";
+
+
+    BOOST_LOG_TRIVIAL(info)<<"on_message() end";
+}
+void on_open(std::shared_ptr<WsClient::Connection> connection){
+    BOOST_LOG_TRIVIAL(info)<<"on_open() start";
+
+
+    BOOST_LOG_TRIVIAL(info)<<"on_open() end";
+
+}
+void on_close(std::shared_ptr<WsClient::Connection> connection, int status, const std::string & reason){
+    BOOST_LOG_TRIVIAL(info)<<"on_close() start";
+
+
+    BOOST_LOG_TRIVIAL(info)<<"on_close() end";
+}
+void on_error(std::shared_ptr<WsClient::Connection> connection, const SimpleWeb::error_code &ec){
+    BOOST_LOG_TRIVIAL(info)<<"on_error() start";
+
+
+    BOOST_LOG_TRIVIAL(info)<<"on_error() end";
+}
+
 
 

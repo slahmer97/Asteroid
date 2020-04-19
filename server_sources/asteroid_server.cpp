@@ -1,13 +1,5 @@
-#include "headers/games_scheduler.h"
-#include <cpprest/http_listener.h>
-#include <cpprest/filestream.h>
 
-#include <memory>
-#include <rest_server.h>
-#include "headers/server_http_service_handler.h"
-#include "headers/polyServeur.h"
-#include "headers/moyenAsteroid.h"
-
+/*
 void TEST() {
     game g{};
     polyServeur ps = {{1, 2},
@@ -17,17 +9,17 @@ void TEST() {
                         {2, 6},
                         {3, 7}};
 }
+*/
+#include <iostream>
+#include <rest_server.h>
 
 auto main(int argc, char **argv) -> int {
 
-    TEST();
 
-    utility::string_t port = U("9999");
-    if (argc == 2) {
-        port = argv[1];
-    }
+    std::string port = "9999";
+    std::string host = "localhost";
     std::shared_ptr<rest_server> server = rest_server::get_instance();
-    utility::string_t host = "http://localhost";
+
     server->init(host, port);
 
     server->run();

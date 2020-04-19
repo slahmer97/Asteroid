@@ -24,7 +24,7 @@ private:
     std::vector<std::shared_ptr<asteroid>> asteroids;
     std::vector<std::shared_ptr<laser>> lasers;
     std::map<std::shared_ptr<vaisseau>, int/*idDuJoueur*/> vaisseaux;
-    int score;
+    int score{};
     // autre, placeholder
 };
 
