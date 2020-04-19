@@ -34,7 +34,7 @@ include_directories(WEBSOCKET my_libs/Simple-WebSocket-Server)
 set(CLIENT_SOURCE_FILES
         ${CLIENT_SOURCE_PATH}/asteroid_client.cpp
         ${CLIENT_SOURCE_PATH}/rest_client.cpp
-        server_sources/headers/polyServeur.h server_sources/headers/asteroid.h server_sources/headers/grandAsteroid.h server_sources/headers/moyenAsteroid.h server_sources/headers/petitAsteroid.h server_sources/headers/vaisseau.h server_sources/headers/laser.h)
+        server_sources/headers/polyServeur.h server_sources/headers/asteroid.h server_sources/headers/grandAsteroid.h server_sources/headers/moyenAsteroid.h server_sources/headers/petitAsteroid.h server_sources/headers/vaisseau.h server_sources/headers/laser.h server_sources/headers/intersection.h)
 
 set(SERVER_SOURCE_FILES
         ${SERVER_SOURCE_PATH}/asteroid_server.cpp
