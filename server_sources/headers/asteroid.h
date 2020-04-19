@@ -13,8 +13,8 @@ public:
 
     explicit asteroid(std::vector<point> points) : polyServeur(std::move(points)) {}
 
-    virtual std::vector<std::shared_ptr<asteroid>>
-    generationDestruction() const = 0; // genere nouveaux asteroids plus petits
+    //virtual std::vector<std::shared_ptr<asteroid>>
+   // generationDestruction() const = 0; // genere nouveaux asteroids plus petits
 };
 
 #endif //ASTEROID_ASTEROID_H

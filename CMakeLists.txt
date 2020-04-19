@@ -34,12 +34,21 @@ include_directories(WEBSOCKET my_libs/Simple-WebSocket-Server)
 set(CLIENT_SOURCE_FILES
         ${CLIENT_SOURCE_PATH}/asteroid_client.cpp
         ${CLIENT_SOURCE_PATH}/rest_client.cpp
-        server_sources/headers/polyServeur.h server_sources/headers/asteroid.h server_sources/headers/grandAsteroid.h server_sources/headers/moyenAsteroid.h server_sources/headers/petitAsteroid.h server_sources/headers/vaisseau.h server_sources/headers/laser.h server_sources/headers/intersection.h)
+        server_sources/headers/polyServeur.h
+        server_sources/headers/asteroid.h
+        server_sources/headers/grandAsteroid.h
+        server_sources/headers/moyenAsteroid.h
+        server_sources/headers/petitAsteroid.h
+        server_sources/headers/vaisseau.h
+        server_sources/headers/laser.h
+        server_sources/headers/intersection.h
+)
 
 set(SERVER_SOURCE_FILES
         ${SERVER_SOURCE_PATH}/asteroid_server.cpp
         ${SERVER_SOURCE_PATH}/vec2d.cpp
         ${SERVER_SOURCE_PATH}/rest_server.cpp
+        ${SERVER_SOURCE_PATH}/game_scheduler.cpp
         )
 set(SHARED_SOURCE_FILES
         )
@@ -59,7 +68,7 @@ target_link_libraries(Asteroid_client
 
 
 #server side
-add_executable(Asteroid_server server_sources/asteroid_server.cpp ${SERVER_SOURCE_FILES} ${SERVER_HEADER_FILES_I} ${WEBSOCKET})
+add_executable(Asteroid_server server_sources/asteroid_server.cpp  server_sources/headers/game_scheduler.h ${SERVER_SOURCE_FILES} ${SERVER_HEADER_FILES_I} ${WEBSOCKET})
 target_link_libraries(Asteroid_server
         ${Boost_LIBRARIES}
         boost_system

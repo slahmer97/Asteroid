@@ -6,6 +6,7 @@
 
 #include <utility>
 #include <future>
+#include <boost/log/trivial.hpp>
 
 std::shared_ptr<rest_server> rest_server::m_rest_server;
 
@@ -13,6 +14,8 @@ std::shared_ptr<rest_server> rest_server::m_rest_server;
 
 
 void rest_server::init(std::string &host, std::string &port) {
+    BOOST_LOG_TRIVIAL(info)<<"init() start";
+
     m_g_httpHandler->config.port = std::stoi(port);
 
     m_g_httpHandler->endpoint["^/echo/?$"].on_message = [&](const std::shared_ptr<WsServer::Connection>& connection, std::shared_ptr<WsServer::InMessage> in_message) {
@@ -36,10 +39,12 @@ void rest_server::init(std::string &host, std::string &port) {
     m_g_httpHandler->endpoint["^/echo/?$"].on_error = [](const std::shared_ptr<WsServer::Connection>& connection, const SimpleWeb::error_code &ec) {
 
     };
+    BOOST_LOG_TRIVIAL(info)<<"init() exit";
 
 }
 
 void rest_server::run(){
+    BOOST_LOG_TRIVIAL(info)<<"run() start";
 
     std::promise<unsigned short> server_port;
     std::thread server_thread([&]() {
@@ -48,6 +53,8 @@ void rest_server::run(){
             server_port.set_value(port);
         });
     });
+    BOOST_LOG_TRIVIAL(info)<<"server_thread() started";
+
     std::string a;
     std::cout<<"Enter something to exit\n";
     std::cin>>a;
@@ -55,26 +62,36 @@ void rest_server::run(){
 }
 
 std::shared_ptr<rest_server> rest_server::get_instance()  {
+    BOOST_LOG_TRIVIAL(info)<<"get_instance()";
+
     if(rest_server::m_rest_server == nullptr)
         rest_server::m_rest_server = std::make_shared<rest_server>(rest_server());
     return rest_server::m_rest_server;
 }
 void rest_server::on_open(const std::shared_ptr<WsServer::Connection>& connection) {
+    BOOST_LOG_TRIVIAL(info)<<"on_open()";
     std::cout<<"On open\n";
+
 }
 
 void rest_server::on_message(const std::shared_ptr<WsServer::Connection>& connection, std::shared_ptr<WsServer::InMessage> in_message) {
+    BOOST_LOG_TRIVIAL(info)<<"on_message()";
     std::cout<<"On message\n";
+    std::cout<<"Message : "<<in_message->string();
+
 }
 
 void rest_server::on_close(const std::shared_ptr<WsServer::Connection>& connection, int status, const std::string &) {
+    BOOST_LOG_TRIVIAL(info)<<"on_close()";
     std::cout<<"On close\n";
 }
 void rest_server::on_handshake(std::shared_ptr<WsServer::Connection>, SimpleWeb::CaseInsensitiveMultimap &) {
+    BOOST_LOG_TRIVIAL(info)<<"on_handshake()";
     std::cout<<"On handshake\n";
 }
 
 rest_server::rest_server() {
+    BOOST_LOG_TRIVIAL(info)<<"WsServer instance is created";
     m_g_httpHandler = new WsServer();
 }
 

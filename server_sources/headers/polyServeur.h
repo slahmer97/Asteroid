@@ -5,13 +5,11 @@
 #ifndef ASTEROID_POLYSERVEUR_H
 #define ASTEROID_POLYSERVEUR_H
 
-#include <cpprest/http_client.h>
 #include "../../client_sources/headers/point.h"
 #include "../../client_sources/headers/polygone.h"
 #include "vec2d.h"
 #include "intersection.h"
 
-using namespace web;
 
 class polyServeur : public polygone {
 public:
@@ -20,6 +18,7 @@ public:
     explicit polyServeur(std::vector<point> points) : polygone(std::move(points)) {}
 
     std::string to_string() const {
+        /*
         json::value o;
         std::vector<json::value> a{};
         for (const auto &p : points) {
@@ -31,20 +30,21 @@ public:
 
         o["points"] = json::value::array(a);
         o["type"] = json::value(std::string("polygone"));
+   */
 
-        std::stringstream s;
-        s << o;
-        return s.str();
+        return "sqd";
     }
 
     static polyServeur json_to_polygone(const std::string& p_object) {
-
+    /*
         json::array obj = json::value::parse(p_object)["points"].as_array();
         // unsigned long size = obj.size();
-        std::vector<point> res;
         //initialize vector with size
         for (auto &o : obj)
             res.emplace_back(o["x"].as_integer(), o["y"].as_integer());
+            */
+        std::vector<point> res;
+
         return polyServeur(res);
     }
 

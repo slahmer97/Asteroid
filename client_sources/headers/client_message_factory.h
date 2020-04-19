@@ -7,30 +7,35 @@
 
 #include <string>
 #include <boost/log/trivial.hpp>
-
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+namespace pt = boost::property_tree;
 class client_message_factory{
 public:
     static std::string get_create_game_message(const std::string& p_username){
-/*        json::value o;
-        o["type"] = json::value("create_game");
-        o["username"] = json::value(p_username);
-*/
-        //std::stringstream s;
-  //      s << o;
+        pt::ptree root;
+
+        root.put("type","create_game");
+        root.put("username",p_username);
+        std::stringstream ss;
+        boost::property_tree::json_parser::write_json(ss, root);
+
+
         BOOST_LOG_TRIVIAL(info)<< "get_create_game_message()";
-        return "get_create_game_message";
+        return ss.str();
     }
     static std::string get_join_game_message(const std::string& p_game_id, const std::string& p_username){
-     /*   json::value o;
-        o["type"] = json::value("join_game");
-        o["username"] = json::value(p_username);
-        o["game_id"] = json::value(p_game_id);
-        o["server_ip"] = json::value("localhost");
-        o["server_port"] = json::value("99992");*/
-        //std::stringstream s;
-        //s << o;
+        pt::ptree root;
+
+        root.put("type","join_game");
+        root.put("username",p_username);
+        root.put("game_id",p_username);
+
+        std::stringstream ss;
+        boost::property_tree::json_parser::write_json(ss, root);
+
         BOOST_LOG_TRIVIAL(info)<< "get_join_game_message()";
-        return "get_join_game_message";
+        return ss.str();
     }
     static std::string get_request_view_message(const std::string& p_game_id){
         //json::value o;

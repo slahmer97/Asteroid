@@ -27,21 +27,20 @@ void rest_client::client_network()  {
     BOOST_LOG_TRIVIAL(info)<<"client_network() init "<<m_uri;
     m_g_httpHandler = new WsClient(m_uri);
     m_g_httpHandler->on_message = [&](const std::shared_ptr<WsClient::Connection>& connection, const std::shared_ptr<WsClient::InMessage> &in_message) {
-        //this->on_message(connection,in_message);
+        this->on_message(connection,in_message);
     };
 
     m_g_httpHandler->on_open = [&](const std::shared_ptr<WsClient::Connection>& connection) {
-        //this->on_open(connection);
-        connection->send("Hello server");
+        this->on_open(const_cast<std::shared_ptr<WsClient::Connection> &>(connection));
     };
 
     m_g_httpHandler->on_close = [&](const std::shared_ptr<WsClient::Connection>& connection, int status, const std::string & reason) {
-        //this->on_close(connection,status,reason);
+        this->on_close(connection,status,reason);
     };
 
     // See http://www.boost.org/doc/libs/1_55_0/doc/html/boost_asio/reference.html, Error Codes for error code meanings
     m_g_httpHandler->on_error = [&](const std::shared_ptr<WsClient::Connection>& connection, const SimpleWeb::error_code &ec) {
-        //this->on_error(connection,ec);
+        this->on_error(connection,ec);
     };
 
     m_g_httpHandler->start();
@@ -72,13 +71,19 @@ void rest_client::client_gui(){
 void rest_client::run() {
     std::thread gui([&]() {
         BOOST_LOG_TRIVIAL(info)<<"gui thread started";
-        this->client_gui();
+        //this->client_gui();
+    });
+    std::thread net([&]() {
+        BOOST_LOG_TRIVIAL(info)<<"network thread started";
+        this->client_network();
     });
 
-    this->client_network();
 
     gui.join();
-   // net.join();
+    sleep(8);
+    send_create_game_message();
+
+    // net.join();
    // send_create_game_message();
 }
 
@@ -103,39 +108,44 @@ void rest_client::send_create_game_message(){
 }
 
 std::string rest_client::send_message(const std::string &message){
-    if(this->m_server_uri == "empty"){
-        BOOST_LOG_TRIVIAL(fatal)<<"Attempting to send message without specifiying server endpoint uri";
-        throw std::runtime_error("server uri is not valid");
+    if(this->m_connection == nullptr){
+        BOOST_LOG_TRIVIAL(fatal)<<"Attempting to send message without specifiying server connection";
+        throw std::runtime_error("server connection is null");
     }
-
+    m_connection->send(message);
+    return "DONE";
 }
 
 
-void on_message(std::shared_ptr<WsClient::Connection> connection, std::shared_ptr<WsClient::InMessage> in_message){
+
+
+
+void rest_client::on_open(std::shared_ptr<WsClient::Connection>& connection){
+    BOOST_LOG_TRIVIAL(info)<<"on_open() start";
+
+    //connection->send("Hello server");
+    this->m_connection = connection;
+    BOOST_LOG_TRIVIAL(info)<<"on_open() end";
+
+}
+void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connection,const std::shared_ptr<WsClient::InMessage>& in_message){
     BOOST_LOG_TRIVIAL(info)<<"on_message() start";
 
 
     BOOST_LOG_TRIVIAL(info)<<"on_message() end";
 }
-void on_open(std::shared_ptr<WsClient::Connection> connection){
-    BOOST_LOG_TRIVIAL(info)<<"on_open() start";
 
-
-    BOOST_LOG_TRIVIAL(info)<<"on_open() end";
-
-}
-void on_close(std::shared_ptr<WsClient::Connection> connection, int status, const std::string & reason){
-    BOOST_LOG_TRIVIAL(info)<<"on_close() start";
-
-
-    BOOST_LOG_TRIVIAL(info)<<"on_close() end";
-}
-void on_error(std::shared_ptr<WsClient::Connection> connection, const SimpleWeb::error_code &ec){
+void rest_client::on_error(const std::shared_ptr<WsClient::Connection> &connection, const SimpleWeb::error_code &ec) {
     BOOST_LOG_TRIVIAL(info)<<"on_error() start";
 
 
     BOOST_LOG_TRIVIAL(info)<<"on_error() end";
 }
 
+void rest_client::on_close(const std::shared_ptr<WsClient::Connection> &connection, int status, const std::string &reason) {
+    BOOST_LOG_TRIVIAL(info)<<"on_close() start";
 
+
+    BOOST_LOG_TRIVIAL(info)<<"on_close() end";
+}
 
