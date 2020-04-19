@@ -12,7 +12,9 @@
 #include <memory>
 #include "game.h"
 class Game;
-
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+namespace pt = boost::property_tree;
 class game_scheduler{
 public:
 
@@ -30,6 +32,9 @@ public:
 
     static std::shared_ptr<game> get_game_instance(const std::string& game_id);
     static std::shared_ptr<game> create_game_instance(std::string& game_id);
+    static void join_routine(const pt::ptree& pt);
+    static void creation_routine(const pt::ptree& pt);
+    static boost::property_tree::ptree parse_json(std::string rec);
 
 private:
     static std::map<std::string,std::shared_ptr<game>> m_games_instances;

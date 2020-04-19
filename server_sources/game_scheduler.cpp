@@ -2,6 +2,9 @@
 // Created by stevlulz on 19/04/2020.
 //
 
+#include <sstream>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include "game_scheduler.h"
 
 std::string game_scheduler::str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -24,5 +27,21 @@ std::shared_ptr<game> game_scheduler::create_game_instance(std::string &game_id)
     m_games_instances.insert(std::make_pair(game_id,tmp));
 
     return tmp;
+}
+
+boost::property_tree::ptree game_scheduler::parse_json(std::string  rec) {
+    std::stringstream ss;
+    ss << rec;
+    pt::ptree tt;
+    pt::read_json(ss, tt);
+    return tt;
+}
+
+void game_scheduler::join_routine(const pt::ptree& pt) {
+    std::cout<<"Join_routine()\n";
+}
+
+void game_scheduler::creation_routine(const pt::ptree& pt) {
+    std::cout<<"Creation_routine()\n";
 }
 

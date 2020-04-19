@@ -7,6 +7,8 @@
 #include <utility>
 #include <future>
 #include <boost/log/trivial.hpp>
+#include <game_scheduler.h>
+#include <boost/property_tree/ptree.hpp>
 
 std::shared_ptr<rest_server> rest_server::m_rest_server;
 
@@ -77,7 +79,24 @@ void rest_server::on_open(const std::shared_ptr<WsServer::Connection>& connectio
 void rest_server::on_message(const std::shared_ptr<WsServer::Connection>& connection, std::shared_ptr<WsServer::InMessage> in_message) {
     BOOST_LOG_TRIVIAL(info)<<"on_message()";
     std::cout<<"On message\n";
-    std::cout<<"Message : "<<in_message->string();
+    std::cout<<"Received : "<<in_message->string()<<"\n";
+
+    boost::property_tree::ptree root;
+    try {
+        root =     game_scheduler::parse_json(in_message->string());
+    }
+    catch (std::exception e){
+        std::cout<<e.what();
+        return;
+    }
+
+    std::string type = root.get<std::string>("type");
+    if(type == "create_game"){
+        game_scheduler::creation_routine(root);
+    }
+    else if(type == "join_game"){
+        game_scheduler::join_routine(root);
+    }
 
 }
 
