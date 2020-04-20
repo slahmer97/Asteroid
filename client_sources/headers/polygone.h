@@ -27,6 +27,8 @@ public:
     explicit polygone(std::vector<point> p) : m_center{}, points{std::move(p)}
     {}
 
+    polygone() = default;
+
 
 public:
     point m_center;

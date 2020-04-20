@@ -34,6 +34,8 @@ public:
         return "sqd";
     }
 
+    polyServeur() = default;
+
     static polyServeur json_to_polygone(const std::string& p_object) {
     /*
         json::array obj = json::value::parse(p_object)["points"].as_array();

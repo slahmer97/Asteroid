@@ -6,17 +6,26 @@
 #define ASTEROID_VAISSEAU_H
 
 #include "polyServeur.h"
+#include "vec2d.h"
 
 class vaisseau : public polyServeur {
 public:
     vaisseau(std::initializer_list<point> &&liste) : polyServeur(liste) {}
-
     explicit vaisseau(std::vector<point> points) : polyServeur(std::move(points)) {}
 
-    void changerDirection(/*const vec2d& v*/) {
+    vaisseau() : polyServeur{} {
+        // construire un triangle
+    }
 
+    void rotationDroite(int degree) {
+        // placeholder
+    }
 
+    void rotationGauche(int degree) {
+        // placeholder
+    }
 
+    void avancer(const vec2d& v) {
         // placeholder
     }
 };
