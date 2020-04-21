@@ -6,6 +6,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include "game_scheduler.h"
+#include <boost/log/trivial.hpp>
 
 std::string game_scheduler::str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 std::map<std::string,std::shared_ptr<game>> game_scheduler::m_games_instances;
@@ -37,11 +38,48 @@ boost::property_tree::ptree game_scheduler::parse_json(std::string  rec) {
     return tt;
 }
 
-void game_scheduler::join_routine(const pt::ptree& pt) {
-    std::cout<<"Join_routine()\n";
+void game_scheduler::join_routine(const pt::ptree& pt, std::shared_ptr<WsServer::Connection>& p_connection) {
+    BOOST_LOG_TRIVIAL(info)<<"join_routine() start";
+    std::string game_id = pt.get<std::string>("game_id");
+    std::shared_ptr<game> tmp_game = get_game_instance(game_id);
+    std::string tmp_username = pt.get<std::string>("username");
+    BOOST_LOG_TRIVIAL(info)<<"join_routine -- username : "<<tmp_username<<" -- game_id : "<<game_id;
+
+    tmp_game->add_new_player(tmp_username,p_connection);
+    BOOST_LOG_TRIVIAL(info)<<"join_routine() exit";
 }
 
-void game_scheduler::creation_routine(const pt::ptree& pt) {
-    std::cout<<"Creation_routine()\n";
+void game_scheduler::creation_routine(const pt::ptree& pt, std::shared_ptr<WsServer::Connection>& p_connection) {
+    BOOST_LOG_TRIVIAL(info)<<"creation_routine() start";
+    std::string game_id = pt.get<std::string>("game_id");
+    std::shared_ptr<game> tmp_game = create_game_instance(game_id);
+    std::string tmp_username = pt.get<std::string>("username");
+    BOOST_LOG_TRIVIAL(info)<<"creation_routine -- username : "<<tmp_username<<" -- game_id : "<<game_id;
+
+    tmp_game->add_new_player(tmp_username,p_connection);
+    BOOST_LOG_TRIVIAL(info)<<"creation_routine() exit";
+}
+
+void game_scheduler::move_routine(const pt::ptree &pt) {
+    BOOST_LOG_TRIVIAL(info)<<"move_routine() start";
+    BOOST_LOG_TRIVIAL(info)<<"move::value : "<<pt.get<std::string>("value");
+
+
+    BOOST_LOG_TRIVIAL(info)<<"move_routine() exit";
+}
+
+void game_scheduler::rotate_routine(const pt::ptree &pt) {
+    BOOST_LOG_TRIVIAL(info)<<"rotate_routine() start";
+    BOOST_LOG_TRIVIAL(info)<<"rotate::value : "<<pt.get<std::string>("value");
+
+
+    BOOST_LOG_TRIVIAL(info)<<"rotate_routine() exit";
+}
+
+void game_scheduler::fire_routine(const pt::ptree &pt) {
+    BOOST_LOG_TRIVIAL(info)<<"fire_routine() start";
+
+
+    BOOST_LOG_TRIVIAL(info)<<"fire_routine() exit";
 }
 

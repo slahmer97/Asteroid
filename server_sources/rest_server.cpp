@@ -21,7 +21,7 @@ void rest_server::init(std::string &host, std::string &port) {
     m_g_httpHandler->config.port = std::stoi(port);
 
     m_g_httpHandler->endpoint["^/echo/?$"].on_message = [&](const std::shared_ptr<WsServer::Connection>& connection, std::shared_ptr<WsServer::InMessage> in_message) {
-        this->on_message(connection,std::move(in_message));
+        this->on_message(const_cast<std::shared_ptr<WsServer::Connection> &>(connection), std::move(in_message));
     };
     m_g_httpHandler->endpoint["^/echo/?$"].on_open = [&](const std::shared_ptr<WsServer::Connection>& connection) {
        this->on_open(connection);
@@ -76,7 +76,7 @@ void rest_server::on_open(const std::shared_ptr<WsServer::Connection>& connectio
 
 }
 
-void rest_server::on_message(const std::shared_ptr<WsServer::Connection>& connection, std::shared_ptr<WsServer::InMessage> in_message) {
+void rest_server::on_message(std::shared_ptr<WsServer::Connection>& connection, std::shared_ptr<WsServer::InMessage> in_message) {
     BOOST_LOG_TRIVIAL(info)<<"on_message()";
     std::cout<<"On message\n";
     std::cout<<"Received : "<<in_message->string()<<"\n";
@@ -92,10 +92,22 @@ void rest_server::on_message(const std::shared_ptr<WsServer::Connection>& connec
 
     std::string type = root.get<std::string>("type");
     if(type == "create_game"){
-        game_scheduler::creation_routine(root);
+        game_scheduler::creation_routine(root,connection);
     }
     else if(type == "join_game"){
-        game_scheduler::join_routine(root);
+        game_scheduler::join_routine(root,connection);
+    }
+    else if(type == "move"){
+        BOOST_LOG_TRIVIAL(info)<<"move()";
+
+    }
+    else if(type == "rotate"){
+        BOOST_LOG_TRIVIAL(info)<<"rotate()";
+
+    }
+    else if(type == "fire"){
+        BOOST_LOG_TRIVIAL(info)<<"fire()";
+
     }
 
 }

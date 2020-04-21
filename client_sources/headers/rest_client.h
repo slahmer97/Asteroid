@@ -21,7 +21,11 @@ private:
 
     void send_create_game_message();
     void send_join_game_message(const std::string& game_id);
-
+    void send_move_forward_message();
+    void send_move_backward_message();
+    void send_rotate_left_message();
+    void send_rotate_right_message();
+    void send_fire_message();
 
     void on_message(const std::shared_ptr<WsClient::Connection>& connection,const std::shared_ptr<WsClient::InMessage>& in_message);
     void on_open(std::shared_ptr<WsClient::Connection>& connection);

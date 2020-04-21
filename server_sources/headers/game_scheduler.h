@@ -13,7 +13,8 @@
 #include "game.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-
+#include "server_ws.hpp"
+using WsServer = SimpleWeb::SocketServer<SimpleWeb::WS>;
 class Game;
 
 namespace pt = boost::property_tree;
@@ -35,8 +36,11 @@ public:
 
     static std::shared_ptr<game> get_game_instance(const std::string& game_id);
     static std::shared_ptr<game> create_game_instance(std::string& game_id);
-    static void join_routine(const pt::ptree& pt);
-    static void creation_routine(const pt::ptree& pt);
+    static void join_routine(const pt::ptree& pt,std::shared_ptr<WsServer::Connection>& p_connection);
+    static void creation_routine(const pt::ptree& pt,std::shared_ptr<WsServer::Connection>& p_connection);
+    static void move_routine(const pt::ptree& pt);
+    static void rotate_routine(const pt::ptree& pt);
+    static void fire_routine(const pt::ptree& pt);
     static boost::property_tree::ptree parse_json(std::string rec);
 
 private:

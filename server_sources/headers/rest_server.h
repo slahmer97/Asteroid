@@ -17,7 +17,7 @@ public:
     void init(std::string& host, std::string& port);
 
     void run();
-    void on_message(const std::shared_ptr<WsServer::Connection>& connection, std::shared_ptr<WsServer::InMessage> in_message);
+    void on_message(std::shared_ptr<WsServer::Connection>& connection, std::shared_ptr<WsServer::InMessage> in_message);
     void on_open(const std::shared_ptr<WsServer::Connection>& connection);
     void on_close(const std::shared_ptr<WsServer::Connection>& connection, int status, const std::string & );
     void on_handshake(std::shared_ptr<WsServer::Connection> /*connection*/, SimpleWeb::CaseInsensitiveMultimap &);

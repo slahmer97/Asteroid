@@ -82,6 +82,16 @@ void rest_client::run() {
     gui.join();
     sleep(8);
     send_create_game_message();
+    send_move_forward_message();
+    send_move_backward_message();
+    send_rotate_left_message();
+    send_rotate_right_message();
+    send_fire_message();
+    send_fire_message();
+    send_rotate_left_message();
+    send_move_forward_message();
+    send_rotate_right_message();
+    send_fire_message();
 
     // net.join();
    // send_create_game_message();
@@ -100,7 +110,7 @@ std::shared_ptr<rest_client > rest_client::get_instance() noexcept {
 
 void rest_client::send_create_game_message(){
     BOOST_LOG_TRIVIAL(info)<<"send_create_game_message()";
-    std::string payload = client_message_factory::get_create_game_message("username");
+    std::string payload = client_message_factory::get_create_game_message("stevlulz","game_123");
 
     std::string ret = send_message(payload);
 
@@ -147,5 +157,30 @@ void rest_client::on_close(const std::shared_ptr<WsClient::Connection> &connecti
 
 
     BOOST_LOG_TRIVIAL(info)<<"on_close() end";
+}
+
+void rest_client::send_move_forward_message() {
+    std::string msg = client_message_factory::get_move_forward_message();
+    send_message(msg);
+}
+
+void rest_client::send_move_backward_message() {
+    std::string msg = client_message_factory::get_move_backward_message();
+    send_message(msg);
+}
+
+void rest_client::send_rotate_left_message() {
+    std::string msg = client_message_factory::get_left_rotate_message();
+    send_message(msg);
+}
+
+void rest_client::send_rotate_right_message() {
+    std::string msg = client_message_factory::get_right_rotate_message();
+    send_message(msg);
+}
+
+void rest_client::send_fire_message() {
+    std::string msg = client_message_factory::get_fire_message();
+    send_message(msg);
 }
 
