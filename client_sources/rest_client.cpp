@@ -172,9 +172,24 @@ void rest_client::on_open(std::shared_ptr<WsClient::Connection>& connection){
 }
 void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connection,const std::shared_ptr<WsClient::InMessage>& in_message){
     BOOST_LOG_TRIVIAL(info)<<"on_message() start";
-
-    BOOST_LOG_TRIVIAL(info)<< in_message->string();
-
+    std::stringstream ss;
+    ss << in_message->string();
+    pt::ptree tt;
+    pt::read_json(ss, tt);
+    auto type = tt.get<std::string>("type");
+    if(type == "game_view"){
+        BOOST_LOG_TRIVIAL(info)<<"received game view";
+        std::string arr = tt.get<std::string>("shapes");
+        std::cout<<"Val : "<<arr<<std::endl;
+        //for (auto& item : arr.get_child(""))
+        //    std::cout << "value is " << item.second.get<std::string>("type") << std::endl;
+    }
+    else if(type == "error"){
+        BOOST_LOG_TRIVIAL(warning)<<"received error";
+    }
+    else{
+        BOOST_LOG_TRIVIAL(info)<<"received other thing";
+    }
     BOOST_LOG_TRIVIAL(info)<<"on_message() end";
 }
 
