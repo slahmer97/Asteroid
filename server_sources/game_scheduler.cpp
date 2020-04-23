@@ -42,6 +42,11 @@ void game_scheduler::join_routine(const pt::ptree& pt, std::shared_ptr<WsServer:
     BOOST_LOG_TRIVIAL(info)<<"join_routine() start";
     std::string game_id = pt.get<std::string>("game_id");
     std::shared_ptr<game> tmp_game = get_game_instance(game_id);
+    if(tmp_game == nullptr){
+        std::string err = "{\"type\":\"error\",\"value\":\"game_id_does_not_exist\"}";
+        p_connection->send(err);
+        return;
+    }
     std::string tmp_username = pt.get<std::string>("username");
     BOOST_LOG_TRIVIAL(info)<<"join_routine -- username : "<<tmp_username<<" -- game_id : "<<game_id;
 
@@ -53,6 +58,11 @@ void game_scheduler::creation_routine(const pt::ptree& pt, std::shared_ptr<WsSer
     BOOST_LOG_TRIVIAL(info)<<"creation_routine() start";
     std::string game_id = pt.get<std::string>("game_id");
     std::shared_ptr<game> tmp_game = create_game_instance(game_id);
+    if(tmp_game == nullptr){
+        std::string err = "{\"type\" : \"error\",\"value\":\"game_id_exists\"}";
+        p_connection->send(err);
+        return;
+    }
     std::string tmp_username = pt.get<std::string>("username");
     BOOST_LOG_TRIVIAL(info)<<"creation_routine -- username : "<<tmp_username<<" -- game_id : "<<game_id;
 

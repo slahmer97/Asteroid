@@ -90,7 +90,7 @@ void rest_server::on_message(std::shared_ptr<WsServer::Connection>& connection, 
         return;
     }
 
-    std::string type = root.get<std::string>("type");
+    auto type = root.get<std::string>("type");
     if(type == "create_game"){
         game_scheduler::creation_routine(root,connection);
     }

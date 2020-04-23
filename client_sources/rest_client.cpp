@@ -69,32 +69,60 @@ void rest_client::client_gui(){
 
 
 void rest_client::run() {
-    std::thread gui([&]() {
-        BOOST_LOG_TRIVIAL(info)<<"gui thread started";
-        //this->client_gui();
-    });
-    std::thread net([&]() {
-        BOOST_LOG_TRIVIAL(info)<<"network thread started";
-        this->client_network();
-    });
+    std::unique_ptr<std::thread> gui;
+    std::unique_ptr<std::thread> net;
+
+    std::string input;
+    do{
+        std::cout<<"Enter a command : ";
+        std::cin>>input;
+        if (input == "start_net"){
+            net = std::make_unique<std::thread>(std::thread([&]() {
+                BOOST_LOG_TRIVIAL(info)<<"network thread started";
+                this->client_network();
+            }));
+        }
+        else if(input == "start_gui"){
+            gui = std::make_unique<std::thread>(std::thread([&]() {
+                BOOST_LOG_TRIVIAL(info)<<"gui thread started";
+                this->client_gui();
+            }));
+        }
+        else if(input == "create_game"){
+            send_create_game_message();
+        }
+        else if(input == "join_game"){
+            send_join_game_message("game123");
+        }
+        else if(input == "forward"){
+            send_move_forward_message();
+        }
+        else if(input == "backward"){
+            send_move_backward_message();
+        }
+        else if(input == "left"){
+            send_rotate_left_message();
+        }
+        else if(input == "right"){
+            send_rotate_right_message();
+        }
+        else if(input == "fire"){
+            send_fire_message();
+        }
+        else if(input == "close"){
+            std::cout<<"Main loop ended\n";
+            break;
+        }
+        else {
+            std::cout<<"unknown command\n";
+        }
+
+    }while(true);
 
 
-    gui.join();
-    sleep(8);
-    send_create_game_message();
-    send_move_forward_message();
-    send_move_backward_message();
-    send_rotate_left_message();
-    send_rotate_right_message();
-    send_fire_message();
-    send_fire_message();
-    send_rotate_left_message();
-    send_move_forward_message();
-    send_rotate_right_message();
-    send_fire_message();
+    if(gui != nullptr)
+        gui->join();
 
-    // net.join();
-   // send_create_game_message();
 }
 
 std::shared_ptr<rest_client > rest_client::get_instance() noexcept {
@@ -141,6 +169,7 @@ void rest_client::on_open(std::shared_ptr<WsClient::Connection>& connection){
 void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connection,const std::shared_ptr<WsClient::InMessage>& in_message){
     BOOST_LOG_TRIVIAL(info)<<"on_message() start";
 
+    BOOST_LOG_TRIVIAL(info)<< in_message->string();
 
     BOOST_LOG_TRIVIAL(info)<<"on_message() end";
 }
@@ -181,6 +210,11 @@ void rest_client::send_rotate_right_message() {
 
 void rest_client::send_fire_message() {
     std::string msg = client_message_factory::get_fire_message();
+    send_message(msg);
+}
+
+void rest_client::send_join_game_message(const std::string &game_id) {
+    std::string msg = client_message_factory::get_join_game_message(game_id,"sss");
     send_message(msg);
 }
 
