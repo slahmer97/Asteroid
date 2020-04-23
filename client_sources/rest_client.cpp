@@ -47,23 +47,30 @@ void rest_client::client_network()  {
     BOOST_LOG_TRIVIAL(info)<<"client network interface is running on : "<<m_uri;
 }
 
-void rest_client::client_gui(){
+[[noreturn]] void rest_client::client_gui(){
     //main thread for displaying gui
     //BOOST_LOG_TRIVIAL(info)<<"Client gui is started";
     BOOST_LOG_TRIVIAL(info)<<"client_gui() started";
 
 
-    graphiqueSDL fenetre{1000, 800};
-    polyClient b1 = {
-            {200, 100},
-            {400, 300},
-            {500, 500}
-    };
-    alphaNumClient a1 {"HelloWorld, le retour ! Score : 19999", {10,10}};
-    b1.afficherSurFenetre(fenetre);
-    a1.afficherSurFenetre(fenetre);
-    fenetre.afficherImage();
-    getchar();
+    graphiqueSDL fenetre{};
+    std::vector<std::shared_ptr<affichable>> A;
+    A.emplace_back(new polyClient{ {200, 100}, {400, 300}, {500, 500}});
+    A.emplace_back(new alphaNumClient{"HelloWorld, le retour ! Score : 19999", {10,10}});
+
+    while (true) {
+        for (auto i : A) {
+            i->afficherSurFenetre(fenetre);
+        }
+        fenetre.afficherImage();
+        std::string s = fenetre.getTouche(); // getTouche() ne bloque PAS le thread, elle renvoie "" si rien
+        if (s == "") {}
+        else if (s == "space") send_fire_message();
+        else if (s == "up") send_move_forward_message();
+        else if (s == "right") send_rotate_right_message();
+        else if (s == "left") send_rotate_left_message();
+    }
+
     BOOST_LOG_TRIVIAL(info)<<"client_gui() ended";
 }
 

@@ -5,15 +5,16 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include "point.h"
+#include "../../shared_sources/headers/param.h"
 #include <SDL2/SDL_ttf.h>
 
 
 class graphiqueSDL {
 public:
-    graphiqueSDL(int largeur, int hauteur) {
+    graphiqueSDL() {
         if (SDL_Init(SDL_INIT_VIDEO) != 0) return;
         SDL_Window *fenetre = SDL_CreateWindow("Asteroids", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                                               largeur, hauteur, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
+                                               LARGEUR, HAUTEUR, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
         renderer = SDL_CreateRenderer(fenetre, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     }
@@ -27,6 +28,36 @@ public:
         SDL_Event evt;
         SDL_PollEvent(&evt);
         SDL_RenderPresent(renderer);
+    }
+
+    std::string getTouche() {
+        std::string s;
+        SDL_Event e;
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_KEYDOWN) {
+                switch(e.key.keysym.sym) {
+                    case SDLK_UP:
+                        s = "up";
+                        break;
+                    case SDLK_DOWN:
+                        s = "down";
+                        break;
+                    case SDLK_LEFT:
+                        s = "left";
+                        break;
+                    case SDLK_RIGHT:
+                        s = "right";
+                        break;
+                    case SDLK_SPACE:
+                        s = "space";
+                        break;
+                    default:
+                        s = "";
+                }
+                break;
+            }
+        }
+        return s;
     }
 
     void dessinerLigne(const point &a, const point &b) {
