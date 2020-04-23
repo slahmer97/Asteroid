@@ -17,6 +17,7 @@ public:
                                                LARGEUR, HAUTEUR, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
         renderer = SDL_CreateRenderer(fenetre, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_SetEventFilter( [](void* v, SDL_Event* e) -> int {return (e->type == SDL_KEYDOWN) ? 1 : 0;}, NULL);
     }
 
     ~graphiqueSDL() {
@@ -33,28 +34,26 @@ public:
     std::string getTouche() {
         std::string s;
         SDL_Event e;
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_KEYDOWN) {
-                switch(e.key.keysym.sym) {
-                    case SDLK_UP:
-                        s = "up";
-                        break;
-                    case SDLK_DOWN:
-                        s = "down";
-                        break;
-                    case SDLK_LEFT:
-                        s = "left";
-                        break;
-                    case SDLK_RIGHT:
-                        s = "right";
-                        break;
-                    case SDLK_SPACE:
-                        s = "space";
-                        break;
-                    default:
-                        s = "";
-                }
-                break;
+        SDL_PollEvent(&e);
+        if (e.type == SDL_KEYDOWN) {
+            switch(e.key.keysym.sym) {
+                case SDLK_UP:
+                    s = "up";
+                    break;
+                case SDLK_DOWN:
+                    s = "down";
+                    break;
+                case SDLK_LEFT:
+                    s = "left";
+                    break;
+                case SDLK_RIGHT:
+                    s = "right";
+                    break;
+                case SDLK_SPACE:
+                    s = "space";
+                    break;
+                default:
+                    s = "";
             }
         }
         return s;
