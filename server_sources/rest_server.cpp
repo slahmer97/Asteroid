@@ -55,6 +55,10 @@ void rest_server::run(){
             server_port.set_value(port);
         });
     });
+
+    std::thread broadcaster([&](){
+        game_scheduler::broadcaster();
+    });
     BOOST_LOG_TRIVIAL(info)<<"server_thread() started";
 
     std::string a;

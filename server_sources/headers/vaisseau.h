@@ -17,7 +17,9 @@ public:
     vaisseau(std::initializer_list<point> &&liste) : polyServeur(liste) {}
     vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection) : m_username(p_username),m_connection((p_connection)){
         BOOST_LOG_TRIVIAL(info)<<"vaisseau() -- username : "<<m_username;
-
+        points.emplace_back(10,20);
+        points.emplace_back(10,30);
+        points.emplace_back(30,20);
         //initialize fixed point for player
 
     }

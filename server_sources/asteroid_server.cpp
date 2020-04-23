@@ -1,9 +1,12 @@
 
 
 #include <iostream>
+#include <polyServeur.h>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <rest_server.h>
-#include <game_scheduler.h>
 
+namespace pt = boost::property_tree;
 auto main(int argc, char **argv) -> int {
 
 
@@ -14,6 +17,7 @@ auto main(int argc, char **argv) -> int {
     server->init(host, port);
 
     server->run();
+
 
     return 0;
 }

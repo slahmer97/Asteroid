@@ -9,6 +9,10 @@
 #include "vec2d.h"
 #include "intersection.h"
 
+#include <boost/log/trivial.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+namespace pt = boost::property_tree;
 
 class polyServeur : public polygone {
 public:
@@ -16,38 +20,22 @@ public:
 
     explicit polyServeur(std::vector<point> points) : polygone(std::move(points)) {}
 
-    std::string to_string() const {
-        /*
-        json::value o;
-        std::vector<json::value> a{};
-        for (const auto &p : points) {
-            json::value tmp;
-            tmp["x"] = json::value(p.x);
-            tmp["y"] = json::value(p.y);
-            a.emplace_back(tmp);
+    pt::ptree to_ptree() {
+        pt::ptree root;
+
+        pt::ptree  children;
+        for(const auto& elm : points){
+            pt::ptree child;
+            child.put("x",elm.x);
+            child.put("y",elm.y);
+            children.push_back(std::make_pair("",std::move(child)));
         }
-
-        o["points"] = json::value::array(a);
-        o["type"] = json::value(std::string("polygone"));
-   */
-
-        return "sqd";
+        root.put("type","polygone");
+        root.add_child("points",children);
+        return root;
     }
 
     polyServeur() = default;
-
-    static polyServeur json_to_polygone(const std::string& p_object) {
-    /*
-        json::array obj = json::value::parse(p_object)["points"].as_array();
-        // unsigned long size = obj.size();
-        //initialize vector with size
-        for (auto &o : obj)
-            res.emplace_back(o["x"].as_integer(), o["y"].as_integer());
-            */
-        std::vector<point> res;
-
-        return polyServeur(res);
-    }
 
     bool intersecte(const polyServeur &ps) const {
         intersection<point> coupe;

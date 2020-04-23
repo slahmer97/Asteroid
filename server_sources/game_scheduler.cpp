@@ -64,7 +64,7 @@ void game_scheduler::join_routine(const pt::ptree& pt, std::shared_ptr<WsServer:
 
 void game_scheduler::creation_routine(const pt::ptree& pt, std::shared_ptr<WsServer::Connection>& p_connection) {
     BOOST_LOG_TRIVIAL(info)<<"creation_routine() start";
-    std::string game_id = pt.get<std::string>("game_id");
+    auto game_id = pt.get<std::string>("game_id");
     std::shared_ptr<game> tmp_game = create_game_instance(game_id);
     if(tmp_game == nullptr){
         BOOST_LOG_TRIVIAL(warning)<<"attempting to create game with an existing";
@@ -160,5 +160,15 @@ std::shared_ptr<game> game_scheduler::get_game_by_player_connection(std::shared_
             return game.second;
     }
     return nullptr;
+}
+
+void game_scheduler::broadcaster() {
+
+    while(true){
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        for(const auto& game : m_games_instances)
+            game.second->broadcast_view();
+    }
+
 }
 

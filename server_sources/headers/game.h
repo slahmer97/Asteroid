@@ -10,13 +10,18 @@
 #include "asteroid.h"
 #include "laser.h"
 #include "vaisseau.h"
-
+#include <boost/log/trivial.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+namespace pt = boost::property_tree;
 class game {
 public:
 
     explicit game(std::string& game_id) : m_game_id{game_id}, score{},
                                         asteroids{}, lasers{}, vaisseaux{}
-    {}
+    {
+
+    }
 
     void start() {
         BOOST_LOG_TRIVIAL(info)<<"start() game_id : "<<m_game_id;
@@ -63,6 +68,37 @@ public:
 
         BOOST_LOG_TRIVIAL(info)<<"fire() -- end -- username : "<<player->get_username();
     }
+    inline void broadcast_view(){
+        std::string view = get_game_view();
+        BOOST_LOG_TRIVIAL(info)<<"broadcast_view() \n"<<view;
+        for(const auto& p : vaisseaux)
+            p->send_message(view);
+    }
+private:
+
+    inline std::string get_game_view(){
+        pt::ptree root;
+        pt::ptree shapes;
+        for(const auto & shape : asteroids){
+            pt::ptree child = shape->to_ptree();
+            shapes.push_back(std::make_pair("",std::move(child)));
+        }
+        for(const auto& shape : vaisseaux){
+            pt::ptree child = shape->to_ptree();
+            shapes.push_back(std::make_pair("",std::move(child)));
+        }
+        for(const auto& shape : lasers){
+            pt::ptree child = shape->to_ptree();
+            shapes.push_back(std::make_pair("",std::move(child)));
+        }
+        root.put("type","game_view");
+        root.add_child("shapes",shapes);
+        std::stringstream ss;
+        boost::property_tree::json_parser::write_json(ss, root);
+
+        return ss.str();
+    }
+
 private:
     std::string m_game_id;
     int score;

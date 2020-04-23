@@ -43,6 +43,7 @@ public:
     static void fire_routine(const pt::ptree& pt,std::shared_ptr<WsServer::Connection>& p_connection);
     static boost::property_tree::ptree parse_json(std::string rec);
 
+    static void broadcaster();
     static std::shared_ptr<vaisseau> get_player_by_connection(std::shared_ptr<WsServer::Connection>& p_connection);
     static std::shared_ptr<game> get_game_by_player_connection(std::shared_ptr<WsServer::Connection>& p_connection);
 private:
