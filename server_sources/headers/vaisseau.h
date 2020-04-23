@@ -28,20 +28,20 @@ public:
     }
 
     void rotationDroite(int degree = 20) {
-        BOOST_LOG_TRIVIAL(info)<<"rotationDroite()";
+        BOOST_LOG_TRIVIAL(info)<<"rotationDroite() -- username : "<<m_username;
 
         // placeholder
 
     }
 
     void rotationGauche(int degree = 20) {
-        BOOST_LOG_TRIVIAL(info)<<"rotationGauche()";
+        BOOST_LOG_TRIVIAL(info)<<"rotationGauche() -- username : "<<m_username;
 
         // placeholder
     }
 
     void avancer(const vec2d& v) {
-        BOOST_LOG_TRIVIAL(info)<<"avancer()";
+        BOOST_LOG_TRIVIAL(info)<<"avancer() -- username : "<<m_username;
 
         // placeholder
     }
@@ -55,6 +55,15 @@ public:
         m_connection->send(p_message);
         BOOST_LOG_TRIVIAL(info)<<"message sent";
 
+    }
+
+    inline bool is_me(std::shared_ptr<WsServer::Connection>& p_connection){
+        BOOST_LOG_TRIVIAL(info)<<"is_me() -- p_con : "<<p_connection.get()<<" -- m_con : "<<m_connection.get();
+        return p_connection.get() == m_connection.get();
+    }
+
+    inline const std::string& get_username() const{
+        return m_username;
     }
 
 private:

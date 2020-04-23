@@ -38,11 +38,13 @@ public:
     static std::shared_ptr<game> create_game_instance(std::string& game_id);
     static void join_routine(const pt::ptree& pt,std::shared_ptr<WsServer::Connection>& p_connection);
     static void creation_routine(const pt::ptree& pt,std::shared_ptr<WsServer::Connection>& p_connection);
-    static void move_routine(const pt::ptree& pt);
-    static void rotate_routine(const pt::ptree& pt);
-    static void fire_routine(const pt::ptree& pt);
+    static void move_routine(const pt::ptree& pt,std::shared_ptr<WsServer::Connection>& p_connection);
+    static void rotate_routine(const pt::ptree& pt,std::shared_ptr<WsServer::Connection>& p_connection);
+    static void fire_routine(const pt::ptree& pt,std::shared_ptr<WsServer::Connection>& p_connection);
     static boost::property_tree::ptree parse_json(std::string rec);
 
+    static std::shared_ptr<vaisseau> get_player_by_connection(std::shared_ptr<WsServer::Connection>& p_connection);
+    static std::shared_ptr<game> get_game_by_player_connection(std::shared_ptr<WsServer::Connection>& p_connection);
 private:
     static std::map<std::string,std::shared_ptr<game>> m_games_instances;
 

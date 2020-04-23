@@ -28,6 +28,41 @@ public:
         vaisseaux.push_back(tmp);
         start();
     }
+    std::shared_ptr<vaisseau> has_player(std::shared_ptr<WsServer::Connection>& p_connection){
+        for(const auto& v : vaisseaux)
+            if(v->is_me(p_connection))
+                return v;
+        return nullptr;
+    }
+
+    inline void move_forward(std::shared_ptr<vaisseau>& player){
+        BOOST_LOG_TRIVIAL(info)<<"move_forward() -- start  username : "<<player->get_username();
+
+        BOOST_LOG_TRIVIAL(info)<<"move_forward() -- end --  username : "<<player->get_username();
+    }
+    inline void move_backward(std::shared_ptr<vaisseau>& player){
+        BOOST_LOG_TRIVIAL(info)<<"move_backward() -- start -- username : "<<player->get_username();
+
+        BOOST_LOG_TRIVIAL(info)<<"move_backward() -- end -- username : "<<player->get_username();
+    }
+    inline void rotate_left(std::shared_ptr<vaisseau>& player){
+        BOOST_LOG_TRIVIAL(info)<<"rotate_left() -- start -- username : "<<player->get_username();
+
+
+        BOOST_LOG_TRIVIAL(info)<<"move_backward() -- end -- username : "<<player->get_username();
+
+    }
+    inline void rotate_right(std::shared_ptr<vaisseau>& player){
+        BOOST_LOG_TRIVIAL(info)<<"rotate_right() --start -- username : "<<player->get_username();
+
+
+        BOOST_LOG_TRIVIAL(info)<<"move_backward() -- end -- username : "<<player->get_username();
+    }
+    inline void fire(std::shared_ptr<vaisseau>& player){
+        BOOST_LOG_TRIVIAL(info)<<"fire() -- start -- username : "<<player->get_username();
+
+        BOOST_LOG_TRIVIAL(info)<<"fire() -- end -- username : "<<player->get_username();
+    }
 private:
     std::string m_game_id;
     int score;

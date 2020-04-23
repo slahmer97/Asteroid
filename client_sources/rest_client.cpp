@@ -92,7 +92,7 @@ void rest_client::run() {
             send_create_game_message();
         }
         else if(input == "join_game"){
-            send_join_game_message("game123");
+            send_join_game_message();
         }
         else if(input == "forward"){
             send_move_forward_message();
@@ -108,6 +108,18 @@ void rest_client::run() {
         }
         else if(input == "fire"){
             send_fire_message();
+        }
+        else if(input == "set_username"){
+            std::string tmp;
+            std::cout<<"username : ";
+            std::cin>>tmp;
+            set_username(std::move(tmp));
+        }
+        else if(input == "set_game_id"){
+            std::string tmp;
+            std::cout<<"game_id : ";
+            std::cin>>tmp;
+            set_game_id(std::move(tmp));
         }
         else if(input == "close"){
             std::cout<<"Main loop ended\n";
@@ -136,14 +148,6 @@ std::shared_ptr<rest_client > rest_client::get_instance() noexcept {
     return rest_client::s_rest_client;
 }
 
-void rest_client::send_create_game_message(){
-    BOOST_LOG_TRIVIAL(info)<<"send_create_game_message()";
-    std::string payload = client_message_factory::get_create_game_message("stevlulz","game_123");
-
-    std::string ret = send_message(payload);
-
-    BOOST_LOG_TRIVIAL(info)<<"Reiceived : "<<ret;
-}
 
 std::string rest_client::send_message(const std::string &message){
     if(this->m_connection == nullptr){
@@ -212,9 +216,22 @@ void rest_client::send_fire_message() {
     std::string msg = client_message_factory::get_fire_message();
     send_message(msg);
 }
+void rest_client::send_create_game_message(){
+    BOOST_LOG_TRIVIAL(info)<<"send_create_game_message()";
+    std::string payload = client_message_factory::get_create_game_message(m_username,m_game_id);
 
-void rest_client::send_join_game_message(const std::string &game_id) {
-    std::string msg = client_message_factory::get_join_game_message(game_id,"sss");
+    std::string ret = send_message(payload);
+
+    BOOST_LOG_TRIVIAL(info)<<"Reiceived : "<<ret;
+}
+void rest_client::send_join_game_message() {
+    std::string msg = client_message_factory::get_join_game_message(m_game_id,m_username);
     send_message(msg);
 }
 
+void rest_client::set_username(std::string&& username){
+    m_username = username;
+}
+void rest_client::set_game_id(std::string&& game_id){
+    m_game_id = game_id;
+}

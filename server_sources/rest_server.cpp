@@ -85,7 +85,7 @@ void rest_server::on_message(std::shared_ptr<WsServer::Connection>& connection, 
     try {
         root =     game_scheduler::parse_json(in_message->string());
     }
-    catch (std::exception e){
+    catch (std::exception& e){
         std::cout<<e.what();
         return;
     }
@@ -99,15 +99,15 @@ void rest_server::on_message(std::shared_ptr<WsServer::Connection>& connection, 
     }
     else if(type == "move"){
         BOOST_LOG_TRIVIAL(info)<<"move()";
-
+        game_scheduler::move_routine(root,connection);
     }
     else if(type == "rotate"){
         BOOST_LOG_TRIVIAL(info)<<"rotate()";
-
+        game_scheduler::rotate_routine(root,connection);
     }
     else if(type == "fire"){
         BOOST_LOG_TRIVIAL(info)<<"fire()";
-
+        game_scheduler::fire_routine(root,connection);
     }
 
 }
