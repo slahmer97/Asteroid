@@ -16,7 +16,8 @@ private:
     inline rest_client() {
         m_server_uri = "empty";
     }
-    void client_gui();
+
+    [[noreturn]] void client_gui();
     void client_network();
 
     void send_create_game_message();

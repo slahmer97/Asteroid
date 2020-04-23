@@ -30,6 +30,7 @@ public:
     polygone() = default;
 
 
+
 public:
     point m_center;
     std::vector<point> points;
