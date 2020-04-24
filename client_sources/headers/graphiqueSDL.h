@@ -57,6 +57,8 @@ public:
                 break;
             }
         }
+        if(s != "")
+            std::cout<<"Clicked "<<s<<"\n";
         return s;
     }
 
