@@ -55,24 +55,24 @@ void rest_client::client_network()  {
     std::vector<std::shared_ptr<affichable>> A;
     A.emplace_back(new polyClient{ {200, 100}, {400, 300}, {500, 500}});
     A.emplace_back(new alphaNumClient{"HelloWorld, le retour ! Score : 19999", {10,10}});
+    std::thread events_polling([&](){
+        while(true){
+            auto start = std::chrono::steady_clock::now();
+            std::string s = fenetre.getTouche(); // getTouche() ne bloque PAS le thread, elle renvoie "" si rien
+            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - start );
+            if (s == "") {}
+            else if (s == "space") send_fire_message();
+            else if (s == "up") send_move_forward_message();
+            else if (s == "right"){ std::cout << " !!! Reaction Time in ms: " << elapsed.count() << std::endl; send_rotate_right_message();}
+            else if (s == "left") send_rotate_left_message();
+        }
+    });
 
     while (true) {
-
-        auto start = std::chrono::steady_clock::now();
-
-        for (auto i : A) {
+        for (const auto& i : A) {
             i->afficherSurFenetre(fenetre);
         }
         fenetre.afficherImage();
-        std::string s = fenetre.getTouche(); // getTouche() ne bloque PAS le thread, elle renvoie "" si rien
-
-        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - start );
-
-        if (s == "") {}
-        else if (s == "space") send_fire_message();
-        else if (s == "up") send_move_forward_message();
-        else if (s == "right"){ std::cout << " !!! Reaction Time in ms: " << elapsed.count() << std::endl; send_rotate_right_message();}
-        else if (s == "left") send_rotate_left_message();
     }
     BOOST_LOG_TRIVIAL(info)<<"client_gui() ended";
 }
