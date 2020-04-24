@@ -32,30 +32,31 @@ public:
     }
 
     std::string getTouche() {
-        std::string s;
+        std::string s = "";
         SDL_Event e;
-        SDL_PollEvent(&e);
-        if (e.type == SDL_KEYDOWN) {
-            switch(e.key.keysym.sym) {
-                case SDLK_UP:
-                    s = "up";
-                    break;
-                case SDLK_DOWN:
-                    s = "down";
-                    break;
-                case SDLK_LEFT:
-                    s = "left";
-                    break;
-                case SDLK_RIGHT:
-                    s = "right";
-                    break;
-                case SDLK_SPACE:
-                    s = "space";
-                    break;
-                default:
-                    s = "";
+        while(s == "") {
+            SDL_PollEvent(&e);
+            if (e.type == SDL_KEYDOWN) {
+                switch(e.key.keysym.sym) {
+                    case SDLK_UP:
+                        s = "up";
+                        break;
+                    case SDLK_DOWN:
+                        s = "down";
+                        break;
+                    case SDLK_LEFT:
+                        s = "left";
+                        break;
+                    case SDLK_RIGHT:
+                        s = "right";
+                        break;
+                    case SDLK_SPACE:
+                        s = "space";
+                        break;
+                }
             }
         }
+    std::cout << " hi from getTrouch()" << std::endl;
         return s;
     }
 
