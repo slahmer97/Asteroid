@@ -14,6 +14,8 @@ class polyClient : public polygone, public affichable
 public:
     polyClient(std::initializer_list<point>&& liste): polygone(liste) {}
     explicit polyClient(std::vector<point> points): polygone(std::move(points)) {}
+    explicit polyClient(std::vector<point>&& points): polygone(points) {}
+
     inline void afficherSurFenetre(graphiqueSDL& fenetre) const override
     {
         const SDL_Color couleur = {255, 255,255,  255 };

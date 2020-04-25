@@ -17,9 +17,24 @@ public:
     vaisseau(std::initializer_list<point> &&liste) : polyServeur(liste) {}
     vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection) : m_username(p_username),m_connection((p_connection)){
         BOOST_LOG_TRIVIAL(info)<<"vaisseau() -- username : "<<m_username;
-        points.emplace_back(10,20);
-        points.emplace_back(10,30);
-        points.emplace_back(30,20);
+        if(count == 1){
+            points.emplace_back(10,20);
+            points.emplace_back(40,60);
+            points.emplace_back(90,65);
+        }
+        else if(count == 2){
+            points.emplace_back(100,100);
+            points.emplace_back(160,140);
+            points.emplace_back(190,160);
+
+        }
+        else if(count == 3){
+            points.emplace_back(200,160);
+            points.emplace_back(250,180);
+            points.emplace_back(180,220);
+        }
+
+        count++;
         //initialize fixed point for player
 
     }
@@ -71,6 +86,8 @@ public:
 private:
     std::string m_username;
     std::shared_ptr<WsServer::Connection> m_connection;
+
+    static int count;
 };
 
 #endif //ASTEROID_VAISSEAU_H

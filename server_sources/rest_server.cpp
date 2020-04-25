@@ -57,7 +57,7 @@ void rest_server::run(){
     });
 
     std::thread broadcaster([&](){
-       // game_scheduler::broadcaster();
+        game_scheduler::broadcaster();
     });
     BOOST_LOG_TRIVIAL(info)<<"server_thread() started";
 

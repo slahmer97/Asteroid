@@ -10,6 +10,8 @@
 #include "headers/client_http_service_handler.h"
 #include "headers/alphaNumClient.h"
 #include <boost/log/trivial.hpp>
+#include <boost/lexical_cast.hpp>
+#include <game_shapes.h>
 
 std::shared_ptr<rest_client> rest_client::s_rest_client;
 
@@ -52,9 +54,10 @@ void rest_client::client_network()  {
     BOOST_LOG_TRIVIAL(info)<<"client_gui() started";
 
     graphiqueSDL fenetre{};
-    std::vector<std::shared_ptr<affichable>> A;
-    A.emplace_back(new polyClient{ {200, 100}, {400, 300}, {500, 500}});
-    A.emplace_back(new alphaNumClient{"HelloWorld, le retour ! Score : 19999", {10,10}});
+    std::vector<std::shared_ptr<affichable>>* A = game_shapes::get_shapes();
+
+    //A.emplace_back(new polyClient{ {200, 100}, {400, 300}, {500, 500}});
+    //A.emplace_back(new alphaNumClient{"HelloWorld, le retour ! Score : 19999", {10,10}});
     std::thread events_polling([&](){
         while(true){
             auto start = std::chrono::steady_clock::now();
@@ -66,10 +69,11 @@ void rest_client::client_network()  {
             else if (s == "right"){ std::cout << " !!! Reaction Time in ms: " << elapsed.count() << std::endl; send_rotate_right_message();}
             else if (s == "left") send_rotate_left_message();
         }
+
     });
 
     while (true) {
-        for (const auto& i : A) {
+        for (const auto& i : *A) {
             i->afficherSurFenetre(fenetre);
         }
         fenetre.afficherImage();
@@ -184,15 +188,31 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connec
     BOOST_LOG_TRIVIAL(info)<<"on_message() start";
     std::stringstream ss;
     ss << in_message->string();
-    pt::ptree tt;
-    pt::read_json(ss, tt);
-    auto type = tt.get<std::string>("type");
+    pt::ptree root;
+    pt::read_json(ss, root);
+    auto type = root.get<std::string>("type");
     if(type == "game_view"){
         BOOST_LOG_TRIVIAL(info)<<"received game view";
-        std::string arr = tt.get<std::string>("shapes");
-        std::cout<<"Val : "<<arr<<std::endl;
-        //for (auto& item : arr.get_child(""))
-        //    std::cout << "value is " << item.second.get<std::string>("type") << std::endl;
+        std::vector<std::shared_ptr<affichable>> objects;
+
+        for (pt::ptree::value_type &shape : root.get_child("shapes"))
+        {
+            // fruit.first contain the string ""
+            std::vector<point> list;
+            auto tmp_type = shape.second.get<std::string>("type");
+            if(tmp_type == "polygone"){
+                BOOST_LOG_TRIVIAL(info)<<"-------- Found polygone -------";
+                for (pt::ptree::value_type &cor : shape.second.get_child("points")){
+                    std::string x = cor.second.get<std::string>("x");
+                    std::string y = cor.second.get<std::string>("y");
+                    list.emplace_back(boost::lexical_cast<int>(x),boost::lexical_cast<int>(y));
+                    std::cout<<"\t\t X : "<<x<<" -- Y : "<<y<<std::endl;
+                }
+            }
+            objects.push_back(std::make_shared<polyClient>(polyClient(list)));
+        }
+        game_shapes::emplace(std::move(objects));
+
     }
     else if(type == "error"){
         BOOST_LOG_TRIVIAL(warning)<<"received error";

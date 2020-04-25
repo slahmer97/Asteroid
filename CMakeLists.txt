@@ -49,12 +49,13 @@ set(SERVER_SOURCE_FILES
         ${SERVER_SOURCE_PATH}/vec2d.cpp
         ${SERVER_SOURCE_PATH}/rest_server.cpp
         ${SERVER_SOURCE_PATH}/game_scheduler.cpp
+        ${SERVER_SOURCE_PATH}/vaisseau.cpp
         )
 set(SHARED_SOURCE_FILES
         )
 
 #client side
-add_executable(Asteroid_client client_sources/asteroid_client.cpp ${CLIENT_SOURCE_FILES} ${CLIENT_HEADER_FILES_I} ${WEBSOCKET} ${SHARED_HEADER_FILES_I})
+add_executable(Asteroid_client client_sources/headers/game_shapes.h client_sources/asteroid_client.cpp ${CLIENT_SOURCE_FILES} ${CLIENT_HEADER_FILES_I} ${WEBSOCKET} ${SHARED_HEADER_FILES_I})
 target_link_libraries(Asteroid_client
         ${Boost_LIBRARIES}
         SDL2
