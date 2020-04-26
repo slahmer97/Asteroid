@@ -68,7 +68,7 @@ public:
     }
     inline void broadcast_view(){
         std::string view = get_game_view();
-        BOOST_LOG_TRIVIAL(info)<<"broadcast_view() \n"<<view;
+        BOOST_LOG_TRIVIAL(info)<<"broadcast_view() \n";//<<view;
         for(const auto& p : vaisseaux)
             p->send_message(view);
     }
