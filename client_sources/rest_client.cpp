@@ -192,7 +192,7 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connec
     pt::read_json(ss, root);
     auto type = root.get<std::string>("type");
     if(type == "game_view"){
-        BOOST_LOG_TRIVIAL(info)<<"received game view";
+       // BOOST_LOG_TRIVIAL(info)<<"received game view";
         std::vector<std::shared_ptr<polyClient>> objects;
 
         for (pt::ptree::value_type &shape : root.get_child("shapes"))
@@ -201,7 +201,7 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connec
             std::vector<point> list;
             auto tmp_type = shape.second.get<std::string>("type");
             if(tmp_type == "polygone"){
-                BOOST_LOG_TRIVIAL(info)<<"-------- Found polygone -------";
+          //      BOOST_LOG_TRIVIAL(info)<<"-------- Found polygone -------";
                 for (pt::ptree::value_type &cor : shape.second.get_child("points")){
                     std::string x = cor.second.get<std::string>("x");
                     std::string y = cor.second.get<std::string>("y");
