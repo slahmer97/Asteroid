@@ -13,6 +13,15 @@ public:
 
     explicit petitAsteroid(std::vector<point> points) : asteroid(std::move(points)) {}
 
+    petitAsteroid(const point& p) {
+        points.reserve(5);
+        points.emplace_back(p.x - 7, p.y);
+        points.emplace_back(p.x, p.y + 7);
+        points.emplace_back(p.x + 7, p.y);
+        points.emplace_back(p.x + 3, p.y - 7);
+        points.emplace_back(p.x - 3, p.y - 7);
+    }
+
     std::vector<std::shared_ptr<asteroid>> generationDestruction() const override {
         return {}; // pas de generation d'asteroid pour les petits asteroids!
     }

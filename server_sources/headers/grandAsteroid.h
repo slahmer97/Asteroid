@@ -16,11 +16,11 @@ public:
 
     grandAsteroid(const point& p) {
         points.reserve(5);
-        points.emplace_back(p.x - 10, p.y);
-        points.emplace_back(p.x, p.y + 10);
-        points.emplace_back(p.x + 10, p.y);
-        points.emplace_back(p.x + 5, p.y - 10);
-        points.emplace_back(p.x - 5, p.y - 10);
+        points.emplace_back(p.x - 16, p.y);
+        points.emplace_back(p.x, p.y + 16);
+        points.emplace_back(p.x + 16, p.y);
+        points.emplace_back(p.x + 8, p.y - 16);
+        points.emplace_back(p.x - 8, p.y - 16);
     }
 
     std::vector<std::shared_ptr<asteroid>> generationDestruction() const override {
