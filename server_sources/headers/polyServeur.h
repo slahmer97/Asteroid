@@ -51,6 +51,13 @@ public:
         return b;
     }
 
+    void step() {
+        for (auto &p : points) {
+            p.x += direction.dx;
+            p.y += direction.dy;
+        }
+    }
+
 private:
     vec2d direction; //vecteur de direction et de velocite a implementer !!!
 

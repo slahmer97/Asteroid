@@ -13,6 +13,7 @@ public:
     asteroid(std::initializer_list<point> &&liste) : polyServeur(liste) {}
 
     explicit asteroid(std::vector<point> points) : polyServeur(std::move(points)) {}
+    asteroid() = default;
 
     //genere nouveaux asteroids plus petits
     virtual std::vector<std::shared_ptr<asteroid>> generationDestruction() const = 0;
