@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include "point.h"
-#include "../../shared_sources/headers/param.h"
+#include "param.h"
 #include <SDL2/SDL_ttf.h>
 
 

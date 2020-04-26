@@ -7,7 +7,7 @@
 
 
 class vec2d {
-
+    float dx, dy;
 };
 
 
