@@ -5,9 +5,10 @@
 #ifndef ASTEROID_POLYSERVEUR_H
 #define ASTEROID_POLYSERVEUR_H
 
-#include "../../client_sources/headers/polygone.h"
+#include "polygone.h"
 #include "vec2d.h"
 #include "intersection.h"
+#include "param.h"
 
 #include <boost/log/trivial.hpp>
 #include <boost/property_tree/ptree.hpp>
