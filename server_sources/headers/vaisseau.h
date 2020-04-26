@@ -80,7 +80,7 @@ public:
             double xnew = static_cast<double>(shift_x) * cos_ - static_cast<double>(shift_y) * sin_;
             double ynew = static_cast<double>(shift_x) * sin_ + static_cast<double>(shift_y) * cos_;
             p.x = static_cast<int>(xnew + m_center.x);
-            p.y = static_cast<int>(ynew + m_center.x);
+            p.y = static_cast<int>(ynew + m_center.y);
         }
 /*
         for (auto &p : points) {
