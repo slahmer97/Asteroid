@@ -54,7 +54,6 @@ void rest_client::client_network()  {
     BOOST_LOG_TRIVIAL(info)<<"client_gui() started";
 
     graphiqueSDL fenetre{};
-    std::vector<std::shared_ptr<affichable>>* A = game_shapes::get_shapes();
 
     //A.emplace_back(new polyClient{ {200, 100}, {400, 300}, {500, 500}});
     //A.emplace_back(new alphaNumClient{"HelloWorld, le retour ! Score : 19999", {10,10}});
@@ -73,7 +72,8 @@ void rest_client::client_network()  {
     });
 
     while (true) {
-        for (const auto& i : *A) {
+        fenetre.clearImage();
+        for (const auto& i : *game_shapes::get_shapes()) {
             i->afficherSurFenetre(fenetre);
         }
         fenetre.afficherImage();
@@ -193,7 +193,7 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connec
     auto type = root.get<std::string>("type");
     if(type == "game_view"){
         BOOST_LOG_TRIVIAL(info)<<"received game view";
-        std::vector<std::shared_ptr<affichable>> objects;
+        std::vector<std::shared_ptr<polyClient>> objects;
 
         for (pt::ptree::value_type &shape : root.get_child("shapes"))
         {

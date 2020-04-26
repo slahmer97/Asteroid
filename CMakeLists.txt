@@ -31,6 +31,8 @@ include_directories(SERVER_HEADER_FILES_I server_sources/headers)
 include_directories(SHARED_HEADER_FILES_I shared_sources/headers)
 include_directories(WEBSOCKET my_libs/Simple-WebSocket-Server)
 
+
+add_library(WEB_SOCKET INTERFACE ${WEBSOCKET})
 set(CLIENT_SOURCE_FILES
         ${CLIENT_SOURCE_PATH}/asteroid_client.cpp
         ${CLIENT_SOURCE_PATH}/rest_client.cpp
@@ -55,7 +57,7 @@ set(SHARED_SOURCE_FILES
         )
 
 #client side
-add_executable(Asteroid_client client_sources/headers/game_shapes.h client_sources/asteroid_client.cpp ${CLIENT_SOURCE_FILES} ${CLIENT_HEADER_FILES_I} ${WEBSOCKET} ${SHARED_HEADER_FILES_I})
+add_executable(Asteroid_client client_sources/headers/game_shapes.h client_sources/asteroid_client.cpp ${CLIENT_SOURCE_FILES} ${CLIENT_HEADER_FILES_I} ${SHARED_HEADER_FILES_I})
 target_link_libraries(Asteroid_client
         ${Boost_LIBRARIES}
         SDL2
@@ -65,11 +67,12 @@ target_link_libraries(Asteroid_client
         -lSDL2_ttf
         Boost::log_setup
         Boost::log
+        WEB_SOCKET
        )
 
 
 #server side
-add_executable(Asteroid_server server_sources/asteroid_server.cpp  server_sources/headers/game_scheduler.h ${SERVER_SOURCE_FILES} ${SERVER_HEADER_FILES_I} ${WEBSOCKET} ${SHARED_HEADER_FILES_I})
+add_executable(Asteroid_server server_sources/asteroid_server.cpp  server_sources/headers/game_scheduler.h ${SERVER_SOURCE_FILES} ${SERVER_HEADER_FILES_I}  ${SHARED_HEADER_FILES_I})
 target_link_libraries(Asteroid_server
         ${Boost_LIBRARIES}
         boost_system
@@ -77,4 +80,5 @@ target_link_libraries(Asteroid_server
         ssl
         Boost::log_setup
         Boost::log
+        WEB_SOCKET
         )

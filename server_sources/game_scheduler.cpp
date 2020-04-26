@@ -165,7 +165,7 @@ std::shared_ptr<game> game_scheduler::get_game_by_player_connection(std::shared_
 void game_scheduler::broadcaster() {
 
     while(true){
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1200));
         for(const auto& game : m_games_instances)
             game.second->broadcast_view();
     }

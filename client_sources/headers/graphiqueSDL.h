@@ -30,6 +30,10 @@ public:
         SDL_PollEvent(&evt);
         SDL_RenderPresent(renderer);
     }
+    void clearImage(){
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+    }
 
     std::string getTouche() {
         std::string s = "";

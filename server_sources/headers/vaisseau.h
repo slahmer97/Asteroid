@@ -18,25 +18,36 @@ public:
     vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection) : m_username(p_username),m_connection((p_connection)){
         BOOST_LOG_TRIVIAL(info)<<"vaisseau() -- username : "<<m_username;
         if(count == 1){
-            points.emplace_back(10,20);
-            points.emplace_back(40,60);
-            points.emplace_back(90,65);
+            points.emplace_back(270,240);
+            points.emplace_back(240,300);
+            points.emplace_back(300,300);
         }
         else if(count == 2){
-            points.emplace_back(100,100);
-            points.emplace_back(160,140);
-            points.emplace_back(190,160);
-
+            points.emplace_back(370,240);
+            points.emplace_back(340,300);
+            points.emplace_back(400,300);
         }
         else if(count == 3){
-            points.emplace_back(200,160);
-            points.emplace_back(250,180);
-            points.emplace_back(180,220);
+            points.emplace_back(570,240);
+            points.emplace_back(540,300);
+            points.emplace_back(600,300);
         }
-
+        else if(count == 4){
+            points.emplace_back(670,240);
+            points.emplace_back(640,300);
+            points.emplace_back(700,300);
+        }
         count++;
         //initialize fixed point for player
-
+        int minX = 0xFFFF, minY = 0xFFFF, maxX = 0, maxY = 0;
+        for (const auto& p : points) {
+            if (p.x > maxX) maxX = p.x;
+            if (p.x < minX) minX = p.x;
+            if (p.y > maxY) maxY = p.y;
+            if (p.y < minY) minY = p.y;
+        }
+        this->m_center.x = (minX) + ((maxX - minX) / 2);
+        this->m_center.y =  (minY )+ ((maxY - minY) / 2);
     }
     explicit vaisseau(std::vector<point> points) : polyServeur(std::move(points)) {}
 
@@ -44,19 +55,37 @@ public:
         // construire un triangle
     }
 
-    void rotationDroite(int degree = 20) {
+    void rotationDroite(int degree = 2) {
         BOOST_LOG_TRIVIAL(info)<<"rotationDroite() -- username : "<<m_username;
-
-        // placeholder
-
+        rotate(degree);
     }
 
-    void rotationGauche(int degree = 20) {
-        BOOST_LOG_TRIVIAL(info)<<"rotationGauche() -- username : "<<m_username;
-
-        // placeholder
+    void rotationGauche(int degree = -2) {
+        BOOST_LOG_TRIVIAL(info) << "rotationGauche() -- username : " << m_username;
+        rotate(degree);
     }
 
+    void rotate(int deg){
+        // placeholder
+        // Shifting the pivot point to the origin
+        // and the given points accordingly
+        double cos_ = std::cos(deg);
+        double sin_ = std::sin(deg);
+        for (auto &p : points) {
+            double shift_x = static_cast<double>(p.x - m_center.x);
+            double shift_y = static_cast<double>(p.y - m_center.y);
+            double xnew = static_cast<double>(shift_x) * cos_ - static_cast<double>(shift_y) * sin_;
+            double ynew = static_cast<double>(shift_x) * sin_ + static_cast<double>(shift_y) * cos_;
+            p.x = static_cast<int>(xnew + m_center.x);
+            p.y = static_cast<int>(ynew + m_center.x);
+        }
+/*
+        for (auto &p : points) {
+            double dist = std::sqrt(std::pow(m_center.x-p.x,2)+std::pow(m_center.y-p.y,2));
+            std::cout << "X : " << p.x << " -- Y : " << p.y << " -- Dist : "<<dist<<std::endl;
+        }
+        */
+    }
     void avancer(const vec2d& v) {
         BOOST_LOG_TRIVIAL(info)<<"avancer() -- username : "<<m_username;
 
