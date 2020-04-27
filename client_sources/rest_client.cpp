@@ -139,6 +139,28 @@ void rest_client::run() {
             std::cout<<"Main loop ended\n";
             break;
         }
+        else if(input == "fast"){
+            int d = 500;
+            std::cout<<"username : fast1" << std::endl;
+            set_username("fast1");
+            std::this_thread::sleep_for(std::chrono::milliseconds(d));
+            std::cout<<"game_id : gid" << std::endl;
+            set_game_id("gid");
+            std::this_thread::sleep_for(std::chrono::milliseconds(d));
+            std::cout<<"start_net" << std::endl;
+            net = std::make_unique<std::thread>(std::thread([&]() {
+                BOOST_LOG_TRIVIAL(info)<<"network thread started";
+                this->client_network();
+            }));
+            std::this_thread::sleep_for(std::chrono::milliseconds(d));
+            std::cout<<"create_game" << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(d));
+            send_create_game_message();
+            gui = std::make_unique<std::thread>(std::thread([&]() {
+                BOOST_LOG_TRIVIAL(info)<<"gui thread started";
+                this->client_gui();
+            }));
+        }
         else {
             std::cout<<"unknown command\n";
         }

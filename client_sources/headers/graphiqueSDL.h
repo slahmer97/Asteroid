@@ -41,7 +41,7 @@ public:
         while(s == "") {
             SDL_PollEvent(&e);
             if (e.type == SDL_KEYDOWN) {
-                switch(e.key.keysym.sym) {
+                switch (e.key.keysym.sym) {
                     case SDLK_UP:
                         s = "up";
                         break;
@@ -60,7 +60,9 @@ public:
                 }
             }
         }
-    std::cout << " hi from getTrouch()" << std::endl;
+        if (std::chrono::system_clock::now() - previous_time < std::chrono::milliseconds(50))
+            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        previous_time = std::chrono::system_clock::now();
         return s;
     }
 
@@ -165,6 +167,7 @@ public:
     }
 
 private:
+    std::chrono::time_point<std::chrono::system_clock> previous_time;
     SDL_Renderer *renderer;
 };
 
