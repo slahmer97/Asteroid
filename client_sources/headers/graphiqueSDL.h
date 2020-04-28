@@ -85,6 +85,7 @@ public:
 
     void dessinerPolyPlein(const SDL_Color &color, const vec2i &center, const std::vector<vec2d> &points) {
 
+        SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 
         long size = points.size();
         for(int i=0;i <size;++i){
