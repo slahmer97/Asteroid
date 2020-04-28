@@ -12,6 +12,8 @@ public:
     laser(std::initializer_list<vec2d> &&liste) : polyServeur(liste) {}
 
     explicit laser(std::vector<vec2d> points) : polyServeur(std::move(points)) {}
+    laser(vec2d& from, vec2d& to) : polyServeur({from,to}) {}
+
 };
 
 #endif //ASTEROID_LASER_H
