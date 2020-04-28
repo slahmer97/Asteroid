@@ -20,7 +20,7 @@ public:
     vec2(const vec2& v) : x(v.x), y(v.y) {}
 
     const vec2<int> operator () () const {
-        vec2<int> t{static_cast<int>(this->x), static_cast<int>(this->y)};
+        vec2<int> t{std::lround(this->x), std::lround(this->y)};
         return t;
     }
 
