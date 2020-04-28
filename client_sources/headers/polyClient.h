@@ -19,7 +19,7 @@ public:
     inline void afficherSurFenetre(graphiqueSDL& fenetre) const override
     {
         const SDL_Color couleur = {255, 255,255,  255 };
-        fenetre.dessinerPolyPlein(couleur, m_center, points);
+        fenetre.dessinerPolyPlein(couleur, m_center(), points);
     }
 private:
     //static const SDL_Color  couleur;

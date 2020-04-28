@@ -82,7 +82,10 @@ public:
         y /= s;
         return *this;
     }
-
+    void inc(){
+        this->x += 1.0;
+        this->y += 1.0;
+    }
     void set(T p_x, T p_y) {
         this->x = p_x;
         this->y = p_y;
@@ -129,6 +132,7 @@ public:
     static double cross(vec2 v1, vec2 v2) {
         return (v1.x * v2.y) - (v1.y * v2.x);
     }
+
 
     void print(){
         std::cout<<"X : "<<this->x<<" -- Y : "<<this->y<<"\n";

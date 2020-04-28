@@ -83,8 +83,15 @@ public:
         TTF_Quit();
     }
 
-    void dessinerPolyPlein(const SDL_Color &color, const vec2d &center, const std::vector<vec2d> &points) {
-        int topY;
+    void dessinerPolyPlein(const SDL_Color &color, const vec2i &center, const std::vector<vec2d> &points) {
+
+
+        long size = points.size();
+        for(int i=0;i <size;++i){
+            const_cast<std::vector<vec2d>&>(points)[i].print();
+            dessinerLigne(points[i],points[(i+1)%size]);
+        }
+        /*int topY;
         int topCnt;
         int leftCnt;
         int rightCnt;
@@ -160,6 +167,7 @@ public:
             }
             dessinerLigne({(double)startX / 4, (double)cntY + center.y}, {(double)endX / 4, (double)cntY + center.y});
         }
+         */
     }
 
     bool isFonctionne() const {
