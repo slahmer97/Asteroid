@@ -55,13 +55,13 @@ public:
     }
     inline void rotate_left(std::shared_ptr<vaisseau>& player){
         BOOST_LOG_TRIVIAL(info)<<"rotate_left() -- start -- username : "<<player->get_username();
-        player->rotationGauche(8.0);
+        player->rotationGauche(-10.0);
         BOOST_LOG_TRIVIAL(info)<<"move_backward() -- end -- username : "<<player->get_username();
 
     }
     inline void rotate_right(std::shared_ptr<vaisseau>& player){
         BOOST_LOG_TRIVIAL(info)<<"rotate_right() --start -- username : "<<player->get_username();
-        player->rotationDroite(-8.0);
+        player->rotationDroite(10.0);
         BOOST_LOG_TRIVIAL(info)<<"move_backward() -- end -- username : "<<player->get_username();
     }
     inline void fire(std::shared_ptr<vaisseau>& player){
