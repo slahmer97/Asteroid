@@ -10,11 +10,11 @@
 
 class moyenAsteroid : public asteroid {
 public:
-    moyenAsteroid(std::initializer_list<point> &&liste) : asteroid(liste) {}
+    moyenAsteroid(std::initializer_list<vec2d> &&liste) : asteroid(liste) {}
 
-    explicit moyenAsteroid(std::vector<point> points) : asteroid(std::move(points)) {}
+    explicit moyenAsteroid(std::vector<vec2d> points) : asteroid(std::move(points)) {}
 
-    moyenAsteroid(const point& p) {
+    moyenAsteroid(const vec2d& p) {
         points.reserve(5);
         points.emplace_back(p.x - 10, p.y);
         points.emplace_back(p.x, p.y + 10);

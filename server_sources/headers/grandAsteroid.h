@@ -10,11 +10,11 @@
 
 class grandAsteroid : public asteroid {
 public:
-    grandAsteroid(std::initializer_list<point> &&liste) : asteroid(liste) {}
+    grandAsteroid(std::initializer_list<vec2d> &&liste) : asteroid(liste) {}
 
-    explicit grandAsteroid(std::vector<point> points) : asteroid(std::move(points)) {}
+    explicit grandAsteroid(std::vector<vec2d> points) : asteroid(std::move(points)) {}
 
-    grandAsteroid(const point& p) {
+    explicit grandAsteroid(const point& p) {
         points.reserve(5);
         points.emplace_back(p.x - 16, p.y);
         points.emplace_back(p.x, p.y + 16);
@@ -23,7 +23,7 @@ public:
         points.emplace_back(p.x - 8, p.y - 16);
     }
 
-    std::vector<std::shared_ptr<asteroid>> generationDestruction() const override {
+    [[nodiscard]] std::vector<std::shared_ptr<asteroid>> generationDestruction() const override {
 
         // placeholder code:
 

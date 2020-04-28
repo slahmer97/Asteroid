@@ -8,13 +8,13 @@
 #include <utility>
 
 #include "polyServeur.h"
-#include "vec2d.h"
+#include "vec2.h"
 #include <boost/log/trivial.hpp>
 #include "server_ws.hpp"
 using WsServer = SimpleWeb::SocketServer<SimpleWeb::WS>;
 class vaisseau : public polyServeur {
 public:
-    vaisseau(std::initializer_list<point> &&liste) : polyServeur(liste) {}
+    vaisseau(std::initializer_list<vec2d> &&liste) : polyServeur(liste) {}
     vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection) : m_username(p_username),m_connection((p_connection)){
         BOOST_LOG_TRIVIAL(info)<<"vaisseau() -- username : "<<m_username;
 
@@ -52,42 +52,32 @@ public:
         this->m_center.x = (minX) + ((maxX - minX) / 2);
         this->m_center.y =  (minY )+ ((maxY - minY) / 2);
     }
-    explicit vaisseau(std::vector<point> points) : polyServeur(std::move(points)) {}
+    explicit vaisseau(std::vector<vec2d> points) : polyServeur(std::move(points)) {}
 
     vaisseau() : polyServeur{} {
         // construire un triangle
     }
 
-    void rotationDroite(int degree = 2) {
+    void rotationDroite(double degree = 2.0) {
         BOOST_LOG_TRIVIAL(info)<<"rotationDroite() -- username : "<<m_username;
         rotate(degree);
     }
 
-    void rotationGauche(int degree = -2) {
+    void rotationGauche(double degree = -2.0) {
         BOOST_LOG_TRIVIAL(info) << "rotationGauche() -- username : " << m_username;
         rotate(degree);
     }
 
-    void rotate(int deg){
-        // placeholder
-        // Shifting the pivot point to the origin
-        // and the given points accordingly
-        double cos_ = std::cos(deg);
-        double sin_ = std::sin(deg);
+    void rotate(double deg){
         for (auto &p : points) {
-            double shift_x = static_cast<double>(p.x - m_center.x);
-            double shift_y = static_cast<double>(p.y - m_center.y);
-            double xnew = static_cast<double>(shift_x) * cos_ - static_cast<double>(shift_y) * sin_;
-            double ynew = static_cast<double>(shift_x) * sin_ + static_cast<double>(shift_y) * cos_;
-            p.x = static_cast<int>(xnew + m_center.x);
-            p.y = static_cast<int>(ynew + m_center.y);
+            p.rotate(deg,this->m_center);
+            std::cout<<" dist : "<<p.dist(m_center)<<"\n";
         }
-/*
-        for (auto &p : points) {
-            double dist = std::sqrt(std::pow(m_center.x-p.x,2)+std::pow(m_center.y-p.y,2));
-            std::cout << "X : " << p.x << " -- Y : " << p.y << " -- Dist : "<<dist<<std::endl;
-        }
-        */
+
+        std::cout<<" ================\n";
+
+
+
     }
     void avancer(const vec2d& v) {
         BOOST_LOG_TRIVIAL(info)<<"avancer() -- username : "<<m_username;

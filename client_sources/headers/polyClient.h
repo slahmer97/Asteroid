@@ -12,9 +12,9 @@
 class polyClient : public polygone, public affichable
 {
 public:
-    polyClient(std::initializer_list<point>&& liste): polygone(liste) {}
-    explicit polyClient(std::vector<point> points): polygone(std::move(points)) {}
-    explicit polyClient(std::vector<point>&& points): polygone(points) {}
+    polyClient(std::initializer_list<vec2d>&& liste): polygone(liste) {}
+    explicit polyClient(std::vector<vec2d> points): polygone(std::move(points)) {}
+    explicit polyClient(std::vector<vec2d>&& points): polygone(points) {}
 
     inline void afficherSurFenetre(graphiqueSDL& fenetre) const override
     {

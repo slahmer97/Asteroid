@@ -10,9 +10,9 @@
 
 class asteroid : public polyServeur {
 public:
-    asteroid(std::initializer_list<point> &&liste) : polyServeur(liste) {}
+    asteroid(std::initializer_list<vec2d> &&liste) : polyServeur(liste) {}
 
-    explicit asteroid(std::vector<point> points) : polyServeur(std::move(points)) {}
+    explicit asteroid(std::vector<vec2d> points) : polyServeur(std::move(points)) {}
     asteroid() = default;
 
     //genere nouveaux asteroids plus petits

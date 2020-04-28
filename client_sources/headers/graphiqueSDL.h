@@ -4,9 +4,9 @@
 
 #include <SDL2/SDL.h>
 #include <vector>
-#include "point.h"
 #include "param.h"
 #include <SDL2/SDL_ttf.h>
+#include <vec2.h>
 
 
 class graphiqueSDL {
@@ -66,11 +66,11 @@ public:
         return s;
     }
 
-    void dessinerLigne(const point &a, const point &b) {
-        SDL_RenderDrawLine(renderer, a.x, a.y, b.x, b.y);
+    void dessinerLigne(const vec2d &a, const vec2d &b) {
+        SDL_RenderDrawLine(renderer, a().x, a().y, b().x, b().y);
     }
 
-    void dessinerTexte(const std::string& val, const point& pos, int taille) {
+    void dessinerTexte(const std::string& val, const vec2i& pos, int taille) {
         TTF_Init();
         TTF_Font* police = TTF_OpenFont("../client_sources/DroidSans.ttf", taille);
         SDL_Surface* aux = TTF_RenderText_Solid(police, val.c_str(), {255, 255, 255, 255});
@@ -83,7 +83,7 @@ public:
         TTF_Quit();
     }
 
-    void dessinerPolyPlein(const SDL_Color &color, const point &center, const std::vector<point> &points) {
+    void dessinerPolyPlein(const SDL_Color &color, const vec2d &center, const std::vector<vec2d> &points) {
         int topY;
         int topCnt;
         int leftCnt;
@@ -114,20 +114,20 @@ public:
         if (rightCnt >= numVerts)
             rightCnt = 0;
 
-        startX = endX = (points[topCnt].x + center.x) << 16;
+        startX = endX = (points[topCnt].x + center.x) * 4;
         cntY = points[topCnt].y;
 
         if (points[leftCnt].y != points[topCnt].y)
-            leftSlope = ((points[leftCnt].x - points[topCnt].x) << 16) / (points[leftCnt].y - points[topCnt].y);
+            leftSlope = ((points[leftCnt].x - points[topCnt].x) *4) / (points[leftCnt].y - points[topCnt].y);
         if (points[rightCnt].y != points[topCnt].y)
-            rightSlope = ((points[rightCnt].x - points[topCnt].x) << 16) / (points[rightCnt].y - points[topCnt].y);
+            rightSlope = ((points[rightCnt].x - points[topCnt].x) * 4) / (points[rightCnt].y - points[topCnt].y);
 
         SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 
         // find slopes
         while (numVertsProc < numVerts) {
             while (cntY < points[leftCnt].y && cntY < points[rightCnt].y) {
-                dessinerLigne({startX >> 16, cntY + center.y}, {endX >> 16, cntY + center.y});
+                dessinerLigne({((double)startX) / 4, ((double)cntY) + center.y}, {((double)endX) / 4, (double)cntY + center.y});
                 cntY++;
                 startX += leftSlope;
                 endX += rightSlope;
@@ -139,10 +139,10 @@ public:
                 if (leftCnt < 0)
                     leftCnt = numVerts - 1;
                 if (points[leftCnt].y != points[topCnt].y)
-                    leftSlope = ((points[leftCnt].x - points[topCnt].x) << 16) /
+                    leftSlope = ((points[leftCnt].x - points[topCnt].x) * 4) /
                                 (points[leftCnt].y - points[topCnt].y);    // find the left side slope
 
-                startX = (points[topCnt].x + center.x) << 16;
+                startX = (points[topCnt].x + center.x) * 4;
                 numVertsProc++;
             }
 
@@ -152,13 +152,13 @@ public:
                 if (rightCnt == numVerts)
                     rightCnt = 0;
                 if (points[rightCnt].y != points[topCnt].y)
-                    rightSlope = ((points[rightCnt].x - points[topCnt].x) << 16) /
+                    rightSlope = ((points[rightCnt].x - points[topCnt].x) * 4) /
                                  (points[rightCnt].y - points[topCnt].y); // find the right side slope
 
-                endX = (points[topCnt].x + center.x) << 16;
+                endX = (points[topCnt].x + center.x) * 4;
                 numVertsProc++;
             }
-            dessinerLigne({startX >> 16, cntY + center.y}, {endX >> 16, cntY + center.y});
+            dessinerLigne({(double)startX / 4, (double)cntY + center.y}, {(double)endX / 4, (double)cntY + center.y});
         }
     }
 

@@ -21,9 +21,20 @@ auto main(int argc, char **argv) -> int {
     std::shared_ptr<WsServer::Connection> c = std::make_shared<WsServer::Connection>(nullptr);
 
     vaisseau v(port,c );
-    int i = 10;
-    while(i-- > -10)
-        v.rotationGauche();
-   */
+    for(auto& p : v.points)
+        p.print();
+    std::cout<<"------------------------------------\n";
+
+    int i = 180;
+    for (int j = 0; j <90 ; ++j) {
+        v.rotationDroite();
+        for(auto& p : v.points)
+            p.print();
+        std::cout<<"______________________________________________\n";
+    }
+    std::cout<<"------------------------------------\n";
+    for(auto& p : v.points)
+        p.print();
+*/
     return 0;
 }

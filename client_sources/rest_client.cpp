@@ -220,15 +220,15 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connec
         for (pt::ptree::value_type &shape : root.get_child("shapes"))
         {
             // fruit.first contain the string ""
-            std::vector<point> list;
+            std::vector<vec2d> list;
             auto tmp_type = shape.second.get<std::string>("type");
             if(tmp_type == "polygone"){
           //      BOOST_LOG_TRIVIAL(info)<<"-------- Found polygone -------";
                 for (pt::ptree::value_type &cor : shape.second.get_child("points")){
                     std::string x = cor.second.get<std::string>("x");
                     std::string y = cor.second.get<std::string>("y");
-                    list.emplace_back(boost::lexical_cast<int>(x),boost::lexical_cast<int>(y));
-                    std::cout<<"\t\t X : "<<x<<" -- Y : "<<y<<std::endl;
+                    list.emplace_back(boost::lexical_cast<double>(x),boost::lexical_cast<double>(y));
+                    std::cout<<"\t\tDouble X : "<<x<<" -- Y : "<<y<<std::endl;
                 }
             }
             objects.push_back(std::make_shared<polyClient>(polyClient(list)));

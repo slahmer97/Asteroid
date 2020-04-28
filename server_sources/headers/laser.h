@@ -9,9 +9,9 @@
 
 class laser : public polyServeur {
 public:
-    laser(std::initializer_list<point> &&liste) : polyServeur(liste) {}
+    laser(std::initializer_list<vec2d> &&liste) : polyServeur(liste) {}
 
-    explicit laser(std::vector<point> points) : polyServeur(std::move(points)) {}
+    explicit laser(std::vector<vec2d> points) : polyServeur(std::move(points)) {}
 };
 
 #endif //ASTEROID_LASER_H

@@ -6,6 +6,7 @@
 #define ASTEROID_ALPHANUMCLIENT_H
 
 #include <string>
+#include <utility>
 #include "affichable.h"
 #include "graphiqueSDL.h"
 #include "point.h"
@@ -13,14 +14,14 @@
 class alphaNumClient: public affichable
 {
 public:
-    alphaNumClient(const std::string& val, const point& pos, int taille = 18) : val{val}, pos{pos}, taille{taille} {}
+    alphaNumClient(std::string  val, const vec2d& pos, int taille = 18) : val{std::move(val)}, pos{pos}, taille{taille} {}
     void afficherSurFenetre(graphiqueSDL& fenetre) const override
     {
-        fenetre.dessinerTexte(val, pos, taille);
+        fenetre.dessinerTexte(val, pos(), taille);
     }
 private:
     std::string val;
-    point pos;
+    vec2d pos;
     int taille;
 };
 

@@ -9,11 +9,11 @@
 
 class petitAsteroid : public asteroid {
 public:
-    petitAsteroid(std::initializer_list<point> &&liste) : asteroid(liste) {}
+    petitAsteroid(std::initializer_list<vec2d> &&liste) : asteroid(liste) {}
 
-    explicit petitAsteroid(std::vector<point> points) : asteroid(std::move(points)) {}
+    explicit petitAsteroid(std::vector<vec2d> points) : asteroid(std::move(points)) {}
 
-    petitAsteroid(const point& p) {
+    petitAsteroid(const vec2d& p) {
         points.reserve(5);
         points.emplace_back(p.x - 7, p.y);
         points.emplace_back(p.x, p.y + 7);

@@ -6,12 +6,13 @@
 #define ASTEROID_POLYGONE_H
 
 #include <vector>
+#include <vec2.h>
 #include "point.h"
 
 class polygone
 {
 public:
-    polygone(std::initializer_list<point>&& liste) : m_center{}, points{liste}
+    polygone(std::initializer_list<vec2d>&& liste) : m_center{}, points{liste}
     {
         int minX = 0xFFFF, minY = 0xFFFF, maxX = 0, maxY = 0;
         for (const auto& p : points) {
@@ -24,7 +25,7 @@ public:
         this->m_center.y =  (minY )+ ((maxY - minY) / 2);
     }
 
-    explicit polygone(std::vector<point> p) : m_center{}, points{std::move(p)}
+    explicit polygone(std::vector<vec2d> p) : m_center{}, points{std::move(p)}
     {}
 
     polygone() = default;
@@ -32,8 +33,8 @@ public:
 
 
 public:
-    point m_center;
-    std::vector<point> points;
+    vec2d m_center;
+    std::vector<vec2d> points;
 };
 
 

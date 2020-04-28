@@ -6,7 +6,7 @@
 #define ASTEROID_POLYSERVEUR_H
 
 #include "polygone.h"
-#include "vec2d.h"
+#include "vec2.h"
 #include "intersection.h"
 #include "param.h"
 
@@ -17,9 +17,9 @@ namespace pt = boost::property_tree;
 
 class polyServeur : public polygone {
 public:
-    polyServeur(std::initializer_list<point> &&liste) : polygone(liste) {}
+    polyServeur(std::initializer_list<vec2d> &&liste) : polygone(liste) {}
 
-    explicit polyServeur(std::vector<point> points) : polygone(std::move(points)) {}
+    explicit polyServeur(std::vector<vec2d> points) : polygone(std::move(points)) {}
 
     pt::ptree to_ptree() {
         pt::ptree root;
@@ -27,8 +27,8 @@ public:
         pt::ptree  children;
         for(const auto& elm : points){
             pt::ptree child;
-            child.put("x",elm.x);
-            child.put("y",elm.y);
+            child.put<double>("x",elm.x);
+            child.put<double>("y",elm.y);
             children.push_back(std::make_pair("",std::move(child)));
         }
         root.put("type","polygone");
@@ -39,7 +39,7 @@ public:
     polyServeur() = default;
 
     bool intersecte(const polyServeur &ps) const {
-        intersection<point> coupe;
+        intersection<vec2d> coupe;
         bool b = false;
         for (unsigned i = 0; i < points.size() - 1; ++i)
             for (unsigned j = 0; j < ps.points.size() - 1; ++j)
@@ -53,8 +53,8 @@ public:
 
     void step() {
         for (auto &p : points) {
-            p.x += direction.dx;
-            p.y += direction.dy;
+            //p.x += direction.dx;
+           // p.y += direction.dy;
         }
     }
 
