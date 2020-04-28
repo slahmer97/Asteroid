@@ -16,7 +16,7 @@ class vaisseau : public polyServeur {
 public:
     vaisseau(std::initializer_list<vec2d> &&liste) : polyServeur(liste) {}
     vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection) : m_username(p_username),m_connection((p_connection)){
-        BOOST_LOG_TRIVIAL(info)<<"vaisseau() -- username : "<<m_username;
+        //BOOST_LOG_TRIVIAL(info)<<"vaisseau() -- username : "<<m_username;
 
 
 
@@ -59,12 +59,12 @@ public:
     }
 
     void rotationDroite(double degree = 2.0) {
-        BOOST_LOG_TRIVIAL(info)<<"rotationDroite() -- username : "<<m_username;
+        //BOOST_LOG_TRIVIAL(info)<<"rotationDroite() -- username : "<<m_username;
         rotate(degree);
     }
 
     void rotationGauche(double degree = -2.0) {
-        BOOST_LOG_TRIVIAL(info) << "rotationGauche() -- username : " << m_username;
+        //BOOST_LOG_TRIVIAL(info) << "rotationGauche() -- username : " << m_username;
         rotate(degree);
     }
 
@@ -74,7 +74,7 @@ public:
         }
     }
     void avancer(const vec2d& v) {
-        BOOST_LOG_TRIVIAL(info)<<"avancer() -- username : "<<m_username;
+        //BOOST_LOG_TRIVIAL(info)<<"avancer() -- username : "<<m_username;
         vec2d dir = (this->points[0] - this->m_center).normalize()*10;
         for(auto&p : points)
             p = p+dir;
@@ -82,18 +82,18 @@ public:
     }
 
     void send_message(const std::string &p_message){
-        BOOST_LOG_TRIVIAL(info)<<"send_message() start";
+        //BOOST_LOG_TRIVIAL(info)<<"send_message() start";
         if (m_connection == nullptr){
-            BOOST_LOG_TRIVIAL(warning)<<"trying to send message with NULL m_connection";
+            //BOOST_LOG_TRIVIAL(warning)<<"trying to send message with NULL m_connection";
             return;
         }
         m_connection->send(p_message);
-        BOOST_LOG_TRIVIAL(info)<<"message sent";
+        //BOOST_LOG_TRIVIAL(info)<<"message sent";
 
     }
 
     inline bool is_me(std::shared_ptr<WsServer::Connection>& p_connection){
-        BOOST_LOG_TRIVIAL(info)<<"is_me() -- p_con : "<<p_connection.get()<<" -- m_con : "<<m_connection.get();
+        //BOOST_LOG_TRIVIAL(info)<<"is_me() -- p_con : "<<p_connection.get()<<" -- m_con : "<<m_connection.get();
         return p_connection.get() == m_connection.get();
     }
 

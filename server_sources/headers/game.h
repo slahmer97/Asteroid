@@ -70,7 +70,11 @@ public:
         BOOST_LOG_TRIVIAL(info)<<"fire() -- start -- username : "<<player->get_username();
         vec2d from = player->points[0];
         vec2d to = (player->points[0]-player->m_center).normalize()*10+from;
-        lasers.emplace_back(new laser(from,to));
+        laser* l = new laser(to,from);
+        if(l != nullptr)
+            lasers.emplace_back(l);
+        else
+            BOOST_LOG_TRIVIAL(info)<<"NULL LASER"<<player->get_username();
         BOOST_LOG_TRIVIAL(info)<<"fire() -- end -- username : "<<player->get_username();
     }
     inline void broadcast_view(){

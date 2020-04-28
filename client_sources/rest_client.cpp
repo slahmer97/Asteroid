@@ -17,16 +17,16 @@ std::shared_ptr<rest_client> rest_client::s_rest_client;
 
 
 void rest_client::init(std::string &host, std::string &port) {
-    BOOST_LOG_TRIVIAL(info)<<"init() start";
+    //BOOST_LOG_TRIVIAL(info)<<"init() start";
     m_uri = std::string(host)+std::string(":")+std::string(port)+std::string("/echo");
-    BOOST_LOG_TRIVIAL(info)<<"init() uri is created : "<<m_uri;
-    BOOST_LOG_TRIVIAL(info)<<"init() exit";
+    //BOOST_LOG_TRIVIAL(info)<<"init() uri is created : "<<m_uri;
+    //BOOST_LOG_TRIVIAL(info)<<"init() exit";
 
 }
 
 
 void rest_client::client_network()  {
-    BOOST_LOG_TRIVIAL(info)<<"client_network() init "<<m_uri;
+    //BOOST_LOG_TRIVIAL(info)<<"client_network() init "<<m_uri;
     m_g_httpHandler = new WsClient(m_uri);
     m_g_httpHandler->on_message = [&](const std::shared_ptr<WsClient::Connection>& connection, const std::shared_ptr<WsClient::InMessage> &in_message) {
         this->on_message(connection,in_message);
@@ -46,12 +46,12 @@ void rest_client::client_network()  {
     };
 
     m_g_httpHandler->start();
-    BOOST_LOG_TRIVIAL(info)<<"client network interface is running on : "<<m_uri;
+    //BOOST_LOG_TRIVIAL(info)<<"client network interface is running on : "<<m_uri;
 }
 
 [[noreturn]] void rest_client::client_gui(){
     //main thread for displaying gui
-    BOOST_LOG_TRIVIAL(info)<<"client_gui() started";
+    //BOOST_LOG_TRIVIAL(info)<<"client_gui() started";
 
     graphiqueSDL fenetre{};
 
@@ -78,12 +78,12 @@ void rest_client::client_network()  {
         for (const auto& i : *game_shapes::get_shapes()) {
             if(i != nullptr)
                 i->afficherSurFenetre(fenetre);
-            else
-                BOOST_LOG_TRIVIAL(error)<<"client_gui() error";
+            //else
+                //BOOST_LOG_TRIVIAL(error)<<"client_gui() error";
         }
         fenetre.afficherImage();
     }
-    BOOST_LOG_TRIVIAL(info)<<"client_gui() ended";
+    //BOOST_LOG_TRIVIAL(info)<<"client_gui() ended";
 }
 
 
@@ -97,13 +97,13 @@ void rest_client::run() {
         std::cin>>input;
         if (input == "start_net"){
             net = std::make_unique<std::thread>(std::thread([&]() {
-                BOOST_LOG_TRIVIAL(info)<<"network thread started";
+                //BOOST_LOG_TRIVIAL(info)<<"network thread started";
                 this->client_network();
             }));
         }
         else if(input == "start_gui"){
             gui = std::make_unique<std::thread>(std::thread([&]() {
-                BOOST_LOG_TRIVIAL(info)<<"gui thread started";
+                //BOOST_LOG_TRIVIAL(info)<<"gui thread started";
                 this->client_gui();
             }));
         }
@@ -154,7 +154,7 @@ void rest_client::run() {
             std::this_thread::sleep_for(std::chrono::milliseconds(d));
             std::cout<<"start_net" << std::endl;
             net = std::make_unique<std::thread>(std::thread([&]() {
-                BOOST_LOG_TRIVIAL(info)<<"network thread started";
+                //BOOST_LOG_TRIVIAL(info)<<"network thread started";
                 this->client_network();
             }));
             std::this_thread::sleep_for(std::chrono::milliseconds(d));
@@ -162,7 +162,7 @@ void rest_client::run() {
             std::this_thread::sleep_for(std::chrono::milliseconds(d));
             send_create_game_message();
             gui = std::make_unique<std::thread>(std::thread([&]() {
-                BOOST_LOG_TRIVIAL(info)<<"gui thread started";
+                //BOOST_LOG_TRIVIAL(info)<<"gui thread started";
                 this->client_gui();
             }));
         }
@@ -181,10 +181,10 @@ void rest_client::run() {
 std::shared_ptr<rest_client > rest_client::get_instance() noexcept {
     if (rest_client::s_rest_client == nullptr){
         rest_client::s_rest_client = std::make_shared<rest_client>(rest_client());
-        BOOST_LOG_TRIVIAL(info)<<"rest client instance is being created";
+        //BOOST_LOG_TRIVIAL(info)<<"rest client instance is being created";
     }
     else{
-        BOOST_LOG_TRIVIAL(warning)<<"rest client instance already exist";
+        //BOOST_LOG_TRIVIAL(warning)<<"rest client instance already exist";
     }
     return rest_client::s_rest_client;
 }
@@ -192,7 +192,7 @@ std::shared_ptr<rest_client > rest_client::get_instance() noexcept {
 
 std::string rest_client::send_message(const std::string &message){
     if(this->m_connection == nullptr){
-        BOOST_LOG_TRIVIAL(fatal)<<"Attempting to send message without specifiying server connection";
+        //BOOST_LOG_TRIVIAL(fatal)<<"Attempting to send message without specifiying server connection";
         throw std::runtime_error("server connection is null");
     }
     m_connection->send(message);
@@ -204,22 +204,22 @@ std::string rest_client::send_message(const std::string &message){
 
 
 void rest_client::on_open(std::shared_ptr<WsClient::Connection>& connection){
-    BOOST_LOG_TRIVIAL(info)<<"on_open() start";
+    //BOOST_LOG_TRIVIAL(info)<<"on_open() start";
 
     //connection->send("Hello server");
     this->m_connection = connection;
-    BOOST_LOG_TRIVIAL(info)<<"on_open() end";
+    //BOOST_LOG_TRIVIAL(info)<<"on_open() end";
 
 }
 void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connection,const std::shared_ptr<WsClient::InMessage>& in_message){
-    //BOOST_LOG_TRIVIAL(info)<<"on_message() start";
+    ////BOOST_LOG_TRIVIAL(info)<<"on_message() start";
     std::stringstream ss;
     ss << in_message->string();
     pt::ptree root;
     pt::read_json(ss, root);
     auto type = root.get<std::string>("type");
     if(type == "game_view"){
-       // BOOST_LOG_TRIVIAL(info)<<"received game view";
+       // //BOOST_LOG_TRIVIAL(info)<<"received game view";
         std::vector<std::shared_ptr<polyClient>> objects;
 
         for (pt::ptree::value_type &shape : root.get_child("shapes"))
@@ -228,7 +228,7 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connec
             std::vector<vec2d> list;
             auto tmp_type = shape.second.get<std::string>("type");
             if(tmp_type == "polygone"){
-          //      BOOST_LOG_TRIVIAL(info)<<"-------- Found polygone -------";
+          //      //BOOST_LOG_TRIVIAL(info)<<"-------- Found polygone -------";
                 for (pt::ptree::value_type &cor : shape.second.get_child("points")){
                     std::string x = cor.second.get<std::string>("x");
                     std::string y = cor.second.get<std::string>("y");
@@ -241,26 +241,26 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connec
 
     }
     else if(type == "error"){
-        BOOST_LOG_TRIVIAL(warning)<<"received error";
+        //BOOST_LOG_TRIVIAL(warning)<<"received error";
     }
     else{
-        BOOST_LOG_TRIVIAL(info)<<"received other thing";
+        //BOOST_LOG_TRIVIAL(info)<<"received other thing";
     }
-    BOOST_LOG_TRIVIAL(info)<<"on_message() end";
+    //BOOST_LOG_TRIVIAL(info)<<"on_message() end";
 }
 
 void rest_client::on_error(const std::shared_ptr<WsClient::Connection> &connection, const SimpleWeb::error_code &ec) {
-    BOOST_LOG_TRIVIAL(info)<<"on_error() start";
+    //BOOST_LOG_TRIVIAL(info)<<"on_error() start";
 
 
-    BOOST_LOG_TRIVIAL(info)<<"on_error() end";
+    //BOOST_LOG_TRIVIAL(info)<<"on_error() end";
 }
 
 void rest_client::on_close(const std::shared_ptr<WsClient::Connection> &connection, int status, const std::string &reason) {
-    BOOST_LOG_TRIVIAL(info)<<"on_close() start";
+    //BOOST_LOG_TRIVIAL(info)<<"on_close() start";
 
 
-    BOOST_LOG_TRIVIAL(info)<<"on_close() end";
+    //BOOST_LOG_TRIVIAL(info)<<"on_close() end";
 }
 
 void rest_client::send_move_forward_message() {
@@ -288,12 +288,12 @@ void rest_client::send_fire_message() {
     send_message(msg);
 }
 void rest_client::send_create_game_message(){
-    BOOST_LOG_TRIVIAL(info)<<"send_create_game_message()";
+    //BOOST_LOG_TRIVIAL(info)<<"send_create_game_message()";
     std::string payload = client_message_factory::get_create_game_message(m_username,m_game_id);
 
     std::string ret = send_message(payload);
 
-    BOOST_LOG_TRIVIAL(info)<<"Reiceived : "<<ret;
+    //BOOST_LOG_TRIVIAL(info)<<"Reiceived : "<<ret;
 }
 void rest_client::send_join_game_message() {
     std::string msg = client_message_factory::get_join_game_message(m_game_id,m_username);

@@ -89,7 +89,7 @@ public:
 
         long size = points.size();
         for(int i=0;i <size;++i){
-            const_cast<std::vector<vec2d>&>(points)[i].print();
+           // const_cast<std::vector<vec2d>&>(points)[i].print();
             dessinerLigne(points[i],points[(i+1)%size]);
         }
 
