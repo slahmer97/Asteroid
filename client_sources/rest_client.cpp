@@ -65,18 +65,21 @@ void rest_client::client_network()  {
             if (s == "") {}
             else if (s == "space") send_fire_message();
             else if (s == "up") send_move_forward_message();
-            else if (s == "right"){ std::cout << " !!! Reaction Time in ms: " << elapsed.count() << std::endl; send_rotate_right_message();}
+            else if (s == "right"){ send_rotate_right_message();}
             else if (s == "left") send_rotate_left_message();
         }
 
     });
+
     std::vector<std::shared_ptr<polyClient>> v;
-    v.emplace_back(new polyClient({{100,100},{200,200},{300,300}}));
-    game_shapes::emplace(std::move(v));
+
     while (true) {
         fenetre.clearImage();
         for (const auto& i : *game_shapes::get_shapes()) {
-            i->afficherSurFenetre(fenetre);
+            if(i != nullptr)
+                i->afficherSurFenetre(fenetre);
+            else
+                BOOST_LOG_TRIVIAL(error)<<"client_gui() error";
         }
         fenetre.afficherImage();
     }
@@ -209,7 +212,7 @@ void rest_client::on_open(std::shared_ptr<WsClient::Connection>& connection){
 
 }
 void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connection,const std::shared_ptr<WsClient::InMessage>& in_message){
-    BOOST_LOG_TRIVIAL(info)<<"on_message() start";
+    //BOOST_LOG_TRIVIAL(info)<<"on_message() start";
     std::stringstream ss;
     ss << in_message->string();
     pt::ptree root;
@@ -230,7 +233,6 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connec
                     std::string x = cor.second.get<std::string>("x");
                     std::string y = cor.second.get<std::string>("y");
                     list.emplace_back(boost::lexical_cast<double>(x),boost::lexical_cast<double>(y));
-                    std::cout<<"\t\tDouble X : "<<x<<" -- Y : "<<y<<std::endl;
                 }
             }
             objects.push_back(std::make_shared<polyClient>(polyClient(list)));

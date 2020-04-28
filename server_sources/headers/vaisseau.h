@@ -71,18 +71,14 @@ public:
     void rotate(double deg){
         for (auto &p : points) {
             p.rotate(deg,this->m_center);
-            std::cout<<" dist : "<<p.dist(m_center)<<"\n";
         }
-
-        std::cout<<" ================\n";
-
-
-
     }
     void avancer(const vec2d& v) {
         BOOST_LOG_TRIVIAL(info)<<"avancer() -- username : "<<m_username;
-        //direction++
-        // placeholder
+        vec2d dir = (this->points[0] - this->m_center).normalize()*10;
+        for(auto&p : points)
+            p = p+dir;
+        this->m_center = this->m_center + dir;
     }
 
     void send_message(const std::string &p_message){
