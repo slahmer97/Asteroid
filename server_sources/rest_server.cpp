@@ -61,6 +61,10 @@ void rest_server::run(){
     });
     BOOST_LOG_TRIVIAL(info)<<"server_thread() started";
 
+
+    std::thread stepper([&](){
+            game_scheduler::start();
+    });
     std::string a;
     std::cout<<"Enter something to exit\n";
     std::cin>>a;

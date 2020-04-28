@@ -46,6 +46,9 @@ public:
     static void broadcaster();
     static std::shared_ptr<vaisseau> get_player_by_connection(std::shared_ptr<WsServer::Connection>& p_connection);
     static std::shared_ptr<game> get_game_by_player_connection(std::shared_ptr<WsServer::Connection>& p_connection);
+
+
+    static void start();
 private:
     static std::map<std::string,std::shared_ptr<game>> m_games_instances;
 
