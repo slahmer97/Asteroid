@@ -29,7 +29,9 @@ public:
         asteroids.emplace_back(new grandAsteroid({100.0, 73.0}, {1,1}));
     }
 
+    void run() {
 
+    }
 
     void add_new_player(std::string& p_username,std::shared_ptr<WsServer::Connection>& p_connection){
         std::shared_ptr<vaisseau> tmp = std::make_shared<vaisseau>(vaisseau(p_username,p_connection));
