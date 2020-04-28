@@ -18,8 +18,11 @@ public:
     vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection) : m_username(p_username),m_connection((p_connection)){
         BOOST_LOG_TRIVIAL(info)<<"vaisseau() -- username : "<<m_username;
 
-
-
+        vec2d p {LARGEUR / 2, HAUTEUR / 2}; // mettre random
+        points.emplace_back(p.x, p.y - 24);
+        points.emplace_back(p.x - 7, p.y);
+        points.emplace_back(p.x + 7, p.y);
+        /*
         if(count == 1){
             points.emplace_back(270,240);
             points.emplace_back(240,300);
@@ -41,6 +44,7 @@ public:
             points.emplace_back(700,300);
         }
         count++;
+         */
         //initialize fixed point for player
         int minX = 0xFFFF, minY = 0xFFFF, maxX = 0, maxY = 0;
         for (const auto& p : points) {
