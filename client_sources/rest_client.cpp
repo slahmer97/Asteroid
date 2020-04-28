@@ -70,7 +70,9 @@ void rest_client::client_network()  {
         }
 
     });
-
+    std::vector<std::shared_ptr<polyClient>> v;
+    v.emplace_back(new polyClient({{100,100},{200,200},{300,300}}));
+    game_shapes::emplace(std::move(v));
     while (true) {
         fenetre.clearImage();
         for (const auto& i : *game_shapes::get_shapes()) {

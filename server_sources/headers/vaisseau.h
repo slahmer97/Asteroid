@@ -81,7 +81,7 @@ public:
     }
     void avancer(const vec2d& v) {
         BOOST_LOG_TRIVIAL(info)<<"avancer() -- username : "<<m_username;
-
+        //direction++
         // placeholder
     }
 

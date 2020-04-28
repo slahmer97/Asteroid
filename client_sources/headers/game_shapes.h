@@ -14,6 +14,10 @@ public:
     static inline std::vector<std::shared_ptr<polyClient>> *get_shapes(){
         return &game_shapes::shapes;
     }
+    static inline void init(){
+        int a=10;
+        std::cout<<a;
+    }
 
     static inline void emplace(std::vector<std::shared_ptr<polyClient>>&& new_shapes){
         game_shapes::shapes =  new_shapes;
