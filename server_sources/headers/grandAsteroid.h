@@ -14,7 +14,8 @@ public:
 
     explicit grandAsteroid(std::vector<vec2d> points) : asteroid(std::move(points)) {}
 
-    explicit grandAsteroid(const point& p) {
+    explicit grandAsteroid(const vec2d& p, const vec2d& d) {
+        direction = d;
         points.reserve(5);
         points.emplace_back(p.x - 16, p.y);
         points.emplace_back(p.x, p.y + 16);

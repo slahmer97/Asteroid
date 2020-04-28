@@ -52,15 +52,18 @@ public:
     }
 
     void step() {
+        if (m_center.x >= LARGEUR) m_center.x = 1;
+        if (m_center.x <= 0) m_center.x = LARGEUR - 1;
+        if (m_center.y >= HAUTEUR) m_center.y = 1;
+        if (m_center.y <= 0) m_center.y = HAUTEUR - 1;
         for (auto &p : points) {
-            //p.x += direction.dx;
-           // p.y += direction.dy;
+            p.x += direction.x;
+            p.y += direction.y;
         }
     }
 
-private:
-    vec2d direction; //vecteur de direction et de velocite a implementer !!!
-
+protected:
+    vec2d direction;
 };
 
 #endif //ASTEROID_POLYSERVEUR_H
