@@ -32,11 +32,8 @@ public:
     }
 
     void run() {
-        /*
-        asteroids.emplace_back(new grandAsteroid{});
         for (auto& i : asteroids)
             i->step();
-            */
     }
 
     void add_new_player(std::string& p_username,std::shared_ptr<WsServer::Connection>& p_connection){

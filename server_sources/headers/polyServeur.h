@@ -52,14 +52,36 @@ public:
     }
 
     void step() {
-        if (m_center.x >= LARGEUR) m_center.x = 1;
-        if (m_center.x <= 0) m_center.x = LARGEUR - 1;
-        if (m_center.y >= HAUTEUR) m_center.y = 1;
-        if (m_center.y <= 0) m_center.y = HAUTEUR - 1;
+        if (points[0].x >= LARGEUR) {
+            m_center.x -= LARGEUR - 1;
+            for (auto &p : points) {
+                p.x -= LARGEUR - 1;
+            }
+        }
+        if (points[0].x <= 0) {
+            m_center.x += LARGEUR - 1;
+            for (auto &p : points) {
+                p.x += LARGEUR - 1;
+            }
+        }
+        if (points[0].y >= HAUTEUR) {
+            m_center.y -= HAUTEUR - 1;
+            for (auto &p : points) {
+                p.y -= HAUTEUR - 1;
+            }
+        }
+        if (points[0].y <= 0) {
+            m_center.y += HAUTEUR - 1;
+            for (auto &p : points) {
+                p.y += HAUTEUR - 1;
+            }
+        }
         for (auto &p : points) {
             p.x += direction.x;
             p.y += direction.y;
         }
+        m_center.x += direction.x;
+        m_center.y += direction.y;
     }
 
 protected:
