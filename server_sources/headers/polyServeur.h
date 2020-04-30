@@ -51,7 +51,7 @@ public:
         return b;
     }
 
-    void step() {
+    virtual void step() {
         if (points[0].x >= LARGEUR) {
             m_center.x -= LARGEUR - 1;
             for (auto &p : points) {
@@ -83,6 +83,8 @@ public:
         m_center.x += direction.x;
         m_center.y += direction.y;
     }
+
+
 
 protected:
     vec2d direction;
