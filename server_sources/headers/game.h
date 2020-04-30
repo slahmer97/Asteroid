@@ -26,11 +26,14 @@ public:
 
     void start() {
         BOOST_LOG_TRIVIAL(info)<<"start() game_id : "<<m_game_id;
-        asteroids.emplace_back(new grandAsteroid({100.0, 73.0}, {1,1}));
+
+        for (int i = 0; i < 10; ++i)
+            asteroids.emplace_back(new grandAsteroid{});
     }
 
     void run() {
-
+        for (auto& i : asteroids)
+            i->step();
     }
 
     void add_new_player(std::string& p_username,std::shared_ptr<WsServer::Connection>& p_connection){

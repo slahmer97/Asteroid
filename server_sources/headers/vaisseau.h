@@ -10,6 +10,7 @@
 #include "polyServeur.h"
 #include "vec2.h"
 #include <boost/log/trivial.hpp>
+#include <random>
 #include "server_ws.hpp"
 using WsServer = SimpleWeb::SocketServer<SimpleWeb::WS>;
 class vaisseau : public polyServeur {
@@ -17,31 +18,15 @@ public:
     vaisseau(std::initializer_list<vec2d> &&liste) : polyServeur(liste) {}
     vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection) : m_username(p_username),m_connection((p_connection)){
         //BOOST_LOG_TRIVIAL(info)<<"vaisseau() -- username : "<<m_username;
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<> dist(0.0, 100);
+        vec2d p {LARGEUR / 2 + dist(gen), HAUTEUR / 2 + dist(gen)};
+        points.emplace_back(p.x, p.y - 24);
+        points.emplace_back(p.x - 7, p.y);
+        points.emplace_back(p.x + 7, p.y);
 
-
-
-        if(count == 1){
-            points.emplace_back(270,240);
-            points.emplace_back(240,300);
-            points.emplace_back(300,300);
-        }
-        else if(count == 2){
-            points.emplace_back(370,240);
-            points.emplace_back(340,300);
-            points.emplace_back(400,300);
-        }
-        else if(count == 3){
-            points.emplace_back(570,240);
-            points.emplace_back(540,300);
-            points.emplace_back(600,300);
-        }
-        else if(count == 4){
-            points.emplace_back(670,240);
-            points.emplace_back(640,300);
-            points.emplace_back(700,300);
-        }
-        count++;
-        //initialize fixed point for player
+        // center point
         int minX = 0xFFFF, minY = 0xFFFF, maxX = 0, maxY = 0;
         for (const auto& p : points) {
             if (p.x > maxX) maxX = p.x;
@@ -52,11 +37,8 @@ public:
         this->m_center.x = (minX) + ((maxX - minX) / 2);
         this->m_center.y =  (minY )+ ((maxY - minY) / 2);
     }
-    explicit vaisseau(std::vector<vec2d> points) : polyServeur(std::move(points)) {}
 
-    vaisseau() : polyServeur{} {
-        // construire un triangle
-    }
+    explicit vaisseau(std::vector<vec2d> points) : polyServeur(std::move(points)) {}
 
     void rotationDroite(double degree = 2.0) {
         //BOOST_LOG_TRIVIAL(info)<<"rotationDroite() -- username : "<<m_username;
@@ -104,8 +86,6 @@ public:
 private:
     std::string m_username;
     std::shared_ptr<WsServer::Connection> m_connection;
-
-    static int count;
 };
 
 #endif //ASTEROID_VAISSEAU_H

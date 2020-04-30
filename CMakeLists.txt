@@ -51,7 +51,6 @@ set(SERVER_SOURCE_FILES
         ${SERVER_SOURCE_PATH}/asteroid_server.cpp
         ${SERVER_SOURCE_PATH}/rest_server.cpp
         ${SERVER_SOURCE_PATH}/game_scheduler.cpp
-        ${SERVER_SOURCE_PATH}/vaisseau.cpp
         )
 set(SHARED_SOURCE_FILES
         )
