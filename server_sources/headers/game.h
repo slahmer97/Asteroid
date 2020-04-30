@@ -41,6 +41,14 @@ public:
         }
         for (auto& i : vaisseaux) // pour faire passer les vaiseaux de l'autre coter
             i->step();
+        /*
+        for (int i = 0; i < asteroids.size(); ++i)
+        {
+            bool b = false;
+            for ()
+        }
+         */
+
     }
 
     void add_new_player(std::string& p_username,std::shared_ptr<WsServer::Connection>& p_connection){

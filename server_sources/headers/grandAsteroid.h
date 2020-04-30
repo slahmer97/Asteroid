@@ -44,17 +44,9 @@ public:
     explicit grandAsteroid() : grandAsteroid(pointAlea(), directionAlea()) {}
 
     [[nodiscard]] std::vector<std::shared_ptr<asteroid>> generationDestruction() const override {
-
-        // placeholder code:
-
-        std::vector<std::shared_ptr<asteroid>> V(3);
-        V.emplace_back(new moyenAsteroid{{1, 2},
-                                         {3, 4}});
-        V.emplace_back(new moyenAsteroid{{1, 2},
-                                         {3, 4}});
-        V.emplace_back(new moyenAsteroid{{1, 2},
-                                         {3, 4}});
-
+        std::vector<std::shared_ptr<asteroid>> V(2);
+        V.emplace_back(new moyenAsteroid{points[0]});
+        V.emplace_back(new moyenAsteroid{points[1]});
         return V;
     }
 };
