@@ -115,7 +115,7 @@ void game_scheduler::rotate_routine(const pt::ptree &pt, std::shared_ptr<WsServe
     std::shared_ptr<game> game = get_game_by_player_connection(p_connection);
     std::shared_ptr<vaisseau> player = get_player_by_connection(p_connection);
     if(player == nullptr || game == nullptr){
-        //BOOST_LOG_TRIVIAL(warning)<<"rotate_routine() player or game instance is null";
+        BOOST_LOG_TRIVIAL(warning)<<"rotate_routine() player or game instance is null";
         return;
     }
     if(val == "left"){
@@ -131,9 +131,14 @@ void game_scheduler::rotate_routine(const pt::ptree &pt, std::shared_ptr<WsServe
 }
 
 void game_scheduler::fire_routine(const pt::ptree &pt, std::shared_ptr<WsServer::Connection>& p_connection) {
+
     BOOST_LOG_TRIVIAL(info)<<"fire_routine() start";
     std::shared_ptr<game> game = get_game_by_player_connection(p_connection);
     std::shared_ptr<vaisseau> player = get_player_by_connection(p_connection);
+    if(p_connection == nullptr){
+        BOOST_LOG_TRIVIAL(error)<<"rotate_routine() connection instance is null";
+        return;
+    }
     if(player == nullptr || game == nullptr){
         BOOST_LOG_TRIVIAL(warning)<<"rotate_routine() player or game instance is null";
         return;
@@ -174,7 +179,7 @@ void game_scheduler::broadcaster() {
 
 void game_scheduler::start() {
     while(true){
-        std::this_thread::sleep_for(std::chrono::milliseconds(15));
+        std::this_thread::sleep_for(std::chrono::milliseconds(30));
         for(const auto& game : m_games_instances)
             game.second->run();
     }

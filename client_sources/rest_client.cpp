@@ -60,6 +60,7 @@ void rest_client::client_network()  {
     std::thread events_polling([&](){
         while(true){
             auto start = std::chrono::steady_clock::now();
+            /*
             std::string s = fenetre.getTouche(); // getTouche() ne bloque PAS le thread, elle renvoie "" si rien
             auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - start );
             if (s == "") {}
@@ -67,13 +68,31 @@ void rest_client::client_network()  {
             else if (s == "up") send_move_forward_message();
             else if (s == "right"){ send_rotate_right_message();}
             else if (s == "left") send_rotate_left_message();
-        }
+             */
+            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - start );
+
+            std::vector<bool> ret = fenetre.getTouche();
+            if(ret[0] == true){
+                send_move_forward_message();
+            }
+            if(ret[1] == true){
+                send_rotate_right_message();
+            }
+            if(ret[2] == true){
+                send_rotate_left_message();
+            }
+            if(ret[3] == true){
+                send_fire_message();
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));
+         }
 
     });
 
     std::vector<std::shared_ptr<polyClient>> v;
 
     while (true) {
+        fenetre.update_keys();
         fenetre.clearImage();
         for (const auto& i : *game_shapes::get_shapes()) {
             if(i != nullptr)

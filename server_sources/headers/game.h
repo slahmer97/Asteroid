@@ -88,7 +88,7 @@ public:
         BOOST_LOG_TRIVIAL(info)<<"fire() -- start -- username : "<<player->get_username();
         vec2d from = player->points[0];
         vec2d to = (player->points[0]-player->m_center).normalize()*10+from;
-        laser* l = new laser(to,from);
+        auto* l = new laser(to,from);
         if(l != nullptr)
             lasers.emplace_back(l);
         else

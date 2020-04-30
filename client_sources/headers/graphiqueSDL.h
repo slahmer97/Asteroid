@@ -18,6 +18,7 @@ public:
         renderer = SDL_CreateRenderer(fenetre, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_SetEventFilter( [](void* v, SDL_Event* e) -> int {return (e->type == SDL_KEYDOWN) ? 1 : 0;}, NULL);
+        up = left = right = fire = false;
     }
 
     ~graphiqueSDL() {
@@ -34,9 +35,20 @@ public:
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
     }
+    void update_keys(){
+        SDL_Event e;
+        SDL_PollEvent(&e);
+        if(e.type == SDL_KEYDOWN){
+            key_pressed(e);
+        }
+        else if(e.type == SDL_KEYUP){
+            key_released(e);
+        }
+    }
+    std::vector<bool> getTouche() {
+        return std::vector<bool>{this->up,this->right,this->left,this->fire};
 
-    std::string getTouche() {
-        std::string s = "";
+        /*std::string s = "";
         SDL_Event e;
         while(s == "") {
             SDL_PollEvent(&e);
@@ -65,8 +77,42 @@ public:
             else std::this_thread::sleep_for(std::chrono::milliseconds(40));
         previous_time = std::chrono::system_clock::now();
         return s;
+                  */
     }
-
+    void key_pressed(const SDL_Event& e){
+        std::cout<< "--------------------->key_released"<<std::endl;
+        switch (e.key.keysym.sym) {
+            case SDLK_UP:
+                up = true;
+                break;
+            case SDLK_LEFT:
+                left = true;
+                break;
+            case SDLK_RIGHT:
+                right = true;
+                break;
+            case SDLK_SPACE:
+                fire = true;
+                break;
+        }
+    }
+    void key_released(const SDL_Event& e){
+        std::cout<< "--------------------->key_released"<<std::endl;
+        switch (e.key.keysym.sym) {
+            case SDLK_UP:
+                up = false;
+                break;
+            case SDLK_LEFT:
+                left = false;
+                break;
+            case SDLK_RIGHT:
+                right = false;
+                break;
+            case SDLK_SPACE:
+                fire = false;
+                break;
+        }
+    }
     void dessinerLigne(const vec2d &a, const vec2d &b) {
         SDL_RenderDrawLine(renderer, a().x, a().y, b().x, b().y);
     }
@@ -103,6 +149,7 @@ public:
 private:
     std::chrono::time_point<std::chrono::system_clock> previous_time;
     SDL_Renderer *renderer;
+    bool up,left,right,fire;
 };
 
 #endif //GRAPHIQUE_SDL_H

@@ -94,7 +94,7 @@ void rest_server::on_message(std::shared_ptr<WsServer::Connection>& connection, 
         root =     game_scheduler::parse_json(in_message->string());
     }
     catch (std::exception& e){
-        //std::cout<<e.what();
+        BOOST_LOG_TRIVIAL(info)<<e.what();
         return;
     }
 
