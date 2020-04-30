@@ -34,6 +34,8 @@ public:
     void run() {
         for (auto& i : asteroids)
             i->step();
+        for (auto& i : lasers)
+            i->step();
     }
 
     void add_new_player(std::string& p_username,std::shared_ptr<WsServer::Connection>& p_connection){
