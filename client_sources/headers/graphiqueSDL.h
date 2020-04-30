@@ -61,7 +61,8 @@ public:
             }
         }
         if (std::chrono::system_clock::now() - previous_time < std::chrono::milliseconds(50))
-            std::this_thread::sleep_for(std::chrono::milliseconds(40));
+            if (s == "space") std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            else std::this_thread::sleep_for(std::chrono::milliseconds(40));
         previous_time = std::chrono::system_clock::now();
         return s;
     }
