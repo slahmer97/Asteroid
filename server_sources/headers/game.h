@@ -34,7 +34,12 @@ public:
     void run() {
         for (auto& i : asteroids)
             i->step();
-        for (auto& i : lasers)
+        for (int i = 0; i < lasers.size(); ++i)
+        {
+            if (lasers[i]->isBordure()) lasers.erase(lasers.begin() + i);
+            else lasers[i]->step();
+        }
+        for (auto& i : vaisseaux) // pour faire passer les vaiseaux de l'autre coter
             i->step();
     }
 

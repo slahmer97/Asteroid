@@ -18,6 +18,13 @@ public:
         direction *= 10;
     }
 
+    bool isBordure() const {
+        if (points[0].x >= LARGEUR) return true;
+        if (points[0].x <= 0) return true;
+        if (points[0].y >= HAUTEUR) return true;
+        if (points[0].y <= 0) return true;
+        return false;
+    }
 };
 
 #endif //ASTEROID_LASER_H
