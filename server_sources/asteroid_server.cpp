@@ -8,6 +8,7 @@
 #include <game.h>
 
 namespace pt = boost::property_tree;
+
 auto main(int argc, char **argv) -> int {
 
     std::string port = "9999";

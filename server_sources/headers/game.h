@@ -15,14 +15,13 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 namespace pt = boost::property_tree;
+
 class game {
 public:
 
-    explicit game(std::string& game_id) : m_game_id{game_id}, score{},
+    explicit game(std::string& game_id) : m_game_id{game_id},
                                         asteroids{}, lasers{}, vaisseaux{}
-    {
-
-    }
+    {}
 
     void start() {
         BOOST_LOG_TRIVIAL(info)<<"start() game_id : "<<m_game_id;
@@ -41,14 +40,18 @@ public:
         }
         for (auto& i : vaisseaux) // pour faire passer les vaiseaux de l'autre coter
             i->step();
-        /*
-        for (int i = 0; i < asteroids.size(); ++i)
+        for (unsigned long i = 0; i < asteroids.size(); ++i)
         {
-            bool b = false;
-            for ()
+            unsigned long j;
+            for (j = 0; j < lasers.size() && !asteroids[i]->intersecte(lasers[j]); ++j)
+            {}
+            // si le laser j intersecte avec l'asteroid i
+            if (j < lasers.size()) {
+                auto rocks = asteroids[i]->generationDestruction();
+                //asteroids.insert(asteroids.end(), rocks.begin(), rocks.end()); // ça coince ici
+                asteroids.erase(asteroids.begin() + i);
+            }
         }
-         */
-
     }
 
     void add_new_player(std::string& p_username,std::shared_ptr<WsServer::Connection>& p_connection){
@@ -125,11 +128,9 @@ private:
 
 private:
     std::string m_game_id;
-    int score;
     std::vector<std::shared_ptr<asteroid>> asteroids;
     std::vector<laser> lasers;
     std::vector<std::shared_ptr<vaisseau>> vaisseaux;
-    // autre, placeholder
 };
 
 #endif //ASTEROID_GAME_H
