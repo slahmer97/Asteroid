@@ -34,10 +34,10 @@ public:
     void run() {
         for (auto& i : asteroids)
             i->step();
-        for (int i = 0; i < lasers.size(); ++i)
+        for (unsigned long i = 0; i < lasers.size(); ++i)
         {
-            if (lasers[i]->isBordure()) lasers.erase(lasers.begin() + i);
-            else lasers[i]->step();
+            if (lasers[i].isBordure()) lasers.erase(lasers.begin() + i);
+            else lasers[i].step();
         }
         for (auto& i : vaisseaux) // pour faire passer les vaiseaux de l'autre coter
             i->step();
@@ -80,11 +80,8 @@ public:
         BOOST_LOG_TRIVIAL(info)<<"fire() -- start -- username : "<<player->get_username();
         vec2d from = player->points[0];
         vec2d to = (player->points[0]-player->m_center).normalize()*10+from;
-        auto* l = new laser(to,from);
-        if(l != nullptr)
-            lasers.emplace_back(l);
-        else
-            BOOST_LOG_TRIVIAL(info)<<"NULL LASER"<<player->get_username();
+        lasers.emplace_back(to,from);
+        BOOST_LOG_TRIVIAL(info)<<"NULL LASER"<<player->get_username();
         BOOST_LOG_TRIVIAL(info)<<"fire() -- end -- username : "<<player->get_username();
     }
     inline void broadcast_view(){
@@ -106,8 +103,8 @@ private:
             pt::ptree child = shape->to_ptree();
             shapes.push_back(std::make_pair("",std::move(child)));
         }
-        for(const auto& shape : lasers){
-            pt::ptree child = shape->to_ptree();
+        for(laser& shape : lasers){
+            pt::ptree child = shape.to_ptree();
             shapes.push_back(std::make_pair("",std::move(child)));
         }
         root.put("type","game_view");
@@ -122,7 +119,7 @@ private:
     std::string m_game_id;
     int score;
     std::vector<std::shared_ptr<asteroid>> asteroids;
-    std::vector<std::shared_ptr<laser>> lasers;
+    std::vector<laser> lasers;
     std::vector<std::shared_ptr<vaisseau>> vaisseaux;
     // autre, placeholder
 };
