@@ -84,10 +84,12 @@ void rest_client::client_network()  {
             if(ret[3] == true){
                 send_fire_message();
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+            std::this_thread::sleep_for(std::chrono::milliseconds(15));
          }
 
     });
+
+
 
     std::vector<std::shared_ptr<polyClient>> v;
 
@@ -101,6 +103,7 @@ void rest_client::client_network()  {
                 //BOOST_LOG_TRIVIAL(error)<<"client_gui() error";
         }
         fenetre.afficherImage();
+        fenetre.init_key();
     }
     //BOOST_LOG_TRIVIAL(info)<<"client_gui() ended";
 }

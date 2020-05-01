@@ -17,7 +17,7 @@ public:
                                                LARGEUR, HAUTEUR, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
         renderer = SDL_CreateRenderer(fenetre, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_SetEventFilter( [](void* v, SDL_Event* e) -> int {return (e->type == SDL_KEYDOWN) ? 1 : 0;}, NULL);
+        //SDL_SetEventFilter( [](void* v, SDL_Event* e) -> int {return (e->type == SDL_KEYDOWN) ? 1 : 0;}, NULL);
         up = left = right = fire = false;
     }
 
@@ -38,23 +38,25 @@ public:
     void update_keys(){
         /*! updates the array of keystates */
         SDL_Event event;
-        SDL_PollEvent( &event );
-        switch( event.type ){
-            case SDL_KEYDOWN:
-                key_pressed(event);
-                break;
-            case SDL_KEYUP:
-                printf( "Key release detected\n" );
-                key_released(event);
-                break;
-            default:
-                break;
+        while(SDL_PollEvent( &event ) != 0){
+            switch( event.type ){
+                case SDL_KEYDOWN:
+                    key_pressed(event);
+                    break;
+                case SDL_KEYUP:
+                    key_released(event);
+                    break;
+                default:
+                    break;
+            }
         }
-
+    }
+    void init_key(){
+        up = left = right = fire = false;
     }
     std::vector<bool> getTouche() {
-       // return std::vector<bool>{this->up,this->right,this->left,this->fire};
-        return std::vector<bool>{this->up,right,left,fire};
+        return std::vector<bool>{this->up,this->right,this->left,this->fire};
+        return std::vector<bool>{false,false,false,false};
         /*std::string s = "";
         SDL_Event e;
         while(s == "") {
