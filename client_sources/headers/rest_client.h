@@ -7,6 +7,7 @@
 
 
 #include <memory>
+#include <thread>
 #include <client_ws.hpp>
 #include "client_http_service_handler.h"
 using WsClient = SimpleWeb::SocketClient<SimpleWeb::WS>;
@@ -30,6 +31,8 @@ private:
 
     void set_username(std::string&& username);
     void set_game_id(std::string&& game_id);
+    void fast_config(std::string&& salon, std::string&& joueur, std::unique_ptr<std::thread>& gui,
+                     std::unique_ptr<std::thread>& net, bool creer_salon);
 
     void on_message(const std::shared_ptr<WsClient::Connection>& connection,const std::shared_ptr<WsClient::InMessage>& in_message);
     void on_open(std::shared_ptr<WsClient::Connection>& connection);

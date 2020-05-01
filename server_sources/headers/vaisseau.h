@@ -86,6 +86,7 @@ public:
 private:
     std::string m_username;
     std::shared_ptr<WsServer::Connection> m_connection;
+
 };
 
 #endif //ASTEROID_VAISSEAU_H
