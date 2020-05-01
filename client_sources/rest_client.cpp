@@ -84,7 +84,7 @@ void rest_client::client_network()  {
             if(ret[3] == true){
                 send_fire_message();
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(30));
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
          }
 
     });
