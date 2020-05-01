@@ -37,32 +37,24 @@ public:
     }
     void update_keys(){
         /*! updates the array of keystates */
-        SDL_Event e;
-        while ((SDL_PollEvent(&e)) != 0)
-        {
-            /*! request quit */
-            if (e.type == SDL_QUIT)
-            {
-                std::cout<<"quite \n";
-                exit(1);
-            }
+        SDL_Event event;
+        SDL_PollEvent( &event );
+        switch( event.type ){
+            case SDL_KEYDOWN:
+                key_pressed(event);
+                break;
+            case SDL_KEYUP:
+                printf( "Key release detected\n" );
+                key_released(event);
+                break;
+            default:
+                break;
         }
-        const Uint8 *keys = SDL_GetKeyboardState(nullptr);
-
-        if (keys[SDL_SCANCODE_A]){
-            std::cout << "A is being pressed\n";
-        }
-
-        if (keys[SDL_SCANCODE_A] == 0){
-            std::cout << "A is being released\n";
-        }
-
-
 
     }
     std::vector<bool> getTouche() {
        // return std::vector<bool>{this->up,this->right,this->left,this->fire};
-        return std::vector<bool>{false,false,false,false};
+        return std::vector<bool>{this->up,right,left,fire};
         /*std::string s = "";
         SDL_Event e;
         while(s == "") {
