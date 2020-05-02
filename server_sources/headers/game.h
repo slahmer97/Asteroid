@@ -50,8 +50,32 @@ public:
 
         collision_lasers_asteroids();
         collision_vaisseaux_asteroids();
-
+        collision_lasers_vaisseaux();
         m_lock->unlock();
+    }
+
+    void collision_lasers_vaisseaux() {
+        for (unsigned long i = 0; i < lasers.size(); ++i) {
+            unsigned long j;
+            for (j = 0; j < vaisseaux.size() && !lasers[i].intersecte(*vaisseaux[j]); ++j)
+            {}
+            if (j < vaisseaux.size()) { // vaisseau j touche par laser i
+                if (vaisseaux[j]->get_type() != lasers[j].get_type()) { // ennemi
+                    if (vaisseaux[j]->attack()) {
+                        vaisseaux[j]->initialize_poly();
+                    }
+                }
+            }
+            for (j = 0; j < vaisseaux2.size() && !lasers[i].intersecte(*vaisseaux2[j]); ++j)
+            {}
+            if (j < vaisseaux2.size()) { // vaisseau2 j touche par laser i
+                if (vaisseaux2[j]->get_type() != lasers[j].get_type()) { // ennemi
+                    if (vaisseaux2[j]->attack()) {
+                        vaisseaux2[j]->initialize_poly();
+                    }
+                }
+            }
+        }
     }
 
     void collision_lasers_asteroids() {
