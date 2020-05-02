@@ -56,40 +56,8 @@ public:
     }
     std::vector<bool> getTouche() {
         return std::vector<bool>{this->up,this->right,this->left,this->fire,this->fireX2,this->fireX3};
-        return std::vector<bool>{false,false,false,false};
-        /*std::string s = "";
-        SDL_Event e;
-        while(s == "") {
-            SDL_PollEvent(&e);
-            if (e.type == SDL_KEYDOWN) {
-                switch (e.key.keysym.sym) {
-                    case SDLK_UP:
-                        s = "up";
-                        break;
-                    case SDLK_DOWN:
-                        s = "down";
-                        break;
-                    case SDLK_LEFT:
-                        s = "left";
-                        break;
-                    case SDLK_RIGHT:
-                        s = "right";
-                        break;
-                    case SDLK_SPACE:
-                        s = "space";
-                        break;
-                }
-            }
-        }
-        if (std::chrono::system_clock::now() - previous_time < std::chrono::milliseconds(50))
-            if (s == "space") std::this_thread::sleep_for(std::chrono::milliseconds(500));
-            else std::this_thread::sleep_for(std::chrono::milliseconds(40));
-        previous_time = std::chrono::system_clock::now();
-        return s;
-                  */
     }
     void key_pressed(const SDL_Event& e){
-        std::cout<< "--------------------->key_pressed"<<std::endl;
         switch (e.key.keysym.sym) {
             case SDLK_UP:
                 up = true;
@@ -112,7 +80,6 @@ public:
         }
     }
     void key_released(const SDL_Event& e){
-        std::cout<< "--------------------->key_released"<<std::endl;
         switch (e.key.keysym.sym) {
             case SDLK_UP:
                 up = false;

@@ -91,12 +91,14 @@ public:
         this->y = p_y;
     }
 
-    void rotate(double deg, const vec2<double>& center) {
+    vec2& rotate(double deg, const vec2<double>& center) {
         x -= center.x;
         y -= center.y;
         rotate(deg);
         x += center.x;
         y += center.y;
+
+        return *this;
     }
     vec2& rotate(double deg) {
         double theta = deg / 180.0 * M_PI;
@@ -109,8 +111,12 @@ public:
         return *this;
     }
 
-    static vec2& rotate_s(double deg, vec2 v){
+    static vec2<double>& rotate_s(double deg, vec2<double> v){
         return v.rotate(deg);
+    }
+
+    static vec2<double>& rotate_s(double deg, vec2<double> v, const vec2<double>& origin){
+        return v.rotate(deg,origin);
     }
     vec2& normalize() {
         if (length() == 0) return *this;
