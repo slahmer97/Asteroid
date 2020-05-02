@@ -12,7 +12,7 @@ public:
     laser(std::initializer_list<vec2d> &&liste) : polyServeur(liste) {}
 
     explicit laser(std::vector<vec2d> points) : polyServeur(std::move(points)) {}
-    laser(vec2d& from, vec2d& to) : polyServeur({from,to}) {
+    laser(vec2d& from, vec2d& to, int type = 1) : polyServeur({from,to}),m_type(type) {
         direction = vec2d{from.x - to.x, from.y - to.y};
         direction.normalize();
         direction *= 10;
@@ -25,6 +25,14 @@ public:
         if (points[0].y <= 0) return true;
         return false;
     }
+
+    int get_type() const {
+        return m_type;
+    }
+    inline void set_type(int type){
+        m_type = type;
+    }
+    int m_type;
 };
 
 #endif //ASTEROID_LASER_H

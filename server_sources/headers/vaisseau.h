@@ -16,7 +16,7 @@ using WsServer = SimpleWeb::SocketServer<SimpleWeb::WS>;
 class vaisseau : public polyServeur {
 public:
     vaisseau(std::initializer_list<vec2d> &&liste) : polyServeur(liste) {}
-    vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection) : m_username(p_username),m_connection((p_connection)){
+    vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection, int type=1) : m_username(p_username),m_connection((p_connection)),m_type(type){
         //BOOST_LOG_TRIVIAL(info)<<"vaisseau() -- username : "<<m_username;
         initialize_poly();
     }
@@ -89,9 +89,17 @@ public:
         return m_username;
     }
 
+    inline int get_type() const{
+        return m_type;
+    }
+    inline void set_type(int type){
+        m_type = type;
+    }
 private:
     std::string m_username;
     std::shared_ptr<WsServer::Connection> m_connection;
+
+    int m_type;
 
 };
 
