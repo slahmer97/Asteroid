@@ -14,7 +14,8 @@ public:
 
     explicit moyenAsteroid(std::vector<vec2d> points) : asteroid(std::move(points)) {}
 
-    moyenAsteroid(const vec2d& p) {
+    moyenAsteroid(const vec2d& p, const vec2d& d) {
+        direction = d;
         points.reserve(5);
         points.emplace_back(p.x - 15, p.y);
         points.emplace_back(p.x, p.y + 15);
@@ -23,10 +24,10 @@ public:
         points.emplace_back(p.x - 5, p.y - 15);
     }
 
-    [[nodiscard]] std::vector<std::shared_ptr<asteroid>> generationDestruction() const override {
-        std::vector<std::shared_ptr<asteroid>> V(2);
-        V.emplace_back(new petitAsteroid{points[0]});
-        V.emplace_back(new petitAsteroid{points[1]});
+    explicit moyenAsteroid(const vec2d& p) : moyenAsteroid(p, directionAlea()) {}
+
+    [[nodiscard]] std::vector<vec2d> generationDestruction() const override {
+        std::vector<vec2d> V = {points[0], points[1]};
         return V;
     }
 };

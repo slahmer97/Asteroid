@@ -7,7 +7,6 @@
 
 #include "asteroid.h"
 #include "moyenAsteroid.h"
-#include <random>
 
 class grandAsteroid : public asteroid {
 public:
@@ -24,29 +23,11 @@ public:
         points.emplace_back(p.x + 14, p.y - 27);
         points.emplace_back(p.x - 14, p.y - 27);
     }
-    static vec2d directionAlea() {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_real_distribution<> dist(0.0, 100.0);
-        vec2d d {dist(gen), dist(gen)};
-        d.normalize();
-        return d;
-    }
 
-    static vec2d pointAlea() {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_real_distribution<> dist_y(30, HAUTEUR / 3);
-        std::uniform_real_distribution<> dist_x(30, LARGEUR - 30);
-        return {dist_x(gen), dist_y(gen)};
-    }
+    grandAsteroid() : grandAsteroid(pointAlea(), directionAlea()) {}
 
-    explicit grandAsteroid() : grandAsteroid(pointAlea(), directionAlea()) {}
-
-    [[nodiscard]] std::vector<std::shared_ptr<asteroid>> generationDestruction() const override {
-        std::vector<std::shared_ptr<asteroid>> V(2);
-        V.emplace_back(new moyenAsteroid{points[0]});
-        V.emplace_back(new moyenAsteroid{points[1]});
+    [[nodiscard]] std::vector<vec2d> generationDestruction() const override {
+        std::vector<vec2d> V = {points[0], points[1]};
         return V;
     }
 };
