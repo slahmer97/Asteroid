@@ -18,7 +18,7 @@ public:
         renderer = SDL_CreateRenderer(fenetre, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         //SDL_SetEventFilter( [](void* v, SDL_Event* e) -> int {return (e->type == SDL_KEYDOWN) ? 1 : 0;}, NULL);
-        up = left = right = fire = false;
+        up = left = right = fire = fireX2 = fireX3 = false;
     }
 
     ~graphiqueSDL() {
@@ -52,10 +52,10 @@ public:
         }
     }
     void init_key(){
-        up = left = right = fire = false;
+        up = left = right = fire = fireX2 = fireX3 = false;
     }
     std::vector<bool> getTouche() {
-        return std::vector<bool>{this->up,this->right,this->left,this->fire};
+        return std::vector<bool>{this->up,this->right,this->left,this->fire,this->fireX2,this->fireX3};
         return std::vector<bool>{false,false,false,false};
         /*std::string s = "";
         SDL_Event e;
@@ -103,6 +103,12 @@ public:
             case SDLK_SPACE:
                 fire = true;
                 break;
+            case SDLK_c:
+                fireX2 = true;
+                break;
+            case SDLK_v:
+                fireX3 = true;
+                break;
         }
     }
     void key_released(const SDL_Event& e){
@@ -119,6 +125,12 @@ public:
                 break;
             case SDLK_SPACE:
                 fire = false;
+                break;
+            case SDLK_c:
+                fireX2 = false;
+                break;
+            case SDLK_v:
+                fireX3 = false;
                 break;
         }
     }
@@ -158,7 +170,7 @@ public:
 private:
     std::chrono::time_point<std::chrono::system_clock> previous_time;
     SDL_Renderer *renderer;
-    bool up,left,right,fire;
+    bool up,left,right,fire,fireX2,fireX3;
 };
 
 #endif //GRAPHIQUE_SDL_H

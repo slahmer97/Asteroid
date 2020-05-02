@@ -81,8 +81,15 @@ void rest_client::client_network()  {
                 send_rotate_left_message();
             }
             if(ret[3] == true){
-                send_fire_message();
+                send_fire_message("X1");
             }
+            if(ret[4] == true){
+                send_fire_message("X2");
+            }
+            if(ret[5] == true){
+                send_fire_message("X3");
+            }
+
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
          }
 
@@ -328,8 +335,8 @@ void rest_client::send_rotate_right_message() {
     send_message(msg);
 }
 
-void rest_client::send_fire_message() {
-    std::string msg = client_message_factory::get_fire_message();
+void rest_client::send_fire_message(const std::string& type) {
+    std::string msg = client_message_factory::get_fire_message(type);
     send_message(msg);
 }
 void rest_client::send_create_game_message(){

@@ -98,7 +98,7 @@ public:
         x += center.x;
         y += center.y;
     }
-    void rotate(double deg) {
+    vec2& rotate(double deg) {
         double theta = deg / 180.0 * M_PI;
         double c = cos(theta);
         double s = sin(theta);
@@ -106,8 +106,12 @@ public:
         double ty = x * s + y * c;
         x = tx;
         y = ty;
+        return *this;
     }
 
+    static vec2& rotate_s(double deg, vec2 v){
+        return v.rotate(deg);
+    }
     vec2& normalize() {
         if (length() == 0) return *this;
         *this *= (1.0 / length());

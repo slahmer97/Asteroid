@@ -27,7 +27,7 @@ private:
     void send_move_backward_message();
     void send_rotate_left_message();
     void send_rotate_right_message();
-    void send_fire_message();
+    void send_fire_message(const std::string& type = "X1");
 
     void set_username(std::string&& username);
     void set_team(std::string&& team);

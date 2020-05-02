@@ -121,12 +121,28 @@ public:
         player->rotationDroite(10.0);
         BOOST_LOG_TRIVIAL(info)<<"move_backward() -- end -- username : "<<player->get_username();
     }
-    inline void fire(std::shared_ptr<vaisseau>& player){
+    inline void fire(std::shared_ptr<vaisseau>& player, const std::string& type="X1"){
         BOOST_LOG_TRIVIAL(info)<<"fire() -- start -- username : "<<player->get_username();
+
         vec2d from = player->points[0];
         vec2d to = (player->points[0]-player->m_center).normalize()*10+from;
         m_lock->lock();
         lasers.emplace_back(to,from);
+        if(type == "X2"){
+            lasers.emplace_back(vec2d::rotate_s(20.0,to),vec2d::rotate_s(20.0,from));
+            lasers.emplace_back(vec2d::rotate_s(-20.0,to),vec2d::rotate_s(-20.0,from));
+
+        }
+        else if(type == "X3"){
+            lasers.emplace_back(vec2d::rotate_s(10.0,to),vec2d::rotate_s(10.0,from));
+            lasers.emplace_back(vec2d::rotate_s(20.0,to),vec2d::rotate_s(20.0,from));
+            lasers.emplace_back(vec2d::rotate_s(30.0,to),vec2d::rotate_s(30.0,from));
+
+            lasers.emplace_back(vec2d::rotate_s(-10.0,to),vec2d::rotate_s(-10.0,from));
+            lasers.emplace_back(vec2d::rotate_s(-20.0,to),vec2d::rotate_s(-20.0,from));
+            lasers.emplace_back(vec2d::rotate_s(-30.0,to),vec2d::rotate_s(-30.0,from));
+        }
+
         m_lock->unlock();
         BOOST_LOG_TRIVIAL(info)<<"NULL LASER"<<player->get_username();
         BOOST_LOG_TRIVIAL(info)<<"fire() -- end -- username : "<<player->get_username();

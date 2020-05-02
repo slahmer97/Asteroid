@@ -157,7 +157,9 @@ void game_scheduler::fire_routine(const pt::ptree &pt, std::shared_ptr<WsServer:
         BOOST_LOG_TRIVIAL(warning)<<"rotate_routine() player or game instance is null";
         return;
     }
-    game->fire(player);
+    std::string mode = pt.get<std::string>("mode");
+    BOOST_LOG_TRIVIAL(info)<<"fire_routine() mode : "<<mode;
+    game->fire(player, mode);
     BOOST_LOG_TRIVIAL(info)<<"fire_routine() exit";
 }
 
