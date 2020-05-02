@@ -164,16 +164,20 @@ void rest_client::run() {
             break;
         }
         else if (input == "s1j1" || input == "fast") {
-            fast_config("salon1", "joueur1", gui, net, true);
+            std::string t = "1";
+            fast_config("salon1", "joueur1", gui, net, true,t);
         }
         else if (input == "s1j2") {
-            fast_config("salon1", "joueur2", gui, net, false);
+            std::string t = "2";
+            fast_config("salon1", "joueur2", gui, net, false,t);
         }
         else if (input == "s2j1") {
-            fast_config("salon2", "joueur1", gui, net, true);
+            std::string t = "1";
+            fast_config("salon2", "joueur1", gui, net, true,t);
         }
         else if (input == "s2j2") {
-            fast_config("salon2", "joueur2", gui, net, false);
+            std::string t = "1";
+            fast_config("salon2", "joueur2", gui, net, false,t);
         }
         else {
             std::cout<<"unknown command\n";
@@ -188,13 +192,15 @@ void rest_client::run() {
 }
 
 void rest_client::fast_config(std::string&& salon, std::string&& joueur, std::unique_ptr<std::thread>& gui,
-                                    std::unique_ptr<std::thread>& net, bool creer_salon) {
+                                    std::unique_ptr<std::thread>& net, bool creer_salon, std::string team) {
     int d = 500;
     std::cout<<"username : " << joueur << std::endl;
     set_username(std::forward<std::string>(joueur));
     std::this_thread::sleep_for(std::chrono::milliseconds(d));
     std::cout<<"game_id : " << salon << std::endl;
     set_game_id(std::forward<std::string>(salon));
+    std::cout<<"team : " << team << std::endl;
+    set_team(std::move(team));
     std::this_thread::sleep_for(std::chrono::milliseconds(d));
     std::cout<<"start_net" << std::endl;
     net = std::make_unique<std::thread>(std::thread([&]() {
@@ -328,14 +334,14 @@ void rest_client::send_fire_message() {
 }
 void rest_client::send_create_game_message(){
     //BOOST_LOG_TRIVIAL(info)<<"send_create_game_message()";
-    std::string payload = client_message_factory::get_create_game_message(m_username,m_game_id);
+    std::string payload = client_message_factory::get_create_game_message(m_username,m_game_id,m_team);
 
     std::string ret = send_message(payload);
 
     //BOOST_LOG_TRIVIAL(info)<<"Reiceived : "<<ret;
 }
 void rest_client::send_join_game_message() {
-    std::string msg = client_message_factory::get_join_game_message(m_game_id,m_username);
+    std::string msg = client_message_factory::get_join_game_message(m_game_id,m_username,m_team);
     send_message(msg);
 }
 
@@ -344,4 +350,7 @@ void rest_client::set_username(std::string&& username){
 }
 void rest_client::set_game_id(std::string&& game_id){
     m_game_id = game_id;
+}
+void rest_client::set_team(std::string&& team){
+    m_team = team;
 }
