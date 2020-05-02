@@ -18,13 +18,19 @@ public:
     vaisseau(std::initializer_list<vec2d> &&liste) : polyServeur(liste) {}
     vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection) : m_username(p_username),m_connection((p_connection)){
         //BOOST_LOG_TRIVIAL(info)<<"vaisseau() -- username : "<<m_username;
+        initialize_poly();
+    }
+
+    void initialize_poly() {
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_real_distribution<> dist(0.0, 100);
+        std::vector<vec2d> V;
         vec2d p {LARGEUR / 2 + dist(gen), HAUTEUR / 2 + dist(gen)};
-        points.emplace_back(p.x, p.y - 24);
-        points.emplace_back(p.x - 7, p.y);
-        points.emplace_back(p.x + 7, p.y);
+        V.emplace_back(p.x, p.y - 24);
+        V.emplace_back(p.x - 7, p.y);
+        V.emplace_back(p.x + 7, p.y);
+        points = V;
 
         // center point
         int minX = 0xFFFF, minY = 0xFFFF, maxX = 0, maxY = 0;

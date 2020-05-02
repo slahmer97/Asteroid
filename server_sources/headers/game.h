@@ -52,7 +52,7 @@ public:
             unsigned long j;
             for (j = 0; j < lasers.size() && !asteroids[i]->intersecte(lasers[j]); ++j)
             {}
-            // si le laser j intersecte avec l'asteroid i
+            // si le laser j intersecte avec l'asteroid i :
             if (j < lasers.size()) {
                 auto rocks = asteroids[i]->generationDestruction();
                 for (const auto& p : rocks)
@@ -60,6 +60,28 @@ public:
                 asteroids.erase(asteroids.begin() + i);
             }
         }
+
+        for (unsigned long i = 0; i < asteroids.size(); ++i)
+        {
+            bool b = false;
+            unsigned long j;
+            for (j = 0; j < vaisseaux.size() && !asteroids[i]->intersecte(*vaisseaux[j]); ++j)
+            {}
+            // si le vaisseau j intersecte avec l'asteroid i :
+            if (j < vaisseaux.size()) {
+                vaisseaux[j]->initialize_poly();
+                b = true;
+            }
+            for (j = 0; j < vaisseaux2.size() && !asteroids[i]->intersecte(*vaisseaux2[j]); ++j)
+            {}
+            // si le vaisseau2 j intersecte avec l'asteroid i :
+            if (j < vaisseaux2.size()) {
+                vaisseaux2[j]->initialize_poly();
+                b = true;
+            }
+            if (b) asteroids.erase(asteroids.begin() + i);
+        }
+
         m_lock->unlock();
     }
 
