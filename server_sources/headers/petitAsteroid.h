@@ -15,11 +15,11 @@ public:
 
     petitAsteroid(const vec2d& p) {
         points.reserve(5);
-        points.emplace_back(p.x - 7, p.y);
+        points.emplace_back(p.x - 10, p.y);
         points.emplace_back(p.x, p.y + 7);
         points.emplace_back(p.x + 7, p.y);
-        points.emplace_back(p.x + 3, p.y - 7);
-        points.emplace_back(p.x - 3, p.y - 7);
+        points.emplace_back(p.x + 5, p.y - 7);
+        points.emplace_back(p.x - 5, p.y - 10);
     }
 
     std::vector<std::shared_ptr<asteroid>> generationDestruction() const override {

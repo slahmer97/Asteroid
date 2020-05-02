@@ -2,7 +2,6 @@
 // Created by stevlulz on 08/04/2020.
 //
 
-#include <thread>
 #include <client_message_factory.h>
 #include "headers/rest_client.h"
 #include "headers/graphiqueSDL.h"
@@ -164,27 +163,17 @@ void rest_client::run() {
             std::cout<<"Main loop ended\n";
             break;
         }
-        else if(input == "fast"){
-            int d = 500;
-            std::cout<<"username : fast1" << std::endl;
-            set_username("fast1");
-            std::this_thread::sleep_for(std::chrono::milliseconds(d));
-            std::cout<<"game_id : gid" << std::endl;
-            set_game_id("gid");
-            std::this_thread::sleep_for(std::chrono::milliseconds(d));
-            std::cout<<"start_net" << std::endl;
-            net = std::make_unique<std::thread>(std::thread([&]() {
-                //BOOST_LOG_TRIVIAL(info)<<"network thread started";
-                this->client_network();
-            }));
-            std::this_thread::sleep_for(std::chrono::milliseconds(d));
-            std::cout<<"create_game" << std::endl;
-            std::this_thread::sleep_for(std::chrono::milliseconds(d));
-            send_create_game_message();
-            gui = std::make_unique<std::thread>(std::thread([&]() {
-                //BOOST_LOG_TRIVIAL(info)<<"gui thread started";
-                this->client_gui();
-            }));
+        else if (input == "s1j1" || input == "fast") {
+            fast_config("salon1", "joueur1", gui, net, true);
+        }
+        else if (input == "s1j2") {
+            fast_config("salon1", "joueur2", gui, net, false);
+        }
+        else if (input == "s2j1") {
+            fast_config("salon2", "joueur1", gui, net, true);
+        }
+        else if (input == "s2j2") {
+            fast_config("salon2", "joueur2", gui, net, false);
         }
         else {
             std::cout<<"unknown command\n";
@@ -196,6 +185,36 @@ void rest_client::run() {
     if(gui != nullptr)
         gui->join();
 
+}
+
+void rest_client::fast_config(std::string&& salon, std::string&& joueur, std::unique_ptr<std::thread>& gui,
+                                    std::unique_ptr<std::thread>& net, bool creer_salon) {
+    int d = 500;
+    std::cout<<"username : " << joueur << std::endl;
+    set_username(std::forward<std::string>(joueur));
+    std::this_thread::sleep_for(std::chrono::milliseconds(d));
+    std::cout<<"game_id : " << salon << std::endl;
+    set_game_id(std::forward<std::string>(salon));
+    std::this_thread::sleep_for(std::chrono::milliseconds(d));
+    std::cout<<"start_net" << std::endl;
+    net = std::make_unique<std::thread>(std::thread([&]() {
+        //BOOST_LOG_TRIVIAL(info)<<"network thread started";
+        this->client_network();
+    }));
+    std::this_thread::sleep_for(std::chrono::milliseconds(d));
+    if (creer_salon) {
+        std::cout<<"create_game" << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(d));
+        send_create_game_message();
+    } else {
+        std::cout<<"join_game" << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(d));
+        send_join_game_message();
+    }
+    gui = std::make_unique<std::thread>(std::thread([&]() {
+        //BOOST_LOG_TRIVIAL(info)<<"gui thread started";
+        this->client_gui();
+    }));
 }
 
 std::shared_ptr<rest_client > rest_client::get_instance() noexcept {

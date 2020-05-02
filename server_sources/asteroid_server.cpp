@@ -8,14 +8,15 @@
 #include <game.h>
 
 namespace pt = boost::property_tree;
-auto main(int argc, char **argv) -> int {
 
+auto main(int argc, char **argv) -> int {
 
     std::string port = "9999";
     std::string host = "localhost";
     std::shared_ptr<rest_server> server = rest_server::get_instance();
 
     server->init(host, port);
+    std::cout << "The game server is up and running!" << std::endl;
     server->run();
 /*
     std::shared_ptr<WsServer::Connection> c = std::make_shared<WsServer::Connection>(nullptr);
