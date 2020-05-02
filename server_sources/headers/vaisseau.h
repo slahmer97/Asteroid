@@ -99,7 +99,7 @@ public:
     inline bool attack(int type=0){
         m_life_level -= type;
 
-        return m_life_level > 0;
+        return m_life_level <= 0;
     }
 
     inline bool use_x2(){
