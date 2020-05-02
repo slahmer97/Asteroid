@@ -55,7 +55,8 @@ public:
             // si le laser j intersecte avec l'asteroid i
             if (j < lasers.size()) {
                 auto rocks = asteroids[i]->generationDestruction();
-               // asteroids.insert(asteroids.end(), rocks.begin(), rocks.end()); // ça coince ici
+                for (const auto& p : rocks)
+                    asteroids.emplace_back(new petitAsteroid(p));
                 asteroids.erase(asteroids.begin() + i);
             }
         }
