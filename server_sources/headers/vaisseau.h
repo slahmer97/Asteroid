@@ -15,10 +15,11 @@
 using WsServer = SimpleWeb::SocketServer<SimpleWeb::WS>;
 class vaisseau : public polyServeur {
 public:
-    vaisseau(std::initializer_list<vec2d> &&liste) : polyServeur(liste),m_life_level(5) {}
-    vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection, int type=1) : m_username(p_username),m_connection((p_connection)),m_type(type),m_life_level(5),m_x2_count(10),m_x3_count(5){
+    vaisseau(std::initializer_list<vec2d> &&liste) : polyServeur(liste),m_life_level(10) {init();}
+    vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection, int type=1) : m_username(p_username),m_connection((p_connection)),m_type(type),m_life_level(10),m_x2_count(30),m_x3_count(15){
         //BOOST_LOG_TRIVIAL(info)<<"vaisseau() -- username : "<<m_username;
         initialize_poly();
+        init();
     }
 
     void initialize_poly() {
@@ -95,11 +96,18 @@ public:
     inline void set_type(int type){
         m_type = type;
     }
-
-    inline bool attack(int type=0){
+    inline void init(){
+        m_life_level = 10;
+        m_x2_count = 50;
+        m_x3_count = 25;
+    }
+    inline bool attack(int type=1){
         m_life_level -= type;
-
-        return m_life_level <= 0;
+        bool ret = m_life_level <= 0;
+        if(ret){
+            init();
+        }
+        return ret;
     }
 
     inline bool use_x2(){
