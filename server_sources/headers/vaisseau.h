@@ -15,8 +15,8 @@
 using WsServer = SimpleWeb::SocketServer<SimpleWeb::WS>;
 class vaisseau : public polyServeur {
 public:
-    vaisseau(std::initializer_list<vec2d> &&liste) : polyServeur(liste) {}
-    vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection, int type=1) : m_username(p_username),m_connection((p_connection)),m_type(type){
+    vaisseau(std::initializer_list<vec2d> &&liste) : polyServeur(liste),m_life_level(5) {}
+    vaisseau(std::string& p_username, std::shared_ptr<WsServer::Connection>& p_connection, int type=1) : m_username(p_username),m_connection((p_connection)),m_type(type),m_life_level(5),m_x2_count(10),m_x3_count(5){
         //BOOST_LOG_TRIVIAL(info)<<"vaisseau() -- username : "<<m_username;
         initialize_poly();
     }
@@ -89,7 +89,7 @@ public:
         return m_username;
     }
 
-    inline int get_type() const{
+    [[nodiscard]] inline int get_type() const{
         return m_type;
     }
     inline void set_type(int type){
@@ -97,14 +97,31 @@ public:
     }
 
     inline bool attack(int type=0){
-        return false;
+        m_life_level -= type;
+
+        return m_life_level > 0;
+    }
+
+    inline bool use_x2(){
+        if(m_x2_count <= 0)
+            return false;
+        m_x2_count--;
+        return true;
+    }
+    inline bool use_x3(){
+        if(m_x3_count <= 0)
+            return false;
+        m_x3_count--;
+        return true;
     }
 private:
     std::string m_username;
     std::shared_ptr<WsServer::Connection> m_connection;
 
     int m_type;
-
+    int m_life_level;
+    int m_x2_count;
+    int m_x3_count;
 };
 
 #endif //ASTEROID_VAISSEAU_H

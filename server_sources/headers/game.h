@@ -118,7 +118,7 @@ public:
     }
 
     void add_new_player(std::string& p_username,std::shared_ptr<WsServer::Connection>& p_connection){
-        std::shared_ptr<vaisseau> tmp = std::make_shared<vaisseau>(vaisseau(p_username,p_connection));
+        std::shared_ptr<vaisseau> tmp = std::make_shared<vaisseau>(vaisseau(p_username,p_connection,1));
         m_lock->lock();
         vaisseaux.push_back(tmp);
         m_lock->unlock();
@@ -136,7 +136,7 @@ public:
     }
 
     void add_new_player2(std::string& p_username,std::shared_ptr<WsServer::Connection>& p_connection){
-        std::shared_ptr<vaisseau> tmp = std::make_shared<vaisseau>(vaisseau(p_username,p_connection));
+        std::shared_ptr<vaisseau> tmp = std::make_shared<vaisseau>(vaisseau(p_username,p_connection,2));
         m_lock->lock();
         vaisseaux2.push_back(tmp);
         m_lock->unlock();
@@ -166,13 +166,13 @@ public:
     }
     inline void rotate_left(std::shared_ptr<vaisseau>& player){
         BOOST_LOG_TRIVIAL(info)<<"rotate_left() -- start -- username : "<<player->get_username();
-        player->rotationGauche(-10.0);
+        player->rotationGauche(-6.0);
         BOOST_LOG_TRIVIAL(info)<<"move_backward() -- end -- username : "<<player->get_username();
 
     }
     inline void rotate_right(std::shared_ptr<vaisseau>& player){
         BOOST_LOG_TRIVIAL(info)<<"rotate_right() --start -- username : "<<player->get_username();
-        player->rotationDroite(10.0);
+        player->rotationDroite(6.0);
         BOOST_LOG_TRIVIAL(info)<<"move_backward() -- end -- username : "<<player->get_username();
     }
     inline void fire(std::shared_ptr<vaisseau>& player, const std::string& type="X1"){
@@ -181,20 +181,26 @@ public:
         vec2d from = player->points[0];
         vec2d to = (player->points[0]-player->m_center).normalize()*10+from;
         m_lock->lock();
-        lasers.emplace_back(to,from);
-        if(type == "X2"){
-            lasers.emplace_back(vec2d::rotate_s(20.0,to),vec2d::rotate_s(20.0,from));
-            lasers.emplace_back(vec2d::rotate_s(-20.0,to),vec2d::rotate_s(-20.0,from));
+        lasers.emplace_back(to,from,player->get_type());
+        if(type == "X2" && player->use_x2()){
+            lasers.emplace_back(vec2d::rotate_s(-10,to,from),from,player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(10,to,from),from,player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(20,to,from),from,player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(-20,to,from),from,player->get_type());
 
         }
-        else if(type == "X3"){
-            lasers.emplace_back(vec2d::rotate_s(10.0,to),vec2d::rotate_s(10.0,from));
-            lasers.emplace_back(vec2d::rotate_s(20.0,to),vec2d::rotate_s(20.0,from));
-            lasers.emplace_back(vec2d::rotate_s(30.0,to),vec2d::rotate_s(30.0,from));
+        else if(type == "X3" && player->use_x3()){
 
-            lasers.emplace_back(vec2d::rotate_s(-10.0,to),vec2d::rotate_s(-10.0,from));
-            lasers.emplace_back(vec2d::rotate_s(-20.0,to),vec2d::rotate_s(-20.0,from));
-            lasers.emplace_back(vec2d::rotate_s(-30.0,to),vec2d::rotate_s(-30.0,from));
+            lasers.emplace_back(vec2d::rotate_s(10.0,to,from),from,player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(20.0,to,from),from,player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(30.0,to,from),from,player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(40.0,to,from),from,player->get_type());
+
+
+            lasers.emplace_back(vec2d::rotate_s(-10,to,from),from,player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(-20,to,from),from,player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(-30,to,from),from,player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(-40.0,to,from),from,player->get_type());
         }
 
         m_lock->unlock();
