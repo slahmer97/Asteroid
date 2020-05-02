@@ -30,9 +30,10 @@ private:
     void send_fire_message();
 
     void set_username(std::string&& username);
+    void set_team(std::string&& team);
     void set_game_id(std::string&& game_id);
     void fast_config(std::string&& salon, std::string&& joueur, std::unique_ptr<std::thread>& gui,
-                     std::unique_ptr<std::thread>& net, bool creer_salon);
+                     std::unique_ptr<std::thread>& net, bool creer_salon, std::string team);
 
     void on_message(const std::shared_ptr<WsClient::Connection>& connection,const std::shared_ptr<WsClient::InMessage>& in_message);
     void on_open(std::shared_ptr<WsClient::Connection>& connection);
@@ -54,6 +55,7 @@ private:
     static std::shared_ptr<rest_client> s_rest_client;
     std::string m_username;
     std::string m_game_id;
+    std::string m_team;
 
 };
 
