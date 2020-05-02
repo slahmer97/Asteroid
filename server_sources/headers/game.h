@@ -20,17 +20,21 @@ class game {
 public:
 
     explicit game(std::string& game_id) : m_game_id{game_id},
-                                        asteroids{}, lasers{}, vaisseaux{}
-    {}
+                                        asteroids{}, lasers{}, vaisseaux{}, vaisseaux2{}
+    {
+        m_lock = std::make_shared<std::mutex>();
+    }
 
     void start() {
         BOOST_LOG_TRIVIAL(info)<<"start() game_id : "<<m_game_id;
-
+        m_lock->lock();
         for (int i = 0; i < 10; ++i)
             asteroids.emplace_back(new grandAsteroid{});
+        m_lock->unlock();
     }
 
     void run() {
+        m_lock->lock();
         for (auto& i : asteroids)
             i->step();
         for (unsigned long i = 0; i < lasers.size(); ++i)
@@ -40,6 +44,9 @@ public:
         }
         for (auto& i : vaisseaux) // pour faire passer les vaiseaux de l'autre coter
             i->step();
+
+        for (auto& i : vaisseaux2) // pour faire passer les vaiseaux de l'autre coter
+            i->step();
         for (unsigned long i = 0; i < asteroids.size(); ++i)
         {
             unsigned long j;
@@ -48,21 +55,47 @@ public:
             // si le laser j intersecte avec l'asteroid i
             if (j < lasers.size()) {
                 auto rocks = asteroids[i]->generationDestruction();
-                //asteroids.insert(asteroids.end(), rocks.begin(), rocks.end()); // ça coince ici
+               // asteroids.insert(asteroids.end(), rocks.begin(), rocks.end()); // ça coince ici
                 asteroids.erase(asteroids.begin() + i);
             }
         }
+        m_lock->unlock();
     }
 
     void add_new_player(std::string& p_username,std::shared_ptr<WsServer::Connection>& p_connection){
         std::shared_ptr<vaisseau> tmp = std::make_shared<vaisseau>(vaisseau(p_username,p_connection));
+        m_lock->lock();
         vaisseaux.push_back(tmp);
+        m_lock->unlock();
         start();
     }
     std::shared_ptr<vaisseau> has_player(std::shared_ptr<WsServer::Connection>& p_connection){
+        m_lock->lock();
         for(const auto& v : vaisseaux)
-            if(v->is_me(p_connection))
+            if(v->is_me(p_connection)){
+                m_lock->unlock();
                 return v;
+            }
+        m_lock->unlock();
+        return nullptr;
+    }
+
+    void add_new_player2(std::string& p_username,std::shared_ptr<WsServer::Connection>& p_connection){
+        std::shared_ptr<vaisseau> tmp = std::make_shared<vaisseau>(vaisseau(p_username,p_connection));
+        m_lock->lock();
+        vaisseaux2.push_back(tmp);
+        m_lock->unlock();
+        start();
+    }
+
+    std::shared_ptr<vaisseau> has_player2(std::shared_ptr<WsServer::Connection>& p_connection){
+        m_lock->lock();
+        for(const auto& v : vaisseaux2)
+            if(v->is_me(p_connection)){
+                m_lock->unlock();
+                return v;
+            }
+        m_lock->unlock();
         return nullptr;
     }
 
@@ -91,7 +124,9 @@ public:
         BOOST_LOG_TRIVIAL(info)<<"fire() -- start -- username : "<<player->get_username();
         vec2d from = player->points[0];
         vec2d to = (player->points[0]-player->m_center).normalize()*10+from;
+        m_lock->lock();
         lasers.emplace_back(to,from);
+        m_lock->unlock();
         BOOST_LOG_TRIVIAL(info)<<"NULL LASER"<<player->get_username();
         BOOST_LOG_TRIVIAL(info)<<"fire() -- end -- username : "<<player->get_username();
     }
@@ -100,12 +135,16 @@ public:
         BOOST_LOG_TRIVIAL(info)<<"broadcast_view() \n";//<<view;
         for(const auto& p : vaisseaux)
             p->send_message(view);
+
+        for(const auto& p : vaisseaux2)
+            p->send_message(view);
     }
 private:
 
     inline std::string get_game_view(){
         pt::ptree root;
         pt::ptree shapes;
+        m_lock->lock();
         for(const auto & shape : asteroids){
             pt::ptree child = shape->to_ptree();
             shapes.push_back(std::make_pair("",std::move(child)));
@@ -114,10 +153,17 @@ private:
             pt::ptree child = shape->to_ptree();
             shapes.push_back(std::make_pair("",std::move(child)));
         }
+
+        for(const auto& shape : vaisseaux2){
+            pt::ptree child = shape->to_ptree();
+            shapes.push_back(std::make_pair("",std::move(child)));
+        }
+
         for(laser& shape : lasers){
             pt::ptree child = shape.to_ptree();
             shapes.push_back(std::make_pair("",std::move(child)));
         }
+        m_lock->unlock();
         root.put("type","game_view");
         root.add_child("shapes",shapes);
         std::stringstream ss;
@@ -130,7 +176,13 @@ private:
     std::string m_game_id;
     std::vector<std::shared_ptr<asteroid>> asteroids;
     std::vector<laser> lasers;
+
     std::vector<std::shared_ptr<vaisseau>> vaisseaux;
+
+    std::vector<std::shared_ptr<vaisseau>> vaisseaux2;
+
+
+    std::shared_ptr<std::mutex> m_lock;
 };
 
 #endif //ASTEROID_GAME_H

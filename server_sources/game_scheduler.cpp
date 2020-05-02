@@ -55,10 +55,17 @@ void game_scheduler::join_routine(const pt::ptree& pt, std::shared_ptr<WsServer:
         p_connection->send(err);
         return;
     }
-    std::string tmp_username = pt.get<std::string>("username");
-    //BOOST_LOG_TRIVIAL(info)<<"join_routine -- username : "<<tmp_username<<" -- game_id : "<<game_id;
 
-    tmp_game->add_new_player(tmp_username,p_connection);
+    std::string tmp_username = pt.get<std::string>("username");
+    std::string tmp_team = pt.get<std::string>("team");
+
+    //BOOST_LOG_TRIVIAL(info)<<"join_routine -- username : "<<tmp_username<<" -- game_id : "<<game_id;
+    if(tmp_team == "1"){
+     tmp_game->add_new_player(tmp_username,p_connection);
+    }
+    else{
+        tmp_game->add_new_player2(tmp_username,p_connection);
+    }
     //BOOST_LOG_TRIVIAL(info)<<"join_routine() exit";
 }
 
@@ -79,10 +86,17 @@ void game_scheduler::creation_routine(const pt::ptree& pt, std::shared_ptr<WsSer
         p_connection->send(err);
         return;
     }
-    std::string tmp_username = pt.get<std::string>("username");
-    ////BOOST_LOG_TRIVIAL(info)<<"creation_routine -- username : "<<tmp_username<<" -- game_id : "<<game_id;
 
-    tmp_game->add_new_player(tmp_username,p_connection);
+    std::string tmp_username = pt.get<std::string>("username");
+    std::string tmp_team = pt.get<std::string>("team");
+
+    //BOOST_LOG_TRIVIAL(info)<<"join_routine -- username : "<<tmp_username<<" -- game_id : "<<game_id;
+    if(tmp_team == "1"){
+        tmp_game->add_new_player(tmp_username,p_connection);
+    }
+    else{
+        tmp_game->add_new_player2(tmp_username,p_connection);
+    }
     //BOOST_LOG_TRIVIAL(info)<<"creation_routine() exit";
 }
 
@@ -153,6 +167,9 @@ std::shared_ptr<vaisseau> game_scheduler::get_player_by_connection(std::shared_p
         const auto& p = game.second->has_player(p_connection);
         if (p != nullptr)
             return p;
+        const auto& p2 = game.second->has_player2(p_connection);
+        if (p2 != nullptr)
+            return p2;
     }
     return nullptr;
 }
@@ -163,6 +180,10 @@ std::shared_ptr<game> game_scheduler::get_game_by_player_connection(std::shared_
         const auto& p = game.second->has_player(p_connection);
         if (p != nullptr)
             return game.second;
+        const auto& p2 = game.second->has_player2(p_connection);
+        if (p2 != nullptr)
+            return game.second;
+
     }
     return nullptr;
 }

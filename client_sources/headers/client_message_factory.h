@@ -12,21 +12,24 @@
 namespace pt = boost::property_tree;
 class client_message_factory{
 public:
-    static std::string get_create_game_message(const std::string& p_username, const std::string& p_game_id){
+    static std::string get_create_game_message(const std::string& p_username, const std::string& p_game_id, const std::string p_team="1"){
         pt::ptree root;
         root.put("type","create_game");
         root.put("username",p_username);
         root.put("game_id",p_game_id);
+        root.put("team",p_team);
+
         std::stringstream ss;
         boost::property_tree::json_parser::write_json(ss, root);
         BOOST_LOG_TRIVIAL(info)<< "get_create_game_message()";
         return ss.str();
     }
-    static std::string get_join_game_message(const std::string& p_game_id, const std::string& p_username){
+    static std::string get_join_game_message(const std::string& p_game_id, const std::string& p_username, const std::string p_team="1"){
         pt::ptree root;
         root.put("type","join_game");
         root.put("username",p_username);
         root.put("game_id",p_game_id);
+        root.put("team",p_team);
         std::stringstream ss;
         boost::property_tree::json_parser::write_json(ss, root);
         BOOST_LOG_TRIVIAL(info)<< "get_join_game_message()";
@@ -73,9 +76,10 @@ public:
         BOOST_LOG_TRIVIAL(info)<< "get_right_rotate_message()";
         return ss.str();
     }
-    static std::string get_fire_message(){
+    static std::string get_fire_message(const std::string& mode = "X1"){
         pt::ptree root;
         root.put("type","fire");
+        root.put("mode",mode);
         std::stringstream ss;
         boost::property_tree::json_parser::write_json(ss, root);
         BOOST_LOG_TRIVIAL(info)<< "get_right_rotate_message()";
