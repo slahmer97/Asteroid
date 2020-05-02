@@ -47,6 +47,14 @@ public:
 
         for (auto& i : vaisseaux2) // pour faire passer les vaiseaux de l'autre coter
             i->step();
+
+        collision_lasers_asteroids();
+        collision_vaisseaux_asteroids();
+
+        m_lock->unlock();
+    }
+
+    void collision_lasers_asteroids() {
         for (unsigned long i = 0; i < asteroids.size(); ++i)
         {
             unsigned long j;
@@ -60,7 +68,9 @@ public:
                 asteroids.erase(asteroids.begin() + i);
             }
         }
+    }
 
+    void collision_vaisseaux_asteroids() {
         for (unsigned long i = 0; i < asteroids.size(); ++i)
         {
             bool b = false;
@@ -81,8 +91,6 @@ public:
             }
             if (b) asteroids.erase(asteroids.begin() + i);
         }
-
-        m_lock->unlock();
     }
 
     void add_new_player(std::string& p_username,std::shared_ptr<WsServer::Connection>& p_connection){
