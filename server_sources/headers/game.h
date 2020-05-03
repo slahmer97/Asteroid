@@ -25,6 +25,7 @@ public:
                                         asteroids{}, lasers{},vaisseaux{},m_score1(0) , vaisseaux2{},m_score2(0)
     {
         m_lock = std::make_shared<std::mutex>();
+        cc = 0;
     }
 
     void start() {
@@ -218,26 +219,31 @@ public:
         for(const auto& p : vaisseaux2)
             p->send_message(view);
 
-        pt::ptree root = get_infos();
-        std::string infos;
-        for(const auto& p : vaisseaux){
-            pt::ptree tmp = root;
-            tmp.put("X2",boost::lexical_cast<std::string>(p->get_x2()));
-            tmp.put("X3",boost::lexical_cast<std::string>(p->get_x3()));
-            std::stringstream sz;
-            boost::property_tree::json_parser::write_json(sz, tmp);
-            p->send_message(sz.str());
 
-        }
+        if(cc == 0){
+            cc = 100;
+            pt::ptree root = get_infos();
+            std::string infos;
+            for(const auto& p : vaisseaux){
+                pt::ptree tmp = root;
+                tmp.put("X2",boost::lexical_cast<std::string>(p->get_x2()));
+                tmp.put("X3",boost::lexical_cast<std::string>(p->get_x3()));
+                std::stringstream sz;
+                boost::property_tree::json_parser::write_json(sz, tmp);
+                p->send_message(sz.str());
 
-        for(const auto& p : vaisseaux2){
-            pt::ptree tmp = root;
-            tmp.put("X2",boost::lexical_cast<std::string>(p->get_x2()));
-            tmp.put("X3",boost::lexical_cast<std::string>(p->get_x3()));
-            std::stringstream sz;
-            boost::property_tree::json_parser::write_json(sz, tmp);
-            p->send_message(sz.str());
+            }
+
+            for(const auto& p : vaisseaux2){
+                pt::ptree tmp = root;
+                tmp.put("X2",boost::lexical_cast<std::string>(p->get_x2()));
+                tmp.put("X3",boost::lexical_cast<std::string>(p->get_x3()));
+                std::stringstream sz;
+                boost::property_tree::json_parser::write_json(sz, tmp);
+                p->send_message(sz.str());
+            }
         }
+        cc--;
 
 
     }
@@ -281,7 +287,6 @@ private:
         int life_lev1 = -1;
         int life_lev2 = -1;
 
-        m_lock->lock();
 
         root.put("s1",        boost::lexical_cast<std::string>(m_score1));
         root.put("s2",boost::lexical_cast<std::string>(m_score2));
@@ -294,14 +299,13 @@ private:
         if (count2 > 0)
             life_lev2 = vaisseaux2[0]->get_life_lev();
 
-        m_lock->unlock();
 
 
-        root.put("count1",boost::lexical_cast<std::string>(count1));
-        root.put("count2",boost::lexical_cast<std::string>(count2));
+        //root.put("count1",boost::lexical_cast<std::string>(count1));
+        //root.put("count2",boost::lexical_cast<std::string>(count2));
 
-        root.put("lvl1",boost::lexical_cast<std::string>(life_lev1));
-        root.put("lvl2",boost::lexical_cast<std::string>(life_lev2));
+        //root.put("lvl1",boost::lexical_cast<std::string>(life_lev1));
+        //root.put("lvl2",boost::lexical_cast<std::string>(life_lev2));
 
 
 
@@ -320,6 +324,8 @@ private:
     std::vector<std::shared_ptr<vaisseau>> vaisseaux2;
     int m_score2;
 
+
+    int cc;
 
     std::shared_ptr<std::mutex> m_lock;
 };

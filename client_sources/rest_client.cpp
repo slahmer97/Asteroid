@@ -294,14 +294,14 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connec
 
     }
     else if (type == "infos"){
-        std::string s1 = root.get<std::string>("s1");
-        std::string s2 = root.get<std::string>("s2");
-        std::string x2 = root.get<std::string>("X2");
-        std::string x3 = root.get<std::string>("X3");
-        std::string lvl1 = root.get<std::string>("lvl1");
-        std::string lvl2 = root.get<std::string>("lvl2");
-        std::string count1 = root.get<std::string>("count1");
-        std::string count2 = root.get<std::string>("count2");
+        auto s1 = root.get<std::string>("s1");
+        auto s2 = root.get<std::string>("s2");
+        auto x2 = root.get<std::string>("X2");
+        auto x3 = root.get<std::string>("X3");
+       // auto lvl1 = root.get<std::string>("lvl1");
+       // auto lvl2 = root.get<std::string>("lvl2");
+       // auto count1 = root.get<std::string>("count1");
+       // auto count2 = root.get<std::string>("count2");
         // X2,X3,S1,S2
         game_shapes::update_score(x2, x3, s1, s2);
         //std::cout<<"S1 : "<<s1<<" -- S2 : "<<s2<<" -- X2 : "<<x2<<" -- X3 : "<<x3<<" -- lvl1 : "<<lvl1<<" -- lvl2 : "<<lvl2<<" -- count1 : "<<count1<<" -- count2 : "<<count2<<std::endl;
