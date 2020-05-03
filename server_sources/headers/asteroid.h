@@ -1,6 +1,3 @@
-//
-// Created by parallels on 4/12/20.
-//
 
 #ifndef ASTEROID_ASTEROID_H
 #define ASTEROID_ASTEROID_H
@@ -14,6 +11,7 @@ public:
     asteroid(std::initializer_list<vec2d> &&liste) : polyServeur(liste) {}
 
     explicit asteroid(std::vector<vec2d> points) : polyServeur(std::move(points)) {}
+
     asteroid() = default;
 
     //genere nouveaux asteroids plus petits
@@ -23,7 +21,7 @@ public:
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_real_distribution<> dist(0.0, 100.0);
-        vec2d d {dist(gen), dist(gen)};
+        vec2d d{dist(gen), dist(gen)};
         d.normalize();
         return d;
     }

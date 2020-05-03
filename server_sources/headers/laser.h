@@ -1,6 +1,3 @@
-//
-// Created by parallels on 4/12/20.
-//
 
 #ifndef ASTEROID_LASER_H
 #define ASTEROID_LASER_H
@@ -12,7 +9,8 @@ public:
     laser(std::initializer_list<vec2d> &&liste) : polyServeur(liste) {}
 
     explicit laser(std::vector<vec2d> points) : polyServeur(std::move(points)) {}
-    laser(vec2d& from, vec2d& to, int type = 1) : polyServeur({from,to}),m_type(type) {
+
+    laser(vec2d &from, vec2d &to, int type = 1) : polyServeur({from, to}), m_type(type) {
         direction = vec2d{from.x - to.x, from.y - to.y};
         direction.normalize();
         direction *= 10;
@@ -29,9 +27,11 @@ public:
     int get_type() const {
         return m_type;
     }
-    inline void set_type(int type){
+
+    void set_type(int type) {
         m_type = type;
     }
+
     int m_type;
 };
 

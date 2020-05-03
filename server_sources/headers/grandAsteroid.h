@@ -1,6 +1,3 @@
-//
-// Created by parallels on 4/12/20.
-//
 
 #ifndef ASTEROID_GRANDASTEROID_H
 #define ASTEROID_GRANDASTEROID_H
@@ -14,7 +11,7 @@ public:
 
     explicit grandAsteroid(std::vector<vec2d> points) : asteroid(std::move(points)) {}
 
-    explicit grandAsteroid(const vec2d& p, const vec2d& d) {
+    grandAsteroid(const vec2d &p, const vec2d &d) {
         direction = d;
         points.reserve(5);
         points.emplace_back(p.x - 27, p.y);

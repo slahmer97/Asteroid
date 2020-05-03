@@ -1,6 +1,3 @@
-//
-// Created by stevlulz on 21/03/2020.
-//
 
 #ifndef ASTEROID_GAME_H
 #define ASTEROID_GAME_H
@@ -21,15 +18,14 @@ namespace pt = boost::property_tree;
 class game {
 public:
 
-    explicit game(std::string& game_id) : m_game_id{game_id},
-                                        asteroids{}, lasers{},vaisseaux{},m_score1(0) , vaisseaux2{},m_score2(0)
-    {
+    explicit game(std::string &game_id) : m_game_id{game_id},
+                                          asteroids{}, lasers{}, vaisseaux{}, m_score1(0), vaisseaux2{}, m_score2(0) {
         m_lock = std::make_shared<std::mutex>();
         cc = 0;
     }
 
     void start() {
-        BOOST_LOG_TRIVIAL(info)<<"start() game_id : "<<m_game_id;
+        BOOST_LOG_TRIVIAL(info) << "start() game_id : " << m_game_id;
         m_lock->lock();
         for (int i = 0; i < 10; ++i)
             asteroids.emplace_back(new grandAsteroid{});
@@ -38,17 +34,16 @@ public:
 
     void run() {
         m_lock->lock();
-        for (auto& i : asteroids)
+        for (auto &i : asteroids)
             i->step();
-        for (unsigned long i = 0; i < lasers.size(); ++i)
-        {
+        for (unsigned long i = 0; i < lasers.size(); ++i) {
             if (lasers[i].isBordure()) lasers.erase(lasers.begin() + i);
             else lasers[i].step();
         }
-        for (auto& i : vaisseaux) // pour faire passer les vaiseaux de l'autre coter
+        for (auto &i : vaisseaux) // pour faire passer les vaiseaux de l'autre coter
             i->step();
 
-        for (auto& i : vaisseaux2) // pour faire passer les vaiseaux de l'autre coter
+        for (auto &i : vaisseaux2) // pour faire passer les vaiseaux de l'autre coter
             i->step();
 
         collision_lasers_asteroids();
@@ -60,8 +55,7 @@ public:
     void collision_lasers_vaisseaux() {
         for (unsigned long i = 0; i < lasers.size(); ++i) {
             unsigned long j;
-            for (j = 0; j < vaisseaux.size() && !lasers[i].intersecte(*vaisseaux[j]); ++j)
-            {}
+            for (j = 0; j < vaisseaux.size() && !lasers[i].intersecte(*vaisseaux[j]); ++j) {}
             if (j < vaisseaux.size()) { // vaisseau j touche par laser i
                 if (vaisseaux[j]->get_type() != lasers[j].get_type()) { // ennemi
                     if (vaisseaux[j]->attack()) {
@@ -69,8 +63,7 @@ public:
                     }
                 }
             }
-            for (j = 0; j < vaisseaux2.size() && !lasers[i].intersecte(*vaisseaux2[j]); ++j)
-            {}
+            for (j = 0; j < vaisseaux2.size() && !lasers[i].intersecte(*vaisseaux2[j]); ++j) {}
             if (j < vaisseaux2.size()) { // vaisseau2 j touche par laser i
                 if (vaisseaux2[j]->get_type() != lasers[j].get_type()) { // ennemi
                     if (vaisseaux2[j]->attack()) {
@@ -82,15 +75,13 @@ public:
     }
 
     void collision_lasers_asteroids() {
-        for (unsigned long i = 0; i < asteroids.size(); ++i)
-        {
+        for (unsigned long i = 0; i < asteroids.size(); ++i) {
             unsigned long j;
-            for (j = 0; j < lasers.size() && !asteroids[i]->intersecte(lasers[j]); ++j)
-            {}
+            for (j = 0; j < lasers.size() && !asteroids[i]->intersecte(lasers[j]); ++j) {}
             // si le laser j intersecte avec l'asteroid i :
             if (j < lasers.size()) {
                 auto rocks = asteroids[i]->generationDestruction();
-                for (const auto& p : rocks)
+                for (const auto &p : rocks)
                     asteroids.emplace_back(new petitAsteroid(p));
                 asteroids.erase(asteroids.begin() + i);
             }
@@ -98,19 +89,16 @@ public:
     }
 
     void collision_vaisseaux_asteroids() {
-        for (unsigned long i = 0; i < asteroids.size(); ++i)
-        {
+        for (unsigned long i = 0; i < asteroids.size(); ++i) {
             bool b = false;
             unsigned long j;
-            for (j = 0; j < vaisseaux.size() && !asteroids[i]->intersecte(*vaisseaux[j]); ++j)
-            {}
+            for (j = 0; j < vaisseaux.size() && !asteroids[i]->intersecte(*vaisseaux[j]); ++j) {}
             // si le vaisseau j intersecte avec l'asteroid i :
             if (j < vaisseaux.size()) {
                 vaisseaux[j]->initialize_poly();
                 b = true;
             }
-            for (j = 0; j < vaisseaux2.size() && !asteroids[i]->intersecte(*vaisseaux2[j]); ++j)
-            {}
+            for (j = 0; j < vaisseaux2.size() && !asteroids[i]->intersecte(*vaisseaux2[j]); ++j) {}
             // si le vaisseau2 j intersecte avec l'asteroid i :
             if (j < vaisseaux2.size()) {
                 vaisseaux2[j]->initialize_poly();
@@ -120,17 +108,18 @@ public:
         }
     }
 
-    void add_new_player(std::string& p_username,std::shared_ptr<WsServer::Connection>& p_connection){
-        std::shared_ptr<vaisseau> tmp = std::make_shared<vaisseau>(vaisseau(p_username,p_connection,1));
+    void add_new_player(std::string &p_username, std::shared_ptr<WsServer::Connection> p_connection) {
+        std::shared_ptr<vaisseau> tmp = std::make_shared<vaisseau>(vaisseau(p_username, p_connection, 1));
         m_lock->lock();
         vaisseaux.push_back(tmp);
         m_lock->unlock();
         start();
     }
-    std::shared_ptr<vaisseau> has_player(std::shared_ptr<WsServer::Connection>& p_connection){
+
+    std::shared_ptr<vaisseau> has_player(std::shared_ptr<WsServer::Connection> p_connection) {
         m_lock->lock();
-        for(const auto& v : vaisseaux)
-            if(v->is_me(p_connection)){
+        for (const auto &v : vaisseaux)
+            if (v->is_me(p_connection)) {
                 m_lock->unlock();
                 return v;
             }
@@ -138,18 +127,18 @@ public:
         return nullptr;
     }
 
-    void add_new_player2(std::string& p_username,std::shared_ptr<WsServer::Connection>& p_connection){
-        std::shared_ptr<vaisseau> tmp = std::make_shared<vaisseau>(vaisseau(p_username,p_connection,2));
+    void add_new_player2(std::string &p_username, std::shared_ptr<WsServer::Connection> p_connection) {
+        std::shared_ptr<vaisseau> tmp = std::make_shared<vaisseau>(vaisseau(p_username, p_connection, 2));
         m_lock->lock();
         vaisseaux2.push_back(tmp);
         m_lock->unlock();
         start();
     }
 
-    std::shared_ptr<vaisseau> has_player2(std::shared_ptr<WsServer::Connection>& p_connection){
+    std::shared_ptr<vaisseau> has_player2(std::shared_ptr<WsServer::Connection> p_connection) {
         m_lock->lock();
-        for(const auto& v : vaisseaux2)
-            if(v->is_me(p_connection)){
+        for (const auto &v : vaisseaux2)
+            if (v->is_me(p_connection)) {
                 m_lock->unlock();
                 return v;
             }
@@ -157,139 +146,142 @@ public:
         return nullptr;
     }
 
-    inline void move_forward(std::shared_ptr<vaisseau>& player){
-        BOOST_LOG_TRIVIAL(info)<<"move_forward() -- start  username : "<<player->get_username();
+    void move_forward(std::shared_ptr<vaisseau> player) {
+        BOOST_LOG_TRIVIAL(info) << "move_forward() -- start  username : " << player->get_username();
         player->avancer({});
-        BOOST_LOG_TRIVIAL(info)<<"move_forward() -- end --  username : "<<player->get_username();
+        BOOST_LOG_TRIVIAL(info) << "move_forward() -- end --  username : " << player->get_username();
     }
-    inline void move_backward(std::shared_ptr<vaisseau>& player){
-        BOOST_LOG_TRIVIAL(info)<<"move_backward() -- start -- username : "<<player->get_username();
+
+    void move_backward(std::shared_ptr<vaisseau> player) {
+        BOOST_LOG_TRIVIAL(info) << "move_backward() -- start -- username : " << player->get_username();
         player->avancer({});
-        BOOST_LOG_TRIVIAL(info)<<"move_backward() -- end -- username : "<<player->get_username();
+        BOOST_LOG_TRIVIAL(info) << "move_backward() -- end -- username : " << player->get_username();
     }
-    inline void rotate_left(std::shared_ptr<vaisseau>& player){
-        BOOST_LOG_TRIVIAL(info)<<"rotate_left() -- start -- username : "<<player->get_username();
+
+    void rotate_left(std::shared_ptr<vaisseau> player) {
+        BOOST_LOG_TRIVIAL(info) << "rotate_left() -- start -- username : " << player->get_username();
         player->rotationGauche(-6.0);
-        BOOST_LOG_TRIVIAL(info)<<"move_backward() -- end -- username : "<<player->get_username();
+        BOOST_LOG_TRIVIAL(info) << "move_backward() -- end -- username : " << player->get_username();
 
     }
-    inline void rotate_right(std::shared_ptr<vaisseau>& player){
-        BOOST_LOG_TRIVIAL(info)<<"rotate_right() --start -- username : "<<player->get_username();
+
+    void rotate_right(std::shared_ptr<vaisseau> player) {
+        BOOST_LOG_TRIVIAL(info) << "rotate_right() --start -- username : " << player->get_username();
         player->rotationDroite(6.0);
-        BOOST_LOG_TRIVIAL(info)<<"move_backward() -- end -- username : "<<player->get_username();
+        BOOST_LOG_TRIVIAL(info) << "move_backward() -- end -- username : " << player->get_username();
     }
-    inline void fire(std::shared_ptr<vaisseau>& player, const std::string& type="X1"){
-        BOOST_LOG_TRIVIAL(info)<<"fire() -- start -- username : "<<player->get_username();
+
+    void fire(std::shared_ptr<vaisseau> player, const std::string &type = "X1") {
+        BOOST_LOG_TRIVIAL(info) << "fire() -- start -- username : " << player->get_username();
 
         vec2d from = player->points[0];
-        vec2d to = (player->points[0]-player->m_center).normalize()*10+from;
+        vec2d to = (player->points[0] - player->m_center).normalize() * 10 + from;
         m_lock->lock();
-        lasers.emplace_back(to,from,player->get_type());
-        if(type == "X2" && player->use_x2()){
-            lasers.emplace_back(vec2d::rotate_s(-10,to,from),from,player->get_type());
-            lasers.emplace_back(vec2d::rotate_s(10,to,from),from,player->get_type());
-            lasers.emplace_back(vec2d::rotate_s(20,to,from),from,player->get_type());
-            lasers.emplace_back(vec2d::rotate_s(-20,to,from),from,player->get_type());
+        lasers.emplace_back(to, from, player->get_type());
+        if (type == "X2" && player->use_x2()) {
+            lasers.emplace_back(vec2d::rotate_s(-10, to, from), from, player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(10, to, from), from, player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(20, to, from), from, player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(-20, to, from), from, player->get_type());
 
-        }
-        else if(type == "X3" && player->use_x3()){
+        } else if (type == "X3" && player->use_x3()) {
 
-            lasers.emplace_back(vec2d::rotate_s(10.0,to,from),from,player->get_type());
-            lasers.emplace_back(vec2d::rotate_s(20.0,to,from),from,player->get_type());
-            lasers.emplace_back(vec2d::rotate_s(30.0,to,from),from,player->get_type());
-            lasers.emplace_back(vec2d::rotate_s(40.0,to,from),from,player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(10.0, to, from), from, player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(20.0, to, from), from, player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(30.0, to, from), from, player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(40.0, to, from), from, player->get_type());
 
 
-            lasers.emplace_back(vec2d::rotate_s(-10,to,from),from,player->get_type());
-            lasers.emplace_back(vec2d::rotate_s(-20,to,from),from,player->get_type());
-            lasers.emplace_back(vec2d::rotate_s(-30,to,from),from,player->get_type());
-            lasers.emplace_back(vec2d::rotate_s(-40.0,to,from),from,player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(-10, to, from), from, player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(-20, to, from), from, player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(-30, to, from), from, player->get_type());
+            lasers.emplace_back(vec2d::rotate_s(-40.0, to, from), from, player->get_type());
         }
 
         m_lock->unlock();
-        BOOST_LOG_TRIVIAL(info)<<"NULL LASER"<<player->get_username();
-        BOOST_LOG_TRIVIAL(info)<<"fire() -- end -- username : "<<player->get_username();
+        BOOST_LOG_TRIVIAL(info) << "NULL LASER" << player->get_username();
+        BOOST_LOG_TRIVIAL(info) << "fire() -- end -- username : " << player->get_username();
     }
-    inline void broadcast_view(){
+
+    void broadcast_view() {
         std::string view = get_game_view();
-        BOOST_LOG_TRIVIAL(info)<<"broadcast_view() \n";//<<view;
-        for(const auto& p : vaisseaux)
+        BOOST_LOG_TRIVIAL(info) << "broadcast_view() \n";//<<view;
+        for (const auto &p : vaisseaux)
             p->send_message(view);
 
-        for(const auto& p : vaisseaux2)
+        for (const auto &p : vaisseaux2)
             p->send_message(view);
 
 
-        if(cc == 0){
+        if (cc == 0) {
             cc = 30;
             pt::ptree root = get_infos();
             std::string infos;
-            for(const auto& p : vaisseaux){
+            for (const auto &p : vaisseaux) {
                 pt::ptree tmp = root;
-                tmp.put("X2",boost::lexical_cast<std::string>(p->get_x2()));
-                tmp.put("X3",boost::lexical_cast<std::string>(p->get_x3()));
+                tmp.put("X2", boost::lexical_cast<std::string>(p->get_x2()));
+                tmp.put("X3", boost::lexical_cast<std::string>(p->get_x3()));
                 std::stringstream sz;
                 boost::property_tree::json_parser::write_json(sz, tmp);
                 p->send_message(sz.str());
 
             }
 
-            for(const auto& p : vaisseaux2){
+            for (const auto &p : vaisseaux2) {
                 pt::ptree tmp = root;
-                tmp.put("X2",boost::lexical_cast<std::string>(p->get_x2()));
-                tmp.put("X3",boost::lexical_cast<std::string>(p->get_x3()));
+                tmp.put("X2", boost::lexical_cast<std::string>(p->get_x2()));
+                tmp.put("X3", boost::lexical_cast<std::string>(p->get_x3()));
                 std::stringstream sz;
                 boost::property_tree::json_parser::write_json(sz, tmp);
                 p->send_message(sz.str());
             }
         }
         cc--;
-
-
     }
+
 private:
 
-    inline std::string get_game_view(){
+    std::string get_game_view() {
         pt::ptree root;
         pt::ptree shapes;
         m_lock->lock();
-        for(const auto & shape : asteroids){
+        for (const auto &shape : asteroids) {
             pt::ptree child = shape->to_ptree();
-            shapes.push_back(std::make_pair("",std::move(child)));
+            shapes.push_back(std::make_pair("", std::move(child)));
         }
-        for(const auto& shape : vaisseaux){
+        for (const auto &shape : vaisseaux) {
             pt::ptree child = shape->to_ptree();
-            shapes.push_back(std::make_pair("",std::move(child)));
-        }
-
-        for(const auto& shape : vaisseaux2){
-            pt::ptree child = shape->to_ptree();
-            shapes.push_back(std::make_pair("",std::move(child)));
+            shapes.push_back(std::make_pair("", std::move(child)));
         }
 
-        for(laser& shape : lasers){
+        for (const auto &shape : vaisseaux2) {
+            pt::ptree child = shape->to_ptree();
+            shapes.push_back(std::make_pair("", std::move(child)));
+        }
+
+        for (laser &shape : lasers) {
             pt::ptree child = shape.to_ptree();
-            shapes.push_back(std::make_pair("",std::move(child)));
+            shapes.push_back(std::make_pair("", std::move(child)));
         }
         m_lock->unlock();
-        root.put("type","game_view");
-        root.add_child("shapes",shapes);
+        root.put("type", "game_view");
+        root.add_child("shapes", shapes);
         std::stringstream ss;
         boost::property_tree::json_parser::write_json(ss, root);
 
         return ss.str();
     }
 
-    inline pt::ptree get_infos(){
+    pt::ptree get_infos() {
         pt::ptree root;
-        root.put("type","infos");
+        root.put("type", "infos");
 
         int life_lev1 = -1;
         int life_lev2 = -1;
 
 
-        root.put("s1",        boost::lexical_cast<std::string>(m_score1));
-        root.put("s2",boost::lexical_cast<std::string>(m_score2));
+        root.put("s1", boost::lexical_cast<std::string>(m_score1));
+        root.put("s2", boost::lexical_cast<std::string>(m_score2));
         int count1 = vaisseaux.size();
         int count2 = vaisseaux2.size();
 
@@ -298,17 +290,6 @@ private:
 
         if (count2 > 0)
             life_lev2 = vaisseaux2[0]->get_life_lev();
-
-
-
-        //root.put("count1",boost::lexical_cast<std::string>(count1));
-        //root.put("count2",boost::lexical_cast<std::string>(count2));
-
-        //root.put("lvl1",boost::lexical_cast<std::string>(life_lev1));
-        //root.put("lvl2",boost::lexical_cast<std::string>(life_lev2));
-
-
-
 
         return root;
     }
@@ -323,7 +304,6 @@ private:
 
     std::vector<std::shared_ptr<vaisseau>> vaisseaux2;
     int m_score2;
-
 
     int cc;
 

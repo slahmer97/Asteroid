@@ -1,10 +1,5 @@
 
-//#include "headers/rest_client.h"
-
-
 #include <rest_client.h>
-
-
 #include <boost/log/trivial.hpp>
 
 
@@ -15,12 +10,6 @@ int main() {
     std::shared_ptr<rest_client> e = rest_client::get_instance();
     e->init(host,port);
     e->run();
-
-
-    std::cout<<"Hello world\n";
-
-
-
 
     return 0;
 }

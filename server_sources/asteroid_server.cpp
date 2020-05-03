@@ -1,5 +1,4 @@
 
-
 #include <iostream>
 #include <polyServeur.h>
 #include <boost/property_tree/ptree.hpp>
@@ -18,24 +17,6 @@ auto main(int argc, char **argv) -> int {
     server->init(host, port);
     std::cout << "The game server is up and running!" << std::endl;
     server->run();
-/*
-    std::shared_ptr<WsServer::Connection> c = std::make_shared<WsServer::Connection>(nullptr);
 
-    vaisseau v(port,c );
-    for(auto& p : v.points)
-        p.print();
-    std::cout<<"------------------------------------\n";
-
-    int i = 180;
-    for (int j = 0; j <90 ; ++j) {
-        v.rotationDroite();
-        for(auto& p : v.points)
-            p.print();
-        std::cout<<"______________________________________________\n";
-    }
-    std::cout<<"------------------------------------\n";
-    for(auto& p : v.points)
-        p.print();
-*/
     return 0;
 }

@@ -1,6 +1,3 @@
-//
-// Created by parallels on 4/13/20.
-//
 
 #ifndef ASTEROID_INTERSECTION_H
 #define ASTEROID_INTERSECTION_H
@@ -10,8 +7,7 @@
 template<typename P, typename T = float>
 class intersection {
 public:
-    bool operator()(const P& p1, const P& q1, const P& p2, const P& q2)
-    {
+    bool operator()(const P &p1, const P &q1, const P &p2, const P &q2) {
         int o1 = orientation(p1, q1, p2);
         int o2 = orientation(p1, q1, q2);
         int o3 = orientation(p2, q2, p1);
@@ -25,15 +21,16 @@ public:
     }
 
 private:
-    bool aligner(const P& p, const P& q, const P& r) {
+    bool aligner(const P &p, const P &q, const P &r) {
         bool b1 = q.x <= std::max(p.x, r.x) && q.x >= std::min(p.x, r.x);
         bool b2 = q.y <= std::max(p.y, r.y) && q.y >= std::min(p.y, r.y);
         return b1 && b2;
     }
-    T orientation(const P& p, const P& q, const P& r) {
+
+    T orientation(const P &p, const P &q, const P &r) {
         int val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
         if (val == 0) return 0;
-        return (val > 0)? 1: 2;
+        return (val > 0) ? 1 : 2;
     }
 };
 

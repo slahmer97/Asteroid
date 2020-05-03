@@ -1,6 +1,3 @@
-//
-// Created by parallels on 4/4/20.
-//
 
 #ifndef ASTEROID_ALPHANUMCLIENT_H
 #define ASTEROID_ALPHANUMCLIENT_H
@@ -20,7 +17,8 @@ public:
         fenetre.dessinerTexte(val, pos());
     }
 
-    void changeTexte(const std::string& tireX, const std::string& tireV, const std::string& scoreEquipe, const std::string& viesEquipe) {
+    void changeTexte(const std::string &tireX, const std::string &tireV, const std::string &scoreEquipe,
+                     const std::string &viesEquipe) {
         val = "SCORE EQUIPE: " + scoreEquipe;
         val += "    VIES EQUIPE: " + viesEquipe;
         val += "    TIRE C: " + tireX;

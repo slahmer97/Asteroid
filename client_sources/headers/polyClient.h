@@ -1,6 +1,3 @@
-//
-// Created by parallels on 4/4/20.
-//
 
 #ifndef ASTEROID_POLYCLIENT_H
 #define ASTEROID_POLYCLIENT_H
@@ -9,20 +6,17 @@
 #include "polygone.h"
 #include "affichable.h"
 
-class polyClient : public polygone, public affichable
-{
+class polyClient : public polygone, public affichable {
 public:
-    polyClient(std::initializer_list<vec2d>&& liste): polygone(liste) {}
-    explicit polyClient(std::vector<vec2d> points): polygone(std::move(points)) {}
-    explicit polyClient(std::vector<vec2d>&& points): polygone(points) {}
+    polyClient(std::initializer_list<vec2d> &&liste) : polygone(liste) {}
 
-    inline void afficherSurFenetre(graphiqueSDL& fenetre) const override
-    {
-        const SDL_Color couleur = {255, 255,255,  255 };
-        fenetre.dessinerPolyPlein(couleur, m_center(), points);
+    explicit polyClient(std::vector<vec2d> points) : polygone(std::move(points)) {}
+
+    explicit polyClient(std::vector<vec2d> &&points) : polygone(points) {}
+
+    void afficherSurFenetre(graphiqueSDL &fenetre) const override {
+        fenetre.dessinerPoly({255, 255, 255, 255}, m_center(), points);
     }
-private:
-    //static const SDL_Color  couleur;
 };
-//const SDL_Color polyClient::couleur = {255, 255,255,  255 };
+
 #endif //ASTEROID_POLYCLIENT_H
