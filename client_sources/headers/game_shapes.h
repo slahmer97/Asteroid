@@ -16,7 +16,7 @@ public:
         return &game_shapes::shapes;
     }
 
-    static inline alphaNumClient get_score() {
+    static inline alphaNumClient& get_score() {
         return score;
     }
 

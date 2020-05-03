@@ -23,7 +23,7 @@ public:
     void changeTexte(const std::string& tireX, const std::string& tireV, const std::string& scoreEquipe, const std::string& viesEquipe) {
         val = "SCORE EQUIPE: " + scoreEquipe;
         val += "    VIES EQUIPE: " + viesEquipe;
-        val += "    TIRE X: " + tireX;
+        val += "    TIRE C: " + tireX;
         val += "    TIRE V: " + tireV;
     }
 
