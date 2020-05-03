@@ -282,8 +282,8 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connec
             if(tmp_type == "polygone"){
           //      //BOOST_LOG_TRIVIAL(info)<<"-------- Found polygone -------";
                 for (pt::ptree::value_type &cor : shape.second.get_child("points")){
-                    std::string x = cor.second.get<std::string>("x");
-                    std::string y = cor.second.get<std::string>("y");
+                    auto x = cor.second.get<std::string>("x");
+                    auto y = cor.second.get<std::string>("y");
                     list.emplace_back(boost::lexical_cast<double>(x),boost::lexical_cast<double>(y));
                 }
             }
@@ -292,11 +292,25 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection>& connec
         game_shapes::emplace(std::move(objects));
 
     }
-    else if(type == "error"){
-        //BOOST_LOG_TRIVIAL(warning)<<"received error";
+    else if (type == "infos"){
+        std::string s1 = root.get<std::string>("s1");
+        std::string s2 = root.get<std::string>("s2");
+        std::string x2 = root.get<std::string>("X2");
+        std::string x3 = root.get<std::string>("X3");
+        std::string lvl1 = root.get<std::string>("lvl1");
+        std::string lvl2 = root.get<std::string>("lvl2");
+        std::string count1 = root.get<std::string>("count1");
+        std::string count2 = root.get<std::string>("count2");
+        // X2,X3,S1,S2
+        game_shapes::update_score(x2, x3, s1, s2);
+        //std::cout<<"S1 : "<<s1<<" -- S2 : "<<s2<<" -- X2 : "<<x2<<" -- X3 : "<<x3<<" -- lvl1 : "<<lvl1<<" -- lvl2 : "<<lvl2<<" -- count1 : "<<count1<<" -- count2 : "<<count2<<std::endl;
     }
-    else{
-        //BOOST_LOG_TRIVIAL(info)<<"received other thing";
+    else if(type == "error"){
+        BOOST_LOG_TRIVIAL(warning)<<"received error";
+    }
+    else {
+        BOOST_LOG_TRIVIAL(warning)<<"not recognized";
+        return;
     }
     //BOOST_LOG_TRIVIAL(info)<<"on_message() end";
 }

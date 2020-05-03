@@ -24,6 +24,7 @@ public:
     }
 private:
     static std::vector<std::shared_ptr<polyClient>> shapes;
+
 };
 #endif //ASTEROID_GAME_SHAPES_H
 std::vector<std::shared_ptr<polyClient>> game_shapes::shapes{};
