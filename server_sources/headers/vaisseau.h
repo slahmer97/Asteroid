@@ -122,6 +122,16 @@ public:
         m_x3_count--;
         return true;
     }
+
+    inline int get_x3(){
+        return m_x3_count;
+    }
+    inline int get_x2(){
+        return m_x2_count;
+    }
+    inline int get_life_lev() const{
+        return m_life_level;
+    }
 private:
     std::string m_username;
     std::shared_ptr<WsServer::Connection> m_connection;
