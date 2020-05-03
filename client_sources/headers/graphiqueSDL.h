@@ -21,7 +21,6 @@ public:
         up = left = right = fire = fireX2 = fireX3 = false;
         TTF_Init();
         police = TTF_OpenFont("../client_sources/DroidSans.ttf", TAILLEF);
-        cpt = 0;
     }
 
     ~graphiqueSDL() {

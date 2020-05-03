@@ -221,7 +221,7 @@ public:
 
 
         if(cc == 0){
-            cc = 100;
+            cc = 30;
             pt::ptree root = get_infos();
             std::string infos;
             for(const auto& p : vaisseaux){
