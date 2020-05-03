@@ -21,6 +21,8 @@ public:
         up = left = right = fire = fireX2 = fireX3 = false;
         TTF_Init();
         police = TTF_OpenFont("../client_sources/DroidSans.ttf", TAILLEF);
+        cpt = 0;
+        valRendu = nullptr;
     }
 
     ~graphiqueSDL() {
@@ -110,13 +112,19 @@ public:
     }
 
     void dessinerTexte(const std::string& val, const vec2i& pos) {
-        aux = TTF_RenderText_Solid(police, val.c_str(), {255, 255, 255, 255});
-        valRendu = SDL_CreateTextureFromSurface(renderer, aux);
+
+        if (cpt % 50 == 0) {
+            if (valRendu) SDL_DestroyTexture(valRendu);
+            SDL_Surface* aux = TTF_RenderText_Solid(police, val.c_str(), {255, 255, 255, 255});
+            valRendu = SDL_CreateTextureFromSurface(renderer, aux);
+            SDL_FreeSurface(aux);
+        }
+
         SDL_Rect boite2 {pos.x, pos.y, static_cast<int>(TAILLEF * val.length() / 2), TAILLEF};
         SDL_Rect boite1 {0, 0, static_cast<int>(TAILLEF * val.length() / 2), TAILLEF};
         SDL_RenderCopy(renderer, valRendu, &boite1, &boite2);
-        SDL_FreeSurface(aux);
-        SDL_DestroyTexture(valRendu);
+
+        ++cpt;
     }
 
     void dessinerPolyPlein(const SDL_Color &color, const vec2i &center, const std::vector<vec2d> &points) {
@@ -140,8 +148,8 @@ private:
     SDL_Renderer *renderer;
     bool up,left,right,fire,fireX2,fireX3;
     TTF_Font* police;
-    SDL_Surface* aux;
     SDL_Texture* valRendu;
+    unsigned cpt;
 };
 
 #endif //GRAPHIQUE_SDL_H
