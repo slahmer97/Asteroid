@@ -19,9 +19,14 @@ public:
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         //SDL_SetEventFilter( [](void* v, SDL_Event* e) -> int {return (e->type == SDL_KEYDOWN) ? 1 : 0;}, NULL);
         up = left = right = fire = fireX2 = fireX3 = false;
+        TTF_Init();
+        police = TTF_OpenFont("../client_sources/DroidSans.ttf", TAILLEF);
+        cpt = 0;
     }
 
     ~graphiqueSDL() {
+        TTF_CloseFont(police);
+        TTF_Quit();
         SDL_DestroyRenderer(renderer);
         SDL_Quit();
     }
@@ -105,17 +110,14 @@ public:
         SDL_RenderDrawLine(renderer, a().x, a().y, b().x, b().y);
     }
 
-    void dessinerTexte(const std::string& val, const vec2i& pos, int taille) {
-        TTF_Init();
-        TTF_Font* police = TTF_OpenFont("../client_sources/DroidSans.ttf", taille);
-        SDL_Surface* aux = TTF_RenderText_Solid(police, val.c_str(), {255, 255, 255, 255});
-        SDL_Texture* valRendu = SDL_CreateTextureFromSurface(renderer, aux);
-        SDL_Rect boite {pos.x, pos.y, static_cast<int>(taille * val.length() / 2), taille};
-        SDL_RenderCopy(renderer, valRendu, nullptr, &boite);
-        TTF_CloseFont(police);
+    void dessinerTexte(const std::string& val, const vec2i& pos) {
+        aux = TTF_RenderText_Solid(police, val.c_str(), {255, 255, 255, 255});
+        valRendu = SDL_CreateTextureFromSurface(renderer, aux);
+        SDL_Rect boite2 {pos.x, pos.y, static_cast<int>(TAILLEF * val.length() / 2), TAILLEF};
+        SDL_Rect boite1 {0, 0, static_cast<int>(TAILLEF * val.length() / 2), TAILLEF};
+        SDL_RenderCopy(renderer, valRendu, &boite1, &boite2);
         SDL_FreeSurface(aux);
         SDL_DestroyTexture(valRendu);
-        TTF_Quit();
     }
 
     void dessinerPolyPlein(const SDL_Color &color, const vec2i &center, const std::vector<vec2d> &points) {
@@ -138,6 +140,9 @@ private:
     std::chrono::time_point<std::chrono::system_clock> previous_time;
     SDL_Renderer *renderer;
     bool up,left,right,fire,fireX2,fireX3;
+    TTF_Font* police;
+    SDL_Surface* aux;
+    SDL_Texture* valRendu;
 };
 
 #endif //GRAPHIQUE_SDL_H
