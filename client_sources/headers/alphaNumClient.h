@@ -11,14 +11,22 @@
 #include "graphiqueSDL.h"
 #include "point.h"
 
-class alphaNumClient: public affichable
-{
+class alphaNumClient : public affichable {
 public:
-    alphaNumClient(std::string  val, const vec2d& pos, int taille = 18) : val{std::move(val)}, pos{pos}, taille{taille} {}
-    void afficherSurFenetre(graphiqueSDL& fenetre) const override
-    {
+
+    alphaNumClient() : pos{10, 10}, taille{20} {};
+
+    void afficherSurFenetre(graphiqueSDL &fenetre) const override {
         fenetre.dessinerTexte(val, pos(), taille);
     }
+
+    void changeTexte(const std::string& tireX, const std::string& tireV, const std::string& scoreEquipe, const std::string& viesEquipe) {
+        val = "SCORE EQUIPE: " + scoreEquipe;
+        val += "    VIES EQUIPE: " + viesEquipe;
+        val += "    TIRE X: " + tireX;
+        val += "    TIRE V: " + tireV;
+    }
+
 private:
     std::string val;
     vec2d pos;

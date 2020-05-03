@@ -106,6 +106,7 @@ void rest_client::client_network()  {
             //else
                 //BOOST_LOG_TRIVIAL(error)<<"client_gui() error";
         }
+        game_shapes::get_score().afficherSurFenetre(fenetre);
         fenetre.afficherImage();
 
     }
