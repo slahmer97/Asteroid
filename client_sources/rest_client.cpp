@@ -88,6 +88,10 @@ void rest_client::client_gui() {
     fenetre << game_shapes::get_score();
     fenetre.afficherImage();
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+
+    this->stop_client();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
 }
 
 
@@ -152,14 +156,14 @@ void rest_client::run() {
             break;
         } else {
             std::cout << "unknown command\n";
-            break;
         }
 
     } while (true);
 
 
     while (is_running());
-
+    std::cout<<"Goodbyte , Phillip,Seyyidahmed\n";
+    std::exit(0);
 }
 
 bool rest_client::is_running(){
