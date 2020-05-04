@@ -205,6 +205,7 @@ void game_scheduler::start() {
             game.second->run();
             if(game.second->ended()){
                 to_be_deleted.push_back(game.second->get_game_id());
+                game.second->on_game_end();
             }
         }
         for (auto&s : to_be_deleted)
