@@ -252,6 +252,11 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection> connect
     }
     else if(type == "end_of_game") {
         BOOST_LOG_TRIVIAL(warning) << "game ended : \n"<<ss.str();
+        auto mode = root.get<std::string>("mode");
+        auto win = root.get<std::string>("won");
+        auto s1 = root.get<std::string>("s1");
+        auto s2 = root.get<std::string>("s2");
+        game_shapes::on_game_end(mode,win,s1,s2);
     }
     else {
              BOOST_LOG_TRIVIAL(warning) << "not recognized";
