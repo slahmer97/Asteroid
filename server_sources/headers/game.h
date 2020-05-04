@@ -52,7 +52,7 @@ public:
         collision_vaisseaux_asteroids();
         collision_lasers_vaisseaux();
         if(asteroids.empty()){
-            end = false;
+            end = true;
         }
         m_lock->unlock();
     }
@@ -64,7 +64,7 @@ public:
             if (j < vaisseaux.size()) { // vaisseau j touche par laser i
                 if (vaisseaux[j]->get_type() != lasers[j].get_type()) { // ennemi
                     if(lasers[j].get_type() == 1){
-                        m_score1++;
+                        m_score1 +=200;
                     }
                     if (vaisseaux[j]->attack()) {
                         vaisseaux[j]->initialize_poly();
@@ -75,7 +75,7 @@ public:
             if (j < vaisseaux2.size()) { // vaisseau2 j touche par laser i
                 if (vaisseaux2[j]->get_type() != lasers[j].get_type()) { // ennemi
                     if(lasers[j].get_type() == 2){
-                        m_score2++;
+                        m_score2 +=200;
                     }
 
                     if (vaisseaux2[j]->attack()) {
@@ -161,10 +161,10 @@ public:
             // si le laser j intersecte avec l'asteroid i :
             if (j < lasers.size()) {
                 if(lasers[j].get_type() == 1){
-                    this->m_score1++;
+                    this->m_score1 +=100;
                 }
                 else{
-                    this->m_score2++;
+                    this->m_score2 += 100;
                 }
                 auto rocks = asteroids[i]->generationDestruction();
                 for (const auto &p : rocks)
@@ -182,7 +182,7 @@ public:
             // si le vaisseau j intersecte avec l'asteroid i :
             if (j < vaisseaux.size()) {
                 if(m_score1 > 0){
-                    m_score1--;
+                    m_score1 -=100;
                 }
                 vaisseaux[j]->initialize_poly();
                 b = true;
@@ -191,7 +191,7 @@ public:
             // si le vaisseau2 j intersecte avec l'asteroid i :
             if (j < vaisseaux2.size()) {
                 if(m_score2 > 0){
-                    m_score2--;
+                    m_score2-=100;
                 }
                 vaisseaux2[j]->initialize_poly();
                 b = true;
@@ -301,7 +301,7 @@ public:
             return;
         }
         std::string view = get_game_view();
-        BOOST_LOG_TRIVIAL(info) << "broadcast_view() \n";//<<view;
+        BOOST_LOG_TRIVIAL(info) << "broadcast_view() -- count : "<<asteroids.size()<<" \n";//<<view;
         for (const auto &p : vaisseaux)
             p->send_message(view);
 

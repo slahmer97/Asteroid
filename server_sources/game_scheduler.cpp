@@ -188,8 +188,11 @@ void game_scheduler::broadcaster() {
 
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(30));
-        for (const auto &game : m_games_instances)
-            game.second->broadcast_view();
+        for (const auto &game : m_games_instances){
+            if(!game.second->ended()) {
+                game.second->broadcast_view();
+            }
+        }
     }
 
 }
@@ -202,6 +205,7 @@ void game_scheduler::start() {
             game.second->run();
             if(game.second->ended()){
                 to_be_deleted.push_back(game.second->get_game_id());
+                game.second->on_game_end();
             }
         }
         for (auto&s : to_be_deleted)
