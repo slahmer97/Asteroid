@@ -153,8 +153,7 @@ void rest_client::run() {
     } while (true);
 
 
-    if (gui != nullptr)
-        gui->join();
+
 
 }
 
