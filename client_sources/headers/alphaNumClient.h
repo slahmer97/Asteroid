@@ -33,8 +33,8 @@ public:
         else {
             if (won == "true") val = "GAGNE !";
             else val = "PERDU !";
-            val += "SCORE DE VOTRE EQUIPE (1) : " + scoreE1;
-            val += "       SCORE EQUIPE (2) : " + scoreE2;
+            val += "SCORE DE L'EQUIPE (1) : " + scoreE1;
+            val += "       SCORE DE L'EQUIPE (2) : " + scoreE2;
         }
     }
 

@@ -39,7 +39,7 @@ void rest_client::client_network() {
     m_g_httpHandler->start();
 }
 
-[[noreturn]] void rest_client::client_gui() {
+void rest_client::client_gui() {
     graphiqueSDL fenetre{};
 
     std::thread events_polling([&]() {
@@ -73,16 +73,21 @@ void rest_client::client_network() {
 
     std::vector<std::shared_ptr<polyClient>> v;
 
-    while (true) {
+    while (!game_shapes::end_game) {
         fenetre.update_keys();
         fenetre.clearImage();
         for (const auto &i : *game_shapes::get_shapes()) {
             if (i != nullptr)
                 fenetre << *i;
         }
-        game_shapes::get_score().afficherSurFenetre(fenetre);
+        fenetre << game_shapes::get_score();
         fenetre.afficherImage();
     }
+    fenetre.clearImage();
+    game_shapes::get_score().texteDeFin(game_shapes::mode, game_shapes::won, game_shapes::scoreE1, game_shapes::scoreE2);
+    fenetre << game_shapes::get_score();
+    fenetre.afficherImage();
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
 }
 
 

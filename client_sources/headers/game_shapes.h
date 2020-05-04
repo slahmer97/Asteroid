@@ -22,19 +22,34 @@ public:
         game_shapes::shapes = new_shapes;
     }
 
-    static inline void update_score(const std::string &tireX, const std::string &tireV, const std::string &scoreEquipe,
-                                    const std::string &viesEquipe) {
-        score.changeTexte(tireX, tireV, scoreEquipe, viesEquipe);
+    static inline void update_score(const std::string &tireX, const std::string &tireV, const std::string &scoreE1,
+                                    const std::string &scoreE2) {
+        score.changeTexte(tireX, tireV, scoreE1, scoreE2);
     }
 
-    static inline void on_game_end(std::string& mode, std::string& won, std::string& score1, std::string& score2){
-        score.texteDeFin(mode,won,score1,score2);
+    static inline void on_game_end(std::string& _mode, std::string& _won, std::string& _scoreE1, std::string& _scoreE2){
+        end_game = true;
+        won = _mode;
+        mode = _won;
+        scoreE1 = _scoreE1;
+        scoreE2 = _scoreE2;
     }
 private:
     static std::vector<std::shared_ptr<polyClient>> shapes;
     static alphaNumClient score;
+public:
+    static bool end_game;
+    static std::string won;
+    static std::string mode;
+    static std::string scoreE1;
+    static std::string scoreE2;
 };
 
 #endif //ASTEROID_GAME_SHAPES_H
 std::vector<std::shared_ptr<polyClient>> game_shapes::shapes{};
 alphaNumClient game_shapes::score{};
+bool game_shapes::end_game{false};
+std::string game_shapes::won{};
+std::string game_shapes::mode{};
+std::string game_shapes::scoreE1{};
+std::string game_shapes::scoreE2{};
