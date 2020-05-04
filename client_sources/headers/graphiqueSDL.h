@@ -23,9 +23,13 @@ public:
                 NULL);
         cpt = 0;
         valRendu = nullptr;
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> num_file(1, 30);
         init_key();
         TTF_Init();
-        police = TTF_OpenFont("../client_sources/DroidSans.ttf", TAILLEF);
+        std::string f = "../client_sources/Fonts/DroidSans" + std::to_string(num_file(gen)) + ".ttf";
+        police = TTF_OpenFont(f.c_str(), TAILLEF);
     }
 
     ~graphiqueSDL() {
