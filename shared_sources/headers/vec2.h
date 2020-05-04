@@ -160,9 +160,9 @@ public:
     }
 };
 
-typedef vec2<float> vec2f;
-typedef vec2<double> vec2d;
-typedef vec2<int> vec2i;
+using vec2f = vec2<float>;
+using vec2d = vec2<double>;
+using vec2i = vec2<int>;
 
 #endif //ASTEROID_VEC2_H
 

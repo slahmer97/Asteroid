@@ -17,12 +17,27 @@ public:
         fenetre.dessinerTexte(val, pos());
     }
 
-    void changeTexte(const std::string &tireX, const std::string &tireV, const std::string &scoreEquipe,
-                     const std::string &viesEquipe) {
-        val = "SCORE EQUIPE: " + scoreEquipe;
-        val += "    VIES EQUIPE: " + viesEquipe;
+    void changeTexte(const std::string &tireX, const std::string &tireV, const std::string &scoreEquipe1,
+                     const std::string &scoreEquipe2) {
+        val = "SCORE EQUIPE 1: " + scoreEquipe1;
+        val += "    SCORE EQUIPE 2 : " + scoreEquipe2;
         val += "    TIRE C: " + tireX;
         val += "    TIRE V: " + tireV;
+    }
+
+    void texteDeFin(const std::string &mode, const std::string &won, const std::string &scoreE1, const std::string &scoreE2) {
+        pos = {LARGEUR / 2 - 300, HAUTEUR / 2};
+        if (mode == "coop") {
+            val = "SCORE EQUIPE 1: " + scoreE1;
+            val += "      SCORE EQUIPE 2 : " + scoreE2;
+            val += "             SCORE TOTAL : " + std::to_string(std::stoi(scoreE1) + std::stoi(scoreE2)) ;
+        }
+        else {
+            if (won == "true") val = "GAGNE !";
+            else val = "PERDU !";
+            val = "SCORE DE VOTRE EQUIPE (1) : " + scoreE1;
+            val += "       SCORE EQUIPE (2) : " + scoreE2;
+        }
     }
 
 private:
