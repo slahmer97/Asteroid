@@ -27,6 +27,9 @@ public:
         score.changeTexte(tireX, tireV, scoreEquipe, viesEquipe);
     }
 
+    static inline void on_game_end(std::string& mode, std::string& won, std::string& score1, std::string& score2){
+        score.texteDeFin(mode,won,score1,score2);
+    }
 private:
     static std::vector<std::shared_ptr<polyClient>> shapes;
     static alphaNumClient score;
