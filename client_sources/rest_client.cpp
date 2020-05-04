@@ -256,7 +256,7 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection> connect
     else {
              BOOST_LOG_TRIVIAL(warning) << "not recognized";
              return;
-         }
+
      }
     //BOOST_LOG_TRIVIAL(info)<<"on_message() end";
 }
