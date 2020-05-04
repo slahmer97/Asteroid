@@ -208,7 +208,7 @@ void game_scheduler::start() {
                 game.second->on_game_end();
             }
         }
-        for (auto&s : to_be_deleted)
-            m_games_instances.erase(s);
+        //for (auto&s : to_be_deleted)
+        //    m_games_instances.erase(s);
     }
 }
