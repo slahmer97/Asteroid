@@ -137,26 +137,37 @@ void rest_client::run() {
         } else if (input == "s1j1" || input == "fast") {
             std::string t = "1";
             fast_config("salon1", "joueur1", gui, net, true, t);
+            break;
         } else if (input == "s1j2") {
             std::string t = "2";
             fast_config("salon1", "joueur2", gui, net, false, t);
+            break;
         } else if (input == "s2j1") {
             std::string t = "1";
             fast_config("salon2", "joueur1", gui, net, true, t);
+            break;
         } else if (input == "s2j2") {
             std::string t = "1";
             fast_config("salon2", "joueur2", gui, net, false, t);
+            break;
         } else {
             std::cout << "unknown command\n";
+            break;
         }
 
     } while (true);
 
 
-
+    while (is_running());
 
 }
 
+bool rest_client::is_running(){
+    return !m_end;
+}
+bool rest_client::stop_client(){
+    m_end = true;
+}
 void rest_client::fast_config(std::string &&salon, std::string &&joueur, std::unique_ptr<std::thread> &gui,
                               std::unique_ptr<std::thread> &net, bool creer_salon, std::string team) {
     int d = 500;

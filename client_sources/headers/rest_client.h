@@ -13,6 +13,7 @@ class rest_client {
 private:
     rest_client() {
         m_server_uri = "empty";
+        m_end = false;
     }
 
     [[noreturn]] void client_gui();
@@ -53,6 +54,9 @@ private:
 
     std::string send_message(const std::string &message);
 
+    bool is_running();
+    bool stop_client();
+
 public:
     void init(std::string &host, std::string &port);
 
@@ -69,6 +73,8 @@ private:
     std::string m_username;
     std::string m_game_id;
     std::string m_team;
+
+    bool m_end;
 };
 
 
