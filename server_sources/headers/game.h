@@ -22,11 +22,13 @@ public:
                                           asteroids{}, lasers{}, vaisseaux{}, m_score1(0), vaisseaux2{}, m_score2(0) {
         m_lock = std::make_shared<std::mutex>();
         cc = 0;
+        end = false;
     }
 
     void start() {
         BOOST_LOG_TRIVIAL(info) << "start() game_id : " << m_game_id;
         m_lock->lock();
+        end = false;
         for (int i = 0; i < 10; ++i)
             asteroids.emplace_back(new grandAsteroid{});
         m_lock->unlock();
@@ -49,6 +51,9 @@ public:
         collision_lasers_asteroids();
         collision_vaisseaux_asteroids();
         collision_lasers_vaisseaux();
+        if(asteroids.empty()){
+            end = false;
+        }
         m_lock->unlock();
     }
 
@@ -58,6 +63,9 @@ public:
             for (j = 0; j < vaisseaux.size() && !lasers[i].intersecte(*vaisseaux[j]); ++j) {}
             if (j < vaisseaux.size()) { // vaisseau j touche par laser i
                 if (vaisseaux[j]->get_type() != lasers[j].get_type()) { // ennemi
+                    if(lasers[j].get_type() == 1){
+                        m_score1++;
+                    }
                     if (vaisseaux[j]->attack()) {
                         vaisseaux[j]->initialize_poly();
                     }
@@ -66,6 +74,10 @@ public:
             for (j = 0; j < vaisseaux2.size() && !lasers[i].intersecte(*vaisseaux2[j]); ++j) {}
             if (j < vaisseaux2.size()) { // vaisseau2 j touche par laser i
                 if (vaisseaux2[j]->get_type() != lasers[j].get_type()) { // ennemi
+                    if(lasers[j].get_type() == 2){
+                        m_score2++;
+                    }
+
                     if (vaisseaux2[j]->attack()) {
                         vaisseaux2[j]->initialize_poly();
                     }
@@ -74,12 +86,86 @@ public:
         }
     }
 
+    void on_game_end(){
+        pt::ptree win,lost;
+        win.put("type","end_of_game");
+        lost.put("type","end_of_game");
+        win.put("won","true");
+        lost.put("won","false");
+
+        win.put("s1",std::to_string(m_score1));
+        lost.put("s1",std::to_string(m_score2));
+        win.put("s2",std::to_string(m_score2));
+        lost.put("s2",std::to_string(m_score1));
+
+        if(m_score1 > m_score2){
+            if(vaisseaux2.empty()){
+                win.put("mode","coop");
+            }
+            else{
+                win.put("mode","combat");
+                lost.put("mode","combat");
+            }
+            std::stringstream w;
+            std::stringstream l;
+
+            boost::property_tree::json_parser::write_json(w, win);
+            boost::property_tree::json_parser::write_json(l, lost);
+
+            std::string win_m = w.str();
+            std::string lost_m = l.str();
+
+            for (auto& p : vaisseaux){
+                p->send_message(win_m);
+            }
+
+            for (auto& p : vaisseaux2){
+                p->send_message(lost_m);
+
+            }
+        }
+        else{
+            if(vaisseaux.empty()){
+                win.put("mode","coop");
+            }
+            else{
+                win.put("mode","combat");
+                lost.put("mode","combat");
+            }
+            std::stringstream w;
+            std::stringstream l;
+
+            boost::property_tree::json_parser::write_json(w, win);
+            boost::property_tree::json_parser::write_json(l, lost);
+
+            std::string win_m = w.str();
+            std::string lost_m = l.str();
+
+            for (auto& p : vaisseaux){
+                p->send_message(lost_m);
+            }
+
+            for (auto& p : vaisseaux2){
+                p->send_message(win_m);
+
+            }
+
+        }
+
+    }
+
     void collision_lasers_asteroids() {
         for (unsigned long i = 0; i < asteroids.size(); ++i) {
             unsigned long j;
             for (j = 0; j < lasers.size() && !asteroids[i]->intersecte(lasers[j]); ++j) {}
             // si le laser j intersecte avec l'asteroid i :
             if (j < lasers.size()) {
+                if(lasers[j].get_type() == 1){
+                    this->m_score1++;
+                }
+                else{
+                    this->m_score2++;
+                }
                 auto rocks = asteroids[i]->generationDestruction();
                 for (const auto &p : rocks)
                     asteroids.emplace_back(new petitAsteroid(p));
@@ -95,12 +181,18 @@ public:
             for (j = 0; j < vaisseaux.size() && !asteroids[i]->intersecte(*vaisseaux[j]); ++j) {}
             // si le vaisseau j intersecte avec l'asteroid i :
             if (j < vaisseaux.size()) {
+                if(m_score1 > 0){
+                    m_score1--;
+                }
                 vaisseaux[j]->initialize_poly();
                 b = true;
             }
             for (j = 0; j < vaisseaux2.size() && !asteroids[i]->intersecte(*vaisseaux2[j]); ++j) {}
             // si le vaisseau2 j intersecte avec l'asteroid i :
             if (j < vaisseaux2.size()) {
+                if(m_score2 > 0){
+                    m_score2--;
+                }
                 vaisseaux2[j]->initialize_poly();
                 b = true;
             }
@@ -204,6 +296,10 @@ public:
     }
 
     void broadcast_view() {
+        if(end){
+            BOOST_LOG_TRIVIAL(info) << "broadcast_view() GAME ENDED AND NOT DELETED================\n";//<<view;
+            return;
+        }
         std::string view = get_game_view();
         BOOST_LOG_TRIVIAL(info) << "broadcast_view() \n";//<<view;
         for (const auto &p : vaisseaux)
@@ -238,7 +334,12 @@ public:
         }
         cc--;
     }
-
+    bool ended(){
+        return end;
+    }
+    std::string get_game_id(){
+        return this->m_game_id;
+    }
 private:
 
     std::string get_game_view() {
@@ -294,8 +395,9 @@ private:
         return root;
     }
 
-private:
     std::string m_game_id;
+
+private:
     std::vector<std::shared_ptr<asteroid>> asteroids;
     std::vector<laser> lasers;
 
@@ -306,7 +408,7 @@ private:
     int m_score2;
 
     int cc;
-
+    bool end;
     std::shared_ptr<std::mutex> m_lock;
 };
 
