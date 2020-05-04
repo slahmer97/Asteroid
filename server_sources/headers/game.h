@@ -23,6 +23,7 @@ public:
         m_lock = std::make_shared<std::mutex>();
         cc = 0;
         end = false;
+        m_not = false;
     }
 
     void start() {
@@ -87,6 +88,9 @@ public:
     }
 
     void on_game_end(){
+        if(m_not)
+            return;
+        m_not = true;
         pt::ptree win,lost;
         win.put("type","end_of_game");
         lost.put("type","end_of_game");
@@ -409,6 +413,7 @@ private:
 
     int cc;
     bool end;
+    bool m_not;
     std::shared_ptr<std::mutex> m_lock;
 };
 
