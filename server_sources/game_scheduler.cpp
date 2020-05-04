@@ -197,7 +197,14 @@ void game_scheduler::broadcaster() {
 void game_scheduler::start() {
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(30));
-        for (const auto &game : m_games_instances)
+        std::vector<std::string> to_be_deleted{};
+        for (const auto &game : m_games_instances){
             game.second->run();
+            if(game.second->ended()){
+                to_be_deleted.push_back(game.second->get_game_id());
+            }
+        }
+        for (auto&s : to_be_deleted)
+            m_games_instances.erase(s);
     }
 }

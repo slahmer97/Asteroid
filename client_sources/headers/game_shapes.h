@@ -18,6 +18,7 @@ public:
     }
 
     static inline void emplace(std::vector<std::shared_ptr<polyClient>> &&new_shapes) {
+
         game_shapes::shapes = new_shapes;
     }
 
