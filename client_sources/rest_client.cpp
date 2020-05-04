@@ -249,10 +249,15 @@ void rest_client::on_message(const std::shared_ptr<WsClient::Connection> connect
         game_shapes::update_score(x2, x3, s1, s2);
     } else if (type == "error") {
         BOOST_LOG_TRIVIAL(warning) << "received error";
-    } else {
-        BOOST_LOG_TRIVIAL(warning) << "not recognized";
-        return;
     }
+    else if(type == "end_of_game") {
+        BOOST_LOG_TRIVIAL(warning) << "game ended : \n"<<ss.str();
+    }
+    else {
+             BOOST_LOG_TRIVIAL(warning) << "not recognized";
+             return;
+         }
+     }
     //BOOST_LOG_TRIVIAL(info)<<"on_message() end";
 }
 
