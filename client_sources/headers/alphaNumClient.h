@@ -26,7 +26,7 @@ public:
     }
 
     void texteDeFin(const std::string &mode, const std::string &won, const std::string &scoreE1, const std::string &scoreE2) {
-        pos = {LARGEUR / 2 - 300, HAUTEUR / 2};
+        pos = {LARGEUR / 2 - 400, HAUTEUR / 2};
         if (mode == "coop") {
             val = "SCORE DE L'EQUIPE : " + scoreE1;
         }
